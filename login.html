@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge"
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+
+    <style>
+
+        *{
+            box-sizing: border-box;
+        }
+
+        body{
+            background-image: url(./img/up.png);
+            background-size: cover;
+            background-position: top;
+            width: 100%;
+            height: 100%;
+        }
+
+        form{
+            display: flex;
+            flex-direction: column;
+            background-color: var(--preto);
+            text-align: center;
+            margin: 200px auto;
+            width: 360px;
+            height: 290px;
+            border-radius: 6px;
+            padding: 20px 30px;
+            box-shadow: 3px 3px 6px 2px rgba(0, 0, 0, 0.2), -4px -4px 7px 3px;
+        }
+        form h3 {
+            color: rgb(206, 20, 181);
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 20px;
+
+        }
+
+        input{
+            display: block;
+            margin: 5px auto;
+            width: 250px;
+            height: 30px;
+        }
+
+    </style>
+
+
+
+</head>
+<body>
+
+
+    <form>
+
+        <h3>Login</h3>
+
+        <input type="text" placeholder="login" id="login">
+        <input type="password" placeholder="senha" id="senha">
+        <input type="submit" onclick="logar(); return false">
+
+    </form>
+
+    <script>
+
+        function logar(){
+
+            var login = document.getElementById('login').value;
+            var senha = document.getElementById('senha').value;
+
+            if(login == "admin" && senha == "admin"){
+                location.href = "index.html";
+            }else{
+                alert('Usuario ou Senha incorretos');
+            }
+        }
+
+
+    </script>
+    
+</body>
+</html>

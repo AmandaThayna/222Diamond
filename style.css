@@ -7,11 +7,11 @@ body {
 
 h1 {
 	text-align: center;
-	color: black;
+	color: rgb(10, 10, 10);
 }
 
 a {
-	color: black;
+	color: rgb(86, 19, 209);
 }
 
 a:hover {
@@ -19,13 +19,16 @@ a:hover {
 }
 
 #corpo {
+	flex-direction: column;
 	margin-left: auto;
 	margin-right: auto;
 	width: 700px;
 	height: 500px;
-	background-color: transparent;
-	border: medium dashed black;
-}
+	border-radius: 6px;
+	padding: 20px 30px;
+	background-color: var(--preto);
+	box-shadow: 3px 3px 6px 2px rgba(0, 0, 0, 0.2), -4px -4px 7px 3px;
+};
 
 #corpo2 {
 	margin-left: auto;
@@ -33,7 +36,7 @@ a:hover {
 	width: 700px;
 	height: 1050px;
 	background-color: transparent;
-	border: medium dashed black;
+	border: medium dashed rgb(226, 1, 1);
 }
 
 #tela {
@@ -57,7 +60,7 @@ a:hover {
 	margin-left: 80px;
 	margin-top: 30px;
 	font-weight: bold;
-	color: aliceblue;
+	color: rgb(5, 5, 5);
 	float: left;
 }
 
@@ -68,14 +71,14 @@ a:hover {
 }
 
 #valor_txt {
-	margin-left: 530px;
+	margin-left: 500px;
 	margin-top: 30px;
 	font-weight: bold;
-	color: aliceblue;
+	color: rgb(7, 7, 7);
 }
 
 #valor {
-	margin-left: 560px;
+	margin-left: 500px;
 }
 
 #slot1 {
@@ -126,9 +129,13 @@ a:hover {
 }
 
 #tabela {
+	flex-direction: column;
 	margin-left: auto;
 	margin-right: auto;
-	text-align: center;
-	font-weight: bold;
-	color: white;
+	width: 700px;
+	height: 900px;
+	border-radius: 6px;
+	padding: 20px 30px;
+	background-color: var(--preto);
+	box-shadow: 3px 3px 6px 2px rgba(255,255,255, 0.3), -4px -4px 7px 3px;
 }
