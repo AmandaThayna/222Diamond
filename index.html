@@ -2,11 +2,13 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página do Jogo</title>
+    <title>Login</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
     <style>
+        /* Estilos do formulário */
         body {
             background-image: url(./img/up.png);
             background-size: cover;
@@ -14,164 +16,169 @@
             width: 100%;
             height: 100%;
             font-family: Arial, sans-serif;
+        }
+        h3 {
+            color: #fff;
+        }
+        form {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        h1 {
-            color: #fff;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .aposta-container {
             background-color: rgba(0, 0, 0, 0.7);
+            text-align: center;
+            margin: 200px auto;
+            width: 360px;
             border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            width: 300px;
+            padding: 20px 30px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            transition: box-shadow 0.3s ease;
         }
-
-        .aposta-input {
+        form:hover {
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+        }
+        input {
+            margin: 10px 0;
             padding: 10px;
-            border: 1px solid #fff;
+            border: none;
             border-radius: 5px;
-            font-size: 18px;
-            margin-bottom: 10px;
-            color: #333;
-            width: 100%;
         }
-
-        .botao {
-            margin-top: 20px;
-        }
-
-        #giraroleta {
+        input[type="submit"] {
             background-color: #66BB6A;
             color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 20px;
-            border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
-            width: 100%;
         }
-
-        #giraroleta:hover {
+        input[type="submit"]:hover {
             background-color: #57A859;
         }
-
-        .diamante {
+        .alert {
             display: none;
-            font-size: 48px;
-            color: gold;
-            position: absolute;
-            animation: shimmer 1s infinite;
+            background-color: #f44336;
+            color: white;
+            padding: 15px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            top: 20px;
+            transform: translateX(-50%);
+            border-radius: 5px;
+            animation: slide-down 0.5s;
         }
-
-        @keyframes shimmer {
-            0% { opacity: 0.5; }
-            50% { opacity: 1; }
-            100% { opacity: 0.5; }
+        @keyframes slide-down {
+            from { top: -50px; }
+            to { top: 20px; }
         }
-
-        #roleta {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            border: 10px solid #ffcc00;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: rgba(255, 255, 255, 0.1);
-            position: relative;
+        .success { background-color: #4CAF50; }
+        .toggle-link {
+            margin-top: 10px;
+            color: #66BB6A;
+            text-decoration: none;
         }
-
-        .aposta-ponto {
-            width: 20px;
-            height: 20px;
-            background-color: red;
-            border-radius: 50%;
-            position: absolute;
-            transition: transform 0.5s ease-in-out;
-        }
-
-        #corpo2 {
-            background-color: rgba(0, 0, 0, 0.7);
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-            width: 400px;
+        .toggle-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <h1>Bem-vindo ao Jogo!</h1>
-    
-    <div class="aposta-container">
-        <input type="number" id="aposta" class="aposta-input" placeholder="Digite sua aposta" min="0.50" max="10000" step="0.50"/>
-        <div>
-            <button id="aumentar" onclick="ajustarAposta(0.50)">+ R$0,50</button>
-            <button id="diminuir" onclick="ajustarAposta(-0.50)">- R$0,50</button>
-        </div>
-    </div>
-    
-    <div id="roleta">
-        <div class="aposta-ponto" id="apostaPonto" style="transform: rotate(0deg);"></div>
-    </div>
-    
-    <div class="botao">
-        <button id="giraroleta">Girar Roleta!</button>
-    </div>
-    
-    <div id="anuncio-diamante" class="diamante">💎 Você Ganhou um Diamante! 💎</div>
+    <div id="alert" class="alert">Usuário ou Senha incorretos</div>
+    <form id="login-form">
+        <h3>Login</h3>
+        <input type="text" placeholder="Email" id="login-email" required>
+        <input type="password" placeholder="Senha" id="login-senha" required>
+        <input type="submit" value="Entrar">
+        <p>Ou <a href="#" id="show-register-form" class="toggle-link">criar uma nova conta</a></p>
+    </form>
 
-    <div id="corpo2">
-        <h1><a href="tabela/tabela.html" style="color: white;">Tabela de Prêmios</a></h1>
-    </div>
+    <form id="register-form" style="display: none;">
+        <h3>Criar Conta</h3>
+        <input type="text" placeholder="Email" id="register-email" required>
+        <input type="password" placeholder="Senha" id="register-senha" required>
+        <input type="submit" value="Registrar">
+        <p>Já tem uma conta? <a href="#" id="show-login-form" class="toggle-link">Entrar</a></p>
+    </form>
 
     <script>
-        let apostaValor = 0;
+        function logar() {
+            const email = document.getElementById('login-email').value.trim();
+            const senha = document.getElementById('login-senha').value;
 
-        function ajustarAposta(valor) {
-            apostaValor = Math.max(0.50, Math.min(10000, apostaValor + valor));
-            document.getElementById('aposta').value = apostaValor.toFixed(2);
+            console.log("Tentativa de login com:", email, senha);
+            const usuario = JSON.parse(localStorage.getItem(email));
+
+            console.log("Usuário recuperado:", usuario);
+
+            if (usuario && usuario.senha === senha) {
+                console.log("Login bem-sucedido! Redirecionando para page.html");
+                localStorage.setItem('usuarioLogado', email); // Armazenar e-mail do usuário logado
+                location.href = "page.html"; // Redirecionar para a página do jogo
+            } else {
+                mostrarAlerta('Usuário ou senha incorretos');
+            }
         }
 
-        document.getElementById('giraroleta').addEventListener('click', function () {
-            if (apostaValor < 0.50 || apostaValor > 10000) {
-                alert("O valor da aposta deve estar entre R$0,50 e R$10.000,00.");
+        function registrar() {
+            const email = document.getElementById('register-email').value.trim();
+            const senha = document.getElementById('register-senha').value;
+
+            if (!email || !senha) {
+                alert('Por favor, preencha todos os campos.');
                 return;
             }
 
-            const multiplicadores = [2, 4, 5, 10, 15, 20, 500];
-            const randomMultiplier = multiplicadores[Math.floor(Math.random() * multiplicadores.length)];
-            const resultado = apostaValor * randomMultiplier;
-
-            // Girar a roleta
-            let randomDegree = Math.floor(Math.random() * 360);
-            const ponto = document.getElementById('apostaPonto');
-            ponto.style.transform = `rotate(${randomDegree}deg)`;
-
-            // Simulação de ganhar ou perder
-            const ganhou = Math.random() < 0.9; // 90% de chance de ganhar
-            
-            if (ganhou) {
-                setTimeout(() => {
-                    document.getElementById('anuncio-diamante').style.display = 'block';
-                    setTimeout(() => {
-                        document.getElementById('anuncio-diamante').style.display = 'none';
-                    }, 3000);
-                    alert(`Você ganhou! Seu prêmio é R$${resultado.toFixed(2)} (Multiplicador: ${randomMultiplier}x)`);
-                }, 500);
-            } else {
-                setTimeout(() => {
-                    alert(`Você perdeu sua aposta de R$${apostaValor.toFixed(2)}. Tente novamente!`);
-                }, 500);
+            if (localStorage.getItem(email)) {
+                alert('Este e-mail já está registrado.');
+                return;
             }
+
+            const novoUsuario = { email, senha };
+            localStorage.setItem(email, JSON.stringify(novoUsuario));
+            mostrarAlerta('Conta criada com sucesso!', true);
+            setTimeout(() => {
+                localStorage.setItem('usuarioLogado', email); // Armazena o e-mail do novo usuário logado
+                location.href = "page.html"; // Redirecionar após 2 segundos
+            }, 2000);
+        }
+
+        function mostrarAlerta(mensagem, sucesso = false) {
+            const alertBox = document.getElementById('alert');
+            alertBox.textContent = mensagem;
+            alertBox.className = 'alert' + (sucesso ? ' success' : '');
+            alertBox.style.display = 'block';
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 3000);
+        }
+
+        function toggleForms() {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+
+            if (loginForm.style.display === "none") {
+                loginForm.style.display = "block";
+                registerForm.style.display = "none";
+            } else {
+                loginForm.style.display = "none";
+                registerForm.style.display = "block";
+            }
+        }
+
+        document.getElementById('login-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            logar();
+        });
+
+        document.getElementById('register-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            registrar();
+        });
+
+        document.getElementById('show-register-form').addEventListener('click', function (e) {
+            e.preventDefault();
+            toggleForms();
+        });
+
+        document.getElementById('show-login-form').addEventListener('click', function (e) {
+            e.preventDefault();
+            toggleForms();
         });
     </script>
 </body>
