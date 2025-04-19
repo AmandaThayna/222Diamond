@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="utf-8" />
-    <title>Página Principal - 222 Diamond</title>
+    <title>Jogo - 222 Diamond</title>
     <link rel="stylesheet" href="style.css" />
     <style>
         body {
@@ -10,21 +10,56 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
             text-align: center;
         }
 
-        nav {
-            margin: 20px 0;
+        #roleta {
+            width: 300px;
+            height: 300px;
+            border: 5px solid #333;
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background-color: #fff;
         }
 
-        a {
-            text-decoration: none;
-            color: #007BFF;
-            font-weight: bold;
+        .diamante {
+            width: 60px;
+            height: 60px;
+            position: absolute;
+            /* Adicione imagens de diamantes em posições aleatórias */
         }
 
-        a:hover {
-            text-decoration: underline;
+        #controls {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        #saldo, #valorAposta {
+            width: 45%;
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        #apostaContainer {
+            margin-top: 20px;
+            text-align: center;
         }
     </style>
 </head>
@@ -33,18 +68,66 @@
         <h1>Bem-vindo ao 222 Diamond</h1>
     </header>
     
-    <nav>
-        <a href="tabela.html">Ver Tabela de Prêmios</a>
-    </nav>
-    
     <main>
-        <h2>Conheça nosso jogo</h2>
-        <p>Desafie a sorte e descubra quais prêmios você pode ganhar jogando!</p>
-        <p>Explore a tabela de prêmios para saber mais sobre as recompensas.</p>
+        <div id="roleta">
+            <!-- Adicione as imagens dos diamantes -->
+            <img src="img/diamante1.png" class="diamante" style="top: 50%; left: 20%;" alt="Diamante 1" />
+            <img src="img/diamante2.png" class="diamante" style="top: 30%; left: 40%;" alt="Diamante 2" />
+            <img src="img/diamante3.png" class="diamante" style="top: 70%; left: 70%;" alt="Diamante 3" />
+            <img src="img/cifrao.png" class="diamante" style="top: 10%; left: 80%;" alt="Cifrão" />
+            <!-- Adicione mais diamantes conforme necessário -->
+        </div>
+
+        <div id="controls">
+            <div id="saldo">
+                <h3>Saldo</h3>
+                <p id="saldoValor">100</p> <!-- Valor inicial do saldo -->
+            </div>
+            <div id="valorAposta">
+                <h3>Valor da Aposta</h3>
+                <p id="apostaValor">10</p> <!-- Valor inicial da aposta -->
+            </div>
+        </div>
+
+        <div id="apostaContainer">
+            <button onclick="aumentarAposta()">Aumentar Aposta</button>
+            <button onclick="diminuirAposta()">Diminuir Aposta</button>
+            <button onclick="realizarAposta()">Realizar Aposta</button>
+        </div>
     </main>
     
     <footer>
         <p>&copy; 2023 222 Diamond. Todos os direitos reservados.</p>
     </footer>
+
+    <script>
+        let saldo = 100; // Saldo do jogador
+        let aposta = 10; // Valor da aposta
+
+        function aumentarAposta() {
+            aposta += 10; // Aumenta em 10 a aposta
+            document.getElementById('apostaValor').innerText = aposta;
+        }
+
+        function diminuirAposta() {
+            if(aposta > 10) {
+                aposta -= 10; // Diminui em 10 a aposta, mas não abaixo de 10
+                document.getElementById('apostaValor').innerText = aposta;
+            }
+        }
+
+        function realizarAposta() {
+            // Aqui você pode adicionar a lógica do jogo, atualizar o saldo, etc.
+            const resultado = Math.random() > 0.5; // Simulando um resultado aleatório
+            if (resultado) {
+                saldo += aposta; // Se ganha, adiciona à saldo
+                alert('Você ganhou!');
+            } else {
+                saldo -= aposta; // Se perde, subtrai do saldo
+                alert('Você perdeu!');
+            }
+            document.getElementById('saldoValor').innerText = saldo;
+        }
+    </script>
 </body>
 </html>
