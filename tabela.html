@@ -1,37 +1,63 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html version="-//W3C//DTD XHTML 1.1//EN"
-      xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.w3.org/1999/xhtml
-                          http://www.w3.org/MarkUp/SCHEMA/xhtml11.xsd"
->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <title>Tabela de Prêmios - 222 Diamond</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        body {
+            background-color: #282c34;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
 
-	<head>
-		<meta charset="utf-8" />
-		<title>222 Diamond</title>
-		<link type="text/css" rel="stylesheet" href="style.css" />
-	</head>
-	
-	<body>
-	
-		<div id = "corpo2">
-			<h1>Tabela de Prêmios</h1>
-			
-			<div id = "tabela">
-				<br>Caso todos os escudos sejam diferentes, o seu prêmio é de 2X o Valor da Aposta.</br>
-				<p><img src = "img/premio1.png" /></p>
-				<br>Caso todos os escudos sejam do Diamante Mesclado, o seu prêmio é de 4X o Valor da Aposta.</br>
-				<p><img src = "img/premio2.png" /></p>
-				<br>Caso todos os escudos sejam do Diamante Rosa, o seu prêmio é de 2X o Valor da Aposta.</br>
-				<p><img src = "img/premio3.png" /></p>
-				<br>Caso todos os escudos sejam do Diamante Verde, o seu prêmio é de 5X o Valor da Aposta.</br>
-				<p><img src = "img/premio4.png" /></p>
-				<br>Caso todos os escudos sejam o Cifrão, o seu prêmio é de 10X o Valor da Aposta.</br>
-				<p><img src = "img/premio5.png" /></p>
-			</div>
-		</div>
-	
-	</body>
+        #corpo2 {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+        }
 
+        h1 {
+            text-align: center;
+        }
+
+        #tabela {
+            margin-top: 20px;
+        }
+
+        #tabela p {
+            margin: 10px 0;
+        }
+
+        #tabela img {
+            width: 150px; /* Ajuste o tamanho conforme necessário */
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="corpo2">
+        <h1>Tabela de Prêmios</h1>
+        <div id="tabela">
+            <p>Caso todos os escudos sejam diferentes, o seu prêmio é de 2X o Valor da Aposta.</p>
+            <img src="img/premio1.png" alt="Premio 1" />
+            <p>Caso todos os escudos sejam do Diamante Mesclado, o seu prêmio é de 4X o Valor da Aposta.</p>
+            <img src="img/premio2.png" alt="Premio 2" />
+            <p>Caso todos os escudos sejam do Diamante Rosa, o seu prêmio é de 2X o Valor da Aposta.</p>
+            <img src="img/premio3.png" alt="Premio 3" />
+            <p>Caso todos os escudos sejam do Diamante Verde, o seu prêmio é de 5X o Valor da Aposta.</p>
+            <img src="img/premio4.png" alt="Premio 4" />
+            <p>Caso todos os escudos sejam o Cifrão, o seu prêmio é de 10X o Valor da Aposta.</p>
+            <img src="img/premio5.png" alt="Premio 5" />
+        </div>
+    </div>
+</body>
 </html>
