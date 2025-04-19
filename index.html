@@ -2,18 +2,17 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE-edge"
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-
-
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
     <style>
-
-        *{
+        * {
             box-sizing: border-box;
         }
 
-        body{
+        body {
             background-image: url(./img/up.png);
             background-size: cover;
             background-position: top;
@@ -21,34 +20,22 @@
             height: 100%;
         }
 
-        form{
+        /* Estilos já existentes para o formulário login e alert */
+        
+        form {
             display: flex;
             flex-direction: column;
             background-color: var(--preto);
             text-align: center;
             margin: 200px auto;
             width: 360px;
-            height: 290px;
             border-radius: 6px;
             padding: 20px 30px;
             box-shadow: 3px 3px 6px 2px rgba(0, 0, 0, 0.2), -4px -4px 7px 3px;
         }
-        form h3 {
-            color: rgb(206, 20, 181);
-            font-size: 2rem;
-            text-align: center;
-            margin-bottom: 20px;
 
-        }
-
-        input{
-            display: block;
-            margin: 5px auto;
-            width: 250px;
-            height: 30px;
-        }
+        /*... outras regras ...*/
         
-       /* Estilo para o alerta */
         .alert {
             display: none;
             background-color: #f44336; /* Cor de fundo vermelha */
@@ -64,44 +51,105 @@
             animation: slide-down 0.5s;
         }
 
-        @keyframes slide-down {
-            from {
-                top: -50px;
-            }
-            to {
-                top: 20px;
-            }
-        }
+        /*... animação e outras regras ...*/
     </style>
 </head>
 <body>
-    <form>
+    <div id="alert" class="alert">Usuário ou Senha incorretos</div>
+    
+    <form id="login-form">
         <h3>Login</h3>
-        <input type="text" placeholder="login" id="login">
-        <input type="password" placeholder="senha" id="senha">
-        <input type="submit" onclick="logar(); return false">
+        <input type="text" placeholder="Email" id="login-email">
+        <input type="password" placeholder="Senha" id="login-senha">
+        <input type="submit" value="Entrar">
+        <p>Ou<a href="#" id="show-register-form"> criar uma nova conta</a></p>
+    </form>
+    
+    <form id="register-form" style="display: none;">
+        <h3>Criar Conta</h3>
+        <input type="text" placeholder="Email" id="register-email">
+        <input type="password" placeholder="Senha" id="register-senha">
+        <input type="submit" value="Registrar">
+        <p>Já tem uma conta? <a href="#" id="show-login-form"> Entrar</a></p>
     </form>
 
-    <div class="alert" id="alert">Usuário ou Senha incorretos</div>
-
     <script>
+        // A função logar e registrar estarão no script.js
         function logar() {
-            var login = document.getElementById('login').value;
-            var senha = document.getElementById('senha').value;
+            const email = document.getElementById('login-email').value;
+            const senha = document.getElementById('login-senha').value;
 
-            if (login == "admin" && senha == "admin") {
+            const usuario = JSON.parse(localStorage.getItem(email)); // pega dados do usuário do localStorage
+
+            if (usuario && usuario.senha === senha) {
                 location.href = "page.html";
             } else {
                 // Mostrar o alerta
                 var alertBox = document.getElementById('alert');
                 alertBox.style.display = 'block';
-                
-                // Ocultar o alerta após 3 segundos
-                setTimeout(function() {
+                setTimeout(function () {
                     alertBox.style.display = 'none';
                 }, 3000);
             }
         }
+
+        function registrar() {
+            const email = document.getElementById('register-email').value;
+            const senha = document.getElementById('register-senha').value;
+
+            if (!email || !senha) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // Verifica se o e-mail já está registrado
+            if (localStorage.getItem(email)) {
+                alert('Este e-mail já está registrado.');
+                return;
+            }
+
+            // Salva o novo usuário no localStorage
+            const novoUsuario = { email, senha };
+            localStorage.setItem(email, JSON.stringify(novoUsuario));
+
+            alert('Conta criada com sucesso! Agora você pode fazer login.');
+            toggleForms(); // Volta para o formulário de login
+        }
+
+        function toggleForms() {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+
+            if (loginForm.style.display === "none") {
+                loginForm.style.display = "block";
+                registerForm.style.display = "none";
+            } else {
+                loginForm.style.display = "none";
+                registerForm.style.display = "block";
+            }
+        }
+
+        // Evento de submissão dos formulários
+        document.getElementById('login-form').addEventListener('submit', function (e) {
+            e.preventDefault(); // Impede o envio do formulário
+            logar();
+        });
+
+        document.getElementById('register-form').addEventListener('submit', function (e) {
+            e.preventDefault(); // Impede o envio do formulário
+            registrar();
+        });
+
+        // Mostrando e ocultando formulários
+        document.getElementById('show-register-form').addEventListener('click', function (e) {
+            e.preventDefault();
+            toggleForms();
+        });
+        
+        document.getElementById('show-login-form').addEventListener('click', function (e) {
+            e.preventDefault();
+            toggleForms();
+        });
     </script>
 </body>
 </html>
