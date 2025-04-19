@@ -1,50 +1,203 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Cadastro e Login</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <style>
+        body {
+            background-image: url(./img/up.png);
+            background-size: cover;
+            background-position: top;
+            width: 100%;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+
+        h3 {
+            color: #fff;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            background-color: rgba(0, 0, 0, 0.7);
+            text-align: center;
+            margin: 200px auto;
+            width: 360px;
+            border-radius: 10px;
+            padding: 20px 30px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            transition: box-shadow 0.3s ease;
+        }
+
+        form:hover {
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+        }
+
+        input {
+            margin: 10px 0;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #66BB6A;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #57A859;
+        }
+
+        .alert {
+            display: none;
+            background-color: #f44336;
+            color: white;
+            padding: 15px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            top: 20px;
+            transform: translateX(-50%);
+            border-radius: 5px;
+            animation: slide-down 0.5s;
+        }
+
+        @keyframes slide-down {
+            from {
+                top: -50px;
+            }
+            to {
+                top: 20px;
+            }
+        }
+
+        .success {
+            background-color: #4CAF50; /* Verde para sucesso */
+        }
+
+        .toggle-link {
+            margin-top: 10px;
+            color: #66BB6A;
+            text-decoration: none;
+        }
+
+        .toggle-link:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <h1>Cadastro</h1>
-    <form id="cadastroForm">
-        <input type="email" id="emailCadastro" placeholder="Email" required>
-        <input type="password" id="senhaCadastro" placeholder="Senha" required>
-        <button type="submit">Cadastrar</button>
+    <div id="alert" class="alert">Usuário ou Senha incorretos</div>
+
+    <form id="login-form">
+        <h3>Login</h3>
+        <input type="text" placeholder="Email" id="login-email" required>
+        <input type="password" placeholder="Senha" id="login-senha" required>
+        <input type="submit" value="Entrar">
+        <p>Ou <a href="#" id="show-register-form" class="toggle-link">criar uma nova conta</a></p>
     </form>
 
-    <h1>Login</h1>
-    <form id="loginForm">
-        <input type="email" id="emailLogin" placeholder="Email" required>
-        <input type="password" id="senhaLogin" placeholder="Senha" required>
-        <button type="submit">Entrar</button>
+    <form id="register-form" style="display: none;">
+        <h3>Criar Conta</h3>
+        <input type="text" placeholder="Email" id="register-email" required>
+        <input type="password" placeholder="Senha" id="register-senha" required>
+        <input type="submit" value="Registrar">
+        <p>Já tem uma conta? <a href="#" id="show-login-form" class="toggle-link">Entrar</a></p>
     </form>
 
     <script>
-        // Cadastro
-        document.getElementById('cadastroForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Impede o envio do formulário
-            const email = document.getElementById('emailCadastro').value;
-            const senha = document.getElementById('senhaCadastro').value;
+        function logar() {
+            const email = document.getElementById('login-email').value.trim();
+            const senha = document.getElementById('login-senha').value;
 
-            // Salva o usuário no localStorage
-            localStorage.setItem(email, JSON.stringify({ email, senha }));
-            alert('Cadastro realizado com sucesso!');
+            // Debug: Verifique se estamos pegando os dados certos
+            console.log("Tentativa de login com:", email, senha);
+
+            const usuario = JSON.parse(localStorage.getItem(email));
+
+            // Debug: Exibir o usuário recuperado
+            console.log("Usuário recuperado:", usuario);
+
+            if (usuario && usuario.senha === senha) {
+                console.log("Login bem-sucedido! Redirecionando para page.html");
+                location.href = "page.html"; // Redirecionar para a página do jogo
+            } else {
+                mostrarAlerta('Usuário ou senha incorretos');
+            }
+        }
+
+        function registrar() {
+            const email = document.getElementById('register-email').value.trim();
+            const senha = document.getElementById('register-senha').value;
+
+            if (!email || !senha) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // Debug: Verificando o e-mail antes de registrar
+            if (localStorage.getItem(email)) {
+                alert('Este e-mail já está registrado.');
+                return;
+            }
+
+            const novoUsuario = { email, senha };
+            localStorage.setItem(email, JSON.stringify(novoUsuario));
+            mostrarAlerta('Conta criada com sucesso!', true);
+            setTimeout(() => {
+                location.href = "page.html"; // Redirecionar após 2 segundos
+            }, 2000);
+        }
+
+        function mostrarAlerta(mensagem, sucesso = false) {
+            const alertBox = document.getElementById('alert');
+            alertBox.textContent = mensagem;
+            alertBox.className = 'alert' + (sucesso ? ' success' : '');
+            alertBox.style.display = 'block';
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 3000);
+        }
+
+        function toggleForms() {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+
+            if (loginForm.style.display === "none") {
+                loginForm.style.display = "block";
+                registerForm.style.display = "none";
+            } else {
+                loginForm.style.display = "none";
+                registerForm.style.display = "block";
+            }
+        }
+
+        document.getElementById('login-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            logar();
         });
 
-        // Login
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Impede o envio do formulário
-            const email = document.getElementById('emailLogin').value;
-            const senha = document.getElementById('senhaLogin').value;
+        document.getElementById('register-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            registrar();
+        });
 
-            // Busca o usuário no localStorage
-            const usuario = JSON.parse(localStorage.getItem(email));
-            if (usuario && usuario.senha === senha) {
-                localStorage.setItem('usuarioLogado', email); // Armazena o usuário logado
-                window.location.href = 'page.html'; // Redireciona para page.html
-            } else {
-                alert('Email ou senha incorretos.');
-            }
+        document.getElementById('show-register-form').addEventListener('click', function (e) {
+            e.preventDefault();
+            toggleForms();
+        });
+
+        document.getElementById('show-login-form').addEventListener('click', function (e) {
+            e.preventDefault();
+            toggleForms();
         });
     </script>
 </body>
