@@ -8,38 +8,58 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
     <style>
-        * {
-            box-sizing: border-box;
-        }
-
         body {
             background-image: url(./img/up.png);
             background-size: cover;
             background-position: top;
             width: 100%;
             height: 100%;
+            font-family: Arial, sans-serif;
         }
 
-        /* Estilos já existentes para o formulário login e alert */
-        
+        h3 {
+            color: #fff;
+        }
+
         form {
             display: flex;
             flex-direction: column;
-            background-color: var(--preto);
+            background-color: rgba(0, 0, 0, 0.7);
             text-align: center;
             margin: 200px auto;
             width: 360px;
-            border-radius: 6px;
+            border-radius: 10px;
             padding: 20px 30px;
-            box-shadow: 3px 3px 6px 2px rgba(0, 0, 0, 0.2), -4px -4px 7px 3px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            transition: box-shadow 0.3s ease;
         }
 
-        /*... outras regras ...*/
-        
+        form:hover {
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+        }
+
+        input {
+            margin: 10px 0;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #66BB6A;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #57A859;
+        }
+
         .alert {
             display: none;
-            background-color: #f44336; /* Cor de fundo vermelha */
-            color: white; /* Texto branco */
+            background-color: #f44336;
+            color: white;
             padding: 15px;
             position: fixed;
             z-index: 1;
@@ -47,49 +67,63 @@
             top: 20px;
             transform: translateX(-50%);
             border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             animation: slide-down 0.5s;
         }
 
-        /*... animação e outras regras ...*/
+        @keyframes slide-down {
+            from {
+                top: -50px;
+            }
+            to {
+                top: 20px;
+            }
+        }
+
+        .success {
+            background-color: #4CAF50; /* Verde para sucesso */
+        }
+
+        .toggle-link {
+            margin-top: 10px;
+            color: #66BB6A;
+            text-decoration: none;
+        }
+
+        .toggle-link:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
     <div id="alert" class="alert">Usuário ou Senha incorretos</div>
-    
+
     <form id="login-form">
         <h3>Login</h3>
-        <input type="text" placeholder="Email" id="login-email">
-        <input type="password" placeholder="Senha" id="login-senha">
+        <input type="text" placeholder="Email" id="login-email" required>
+        <input type="password" placeholder="Senha" id="login-senha" required>
         <input type="submit" value="Entrar">
-        <p>Ou<a href="#" id="show-register-form"> criar uma nova conta</a></p>
+        <p>Ou <a href="#" id="show-register-form" class="toggle-link">criar uma nova conta</a></p>
     </form>
-    
+
     <form id="register-form" style="display: none;">
         <h3>Criar Conta</h3>
-        <input type="text" placeholder="Email" id="register-email">
-        <input type="password" placeholder="Senha" id="register-senha">
+        <input type="text" placeholder="Email" id="register-email" required>
+        <input type="password" placeholder="Senha" id="register-senha" required>
         <input type="submit" value="Registrar">
-        <p>Já tem uma conta? <a href="#" id="show-login-form"> Entrar</a></p>
+        <p>Já tem uma conta? <a href="#" id="show-login-form" class="toggle-link">Entrar</a></p>
     </form>
 
     <script>
-        // A função logar e registrar estarão no script.js
         function logar() {
             const email = document.getElementById('login-email').value;
             const senha = document.getElementById('login-senha').value;
 
-            const usuario = JSON.parse(localStorage.getItem(email)); // pega dados do usuário do localStorage
+            const usuario = JSON.parse(localStorage.getItem(email));
 
             if (usuario && usuario.senha === senha) {
-                location.href = "page.html";
+                location.href = "page.html"; // Redirecionar para a página do jogo
             } else {
-                // Mostrar o alerta
-                var alertBox = document.getElementById('alert');
-                alertBox.style.display = 'block';
-                setTimeout(function () {
-                    alertBox.style.display = 'none';
-                }, 3000);
+                mostrarAlerta('Usuário ou senha incorretos');
             }
         }
 
@@ -102,18 +136,27 @@
                 return;
             }
 
-            // Verifica se o e-mail já está registrado
             if (localStorage.getItem(email)) {
                 alert('Este e-mail já está registrado.');
                 return;
             }
 
-            // Salva o novo usuário no localStorage
             const novoUsuario = { email, senha };
             localStorage.setItem(email, JSON.stringify(novoUsuario));
+            mostrarAlerta('Conta criada com sucesso!', true);
+            setTimeout(() => {
+                location.href = "page.html"; // Redirecionar para a página do jogo após o registro
+            }, 2000); // Espera 2 segundos antes de redirecionar
+        }
 
-            alert('Conta criada com sucesso! Agora você pode fazer login.');
-            toggleForms(); // Volta para o formulário de login
+        function mostrarAlerta(mensagem, sucesso = false) {
+            const alertBox = document.getElementById('alert');
+            alertBox.textContent = mensagem;
+            alertBox.className = 'alert' + (sucesso ? ' success' : '');
+            alertBox.style.display = 'block';
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 3000);
         }
 
         function toggleForms() {
@@ -129,23 +172,21 @@
             }
         }
 
-        // Evento de submissão dos formulários
         document.getElementById('login-form').addEventListener('submit', function (e) {
-            e.preventDefault(); // Impede o envio do formulário
+            e.preventDefault();
             logar();
         });
 
         document.getElementById('register-form').addEventListener('submit', function (e) {
-            e.preventDefault(); // Impede o envio do formulário
+            e.preventDefault();
             registrar();
         });
 
-        // Mostrando e ocultando formulários
         document.getElementById('show-register-form').addEventListener('click', function (e) {
             e.preventDefault();
             toggleForms();
         });
-        
+
         document.getElementById('show-login-form').addEventListener('click', function (e) {
             e.preventDefault();
             toggleForms();
