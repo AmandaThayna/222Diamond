@@ -115,12 +115,19 @@
 
     <script>
         function logar() {
-            const email = document.getElementById('login-email').value;
+            const email = document.getElementById('login-email').value.trim();
             const senha = document.getElementById('login-senha').value;
+
+            // Debug: Verifique se estamos pegando os dados certos
+            console.log("Tentativa de login com:", email, senha);
 
             const usuario = JSON.parse(localStorage.getItem(email));
 
+            // Debug: Exibir o usuário recuperado
+            console.log("Usuário recuperado:", usuario);
+
             if (usuario && usuario.senha === senha) {
+                console.log("Login bem-sucedido! Redirecionando para page.html");
                 location.href = "page.html"; // Redirecionar para a página do jogo
             } else {
                 mostrarAlerta('Usuário ou senha incorretos');
@@ -128,7 +135,7 @@
         }
 
         function registrar() {
-            const email = document.getElementById('register-email').value;
+            const email = document.getElementById('register-email').value.trim();
             const senha = document.getElementById('register-senha').value;
 
             if (!email || !senha) {
@@ -136,6 +143,7 @@
                 return;
             }
 
+            // Debug: Verificando o e-mail antes de registrar
             if (localStorage.getItem(email)) {
                 alert('Este e-mail já está registrado.');
                 return;
@@ -145,8 +153,8 @@
             localStorage.setItem(email, JSON.stringify(novoUsuario));
             mostrarAlerta('Conta criada com sucesso!', true);
             setTimeout(() => {
-                location.href = "page.html"; // Redirecionar para a página do jogo após o registro
-            }, 2000); // Espera 2 segundos antes de redirecionar
+                location.href = "page.html"; // Redirecionar após 2 segundos
+            }, 2000);
         }
 
         function mostrarAlerta(mensagem, sucesso = false) {
