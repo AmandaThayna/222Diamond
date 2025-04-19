@@ -1,147 +1,104 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="utf-8" />
-    <title>Jogo - 222 Diamond</title>
-    <link rel="stylesheet" href="style.css" />
-    <style>
-        body {
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+    <meta charset="UTF-8" />
+    <title>222Diamond</title>
+    <link type="text/css" rel="stylesheet" href="style.css" />
+    <script type="text/javascript">
+        var credito = 0;
+        var aposta = 1;
+
+        // Função para verificar se o usuário está logado
+        function verificarLogin() {
+            var usuarioLogado = localStorage.getItem('usuarioLogado');
+            if (!usuarioLogado) {
+                window.location.href = 'index.html'; // Redireciona se não houver usuário logado
+            } else {
+                // Se o usuário estiver logado, carregar seus créditos
+                credito = parseInt(localStorage.getItem(usuarioLogado)) || 0;
+                document.getElementById('credito').value = 'R$ ' + credito;
+            }
         }
 
-        header {
-            text-align: center;
+        function aleatorio(inferior, superior) {
+            var numPossibilidades = superior - inferior;
+            var aleat = Math.random() * numPossibilidades;
+            aleat = Math.floor(aleat);
+            return parseInt(inferior) + aleat;
         }
 
-        #roleta {
-            width: 300px;
-            height: 300px;
-            border: 5px solid #333;
-            border-radius: 50%;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            background-color: #fff;
+        function apostaMenos() {
+            if (aposta > 1) {
+                aposta--;
+                document.getElementById('aposta').value = 'R$ ' + aposta;
+            }
         }
 
-        .diamante {
-            width: 40px; /* Tamanho dos diamantes */
-            height: 40px;
-            position: absolute;
-            opacity: 0.8;
+        function apostaMais() {
+            if (aposta < 500) {
+                aposta++;
+                document.getElementById('aposta').value = 'R$ ' + aposta;
+            }
         }
 
-        #controls {
-            margin-top: 20px;
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
+        function jogar() {
+            if (credito < 1 || credito < aposta) {
+                var aux = window.prompt("Coloque mais créditos, digite a quantidade em R$:", "1");
+                aux = parseInt(aux);
+                credito = parseInt(credito);
+                credito = credito + aux;
+                document.getElementById('credito').value = 'R$ ' + credito;
+                localStorage.setItem(localStorage.getItem('usuarioLogado'), credito); // Atualiza créditos no localStorage
+            } else {
+                if (credito > 0 && credito >= aposta) {
+                    credito = credito - aposta;
+                    document.getElementById('credito').value = 'R$ ' + credito;
+                    document.getElementById('escud1').src = 'img/roleta.gif';
+                    document.getElementById('escud2').src = 'img/roleta.gif';
+                    document.getElementById('escud3').src = 'img/roleta.gif';
+                    document.getElementById('escud4').src = 'img/roleta.gif';
+
+                    // (Lógica para slots continua aqui...)
+                }
+            }
         }
 
-        #saldo, #valorAposta {
-            width: 45%;
-            text-align: center;
-        }
-
-        button {
-            padding: 10px 20px;
-            margin-top: 10px;
-            cursor: pointer;
-        }
-
-        #apostaContainer {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        #result {
-            margin-top: 20px;
-            font-weight: bold;
-            text-align: center;
-        }
-    </style>
+        // Chama verificarLogin ao carregar a página
+        window.onload = verificarLogin;
+    </script>
 </head>
 <body>
-    <header>
-        <h1>Bem-vindo ao 222 Diamond</h1>
-    </header>
-    
-    <main>
-        <div id="roleta">
-            <!-- Adicionando diversos diamantes -->
-            <img src="img/diamante1.png" class="diamante" style="top: 10%; left: 10%;" alt="Diamante 1" />
-            <img src="img/diamante2.png" class="diamante" style="top: 20%; left: 50%;" alt="Diamante 2" />
-            <img src="img/diamante3.png" class="diamante" style="top: 30%; left: 30%;" alt="Diamante 3" />
-            <img src="img/diamante4.png" class="diamante" style="top: 40%; left: 70%;" alt="Diamante 4" />
-            <img src="img/diamante5.png" class="diamante" style="top: 60%; left: 20%;" alt="Diamante 5" />
-            <img src="img/diamante6.png" class="diamante" style="top: 70%; left: 50%;" alt="Diamante 6" />
-            <!-- Adicione mais diamantes conforme necessário -->
+    <div id="corpo">
+        <div id="creditos_txt">Saldo</div>
+        <div id="creditos">
+            <form>
+                <input id="credito" type="text" size="5" value="R$ 0" readonly />
+            </form>
         </div>
 
-        <div id="controls">
-            <div id="saldo">
-                <h3>Saldo</h3>
-                <p id="saldoValor">100</p> <!-- Valor inicial do saldo -->
-            </div>
-            <div id="valorAposta">
-                <h3>Valor da Aposta</h3>
-                <p id="apostaValor">10</p> <!-- Valor inicial da aposta -->
-            </div>
+        <div id="valor_txt">Valor da Aposta</div>
+        <div id="valor">
+            <form>
+                <input id="aposta" type="text" size="1" value="R$ 1" readonly />
+            </form>
         </div>
 
-        <div id="apostaContainer">
-            <button onclick="aumentarAposta()">Aumentar Aposta</button>
-            <button onclick="diminuirAposta()">Diminuir Aposta</button>
-            <button onclick="realizarAposta()">Jogar</button>
+        <div id="tela">
+            <div id="slot1"><img id="escud1" src="img/diamante_verde.png" /></div>
+            <div id="slot2"><img id="escud2" src="img/diamante_mesclado.png" /></div>
+            <div id="slot3"><img id="escud3" src="img/diamante_rosa.png" /></div>
+            <div id="slot4"><img id="escud4" src="img/cifrao.png" /></div>
         </div>
 
-        <div id="result"></div>
-    </main>
-    
-    <footer>
-        <p>&copy; 2023 222 Diamond. Todos os direitos reservados.</p>
-    </footer>
+        <div id="botoes">
+            <img src="img/apostamenos.gif" onclick="apostaMenos();" />
+            <img src="img/apostamais.gif" onclick="apostaMais();" />
+            <img src="img/jogar.gif" onclick="jogar();" />
+        </div>
 
-    <script>
-        let saldo = 100; // Saldo do jogador
-        let aposta = 10; // Valor da aposta
-
-        function aumentarAposta() {
-            aposta += 10; // Aumenta em 10 a aposta
-            document.getElementById('apostaValor').innerText = aposta;
-        }
-
-        function diminuirAposta() {
-            if(aposta > 10) {
-                aposta -= 10; // Diminui em 10 a aposta, mas não abaixo de 10
-                document.getElementById('apostaValor').innerText = aposta;
-            }
-        }
-
-        function realizarAposta() {
-            const resultado = Math.random() > 0.5; // Simulando um resultado aleatório
-            let ganho = 0;
-
-            // Verificação de prêmio (exemplo simples)
-            if (resultado) {
-                ganho = aposta * 2; // Ganha o dobro da aposta
-                saldo += ganho; 
-                document.getElementById('result').innerText = `Você ganhou ${ganho}!`;
-            } else {
-                saldo -= aposta; 
-                document.getElementById('result').innerText = 'Você perdeu a aposta.';
-            }
-
-            document.getElementById('saldoValor').innerText = saldo;
-        }
-    </script>
+        <div id="rodapé">
+            <a href="tabela.html" target='_blank'>Clique aqui para ver a Tabela de prêmios que você poderá ganhar neste jogo!</a>
+        </div>
+    </div>
 </body>
 </html>
