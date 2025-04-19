@@ -1,104 +1,108 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8" />
-    <title>222Diamond</title>
-    <link type="text/css" rel="stylesheet" href="style.css" />
-    <script type="text/javascript">
-        var credito = 0;
-        var aposta = 1;
-
-        // Função para verificar se o usuário está logado
-        function verificarLogin() {
-            var usuarioLogado = localStorage.getItem('usuarioLogado');
-            if (!usuarioLogado) {
-                window.location.href = 'index.html'; // Redireciona se não houver usuário logado
-            } else {
-                // Se o usuário estiver logado, carregar seus créditos
-                credito = parseInt(localStorage.getItem(usuarioLogado)) || 0;
-                document.getElementById('credito').value = 'R$ ' + credito;
-            }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página do Jogo</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <style>
+        /* Estilo base */
+        body {
+            background-image: url(./img/up.png);
+            background-size: cover;
+            background-position: top;
+            width: 100%;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
-        function aleatorio(inferior, superior) {
-            var numPossibilidades = superior - inferior;
-            var aleat = Math.random() * numPossibilidades;
-            aleat = Math.floor(aleat);
-            return parseInt(inferior) + aleat;
+        /* Estilo do título */
+        h1 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
-        function apostaMenos() {
-            if (aposta > 1) {
-                aposta--;
-                document.getElementById('aposta').value = 'R$ ' + aposta;
-            }
+        /* Estilo da roleta */
+        .roleta {
+            display: grid;
+            grid-template-columns: repeat(4, 150px);
+            gap: 20px;
         }
 
-        function apostaMais() {
-            if (aposta < 500) {
-                aposta++;
-                document.getElementById('aposta').value = 'R$ ' + aposta;
-            }
+        /* Estilo dos diamantes */
+        .opcao {
+            background: linear-gradient(45deg, #f6d02f, #f7797d);
+            border: 2px solid #ffcc00;
+            border-radius: 20px;
+            text-align: center;
+            padding: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
 
-        function jogar() {
-            if (credito < 1 || credito < aposta) {
-                var aux = window.prompt("Coloque mais créditos, digite a quantidade em R$:", "1");
-                aux = parseInt(aux);
-                credito = parseInt(credito);
-                credito = credito + aux;
-                document.getElementById('credito').value = 'R$ ' + credito;
-                localStorage.setItem(localStorage.getItem('usuarioLogado'), credito); // Atualiza créditos no localStorage
-            } else {
-                if (credito > 0 && credito >= aposta) {
-                    credito = credito - aposta;
-                    document.getElementById('credito').value = 'R$ ' + credito;
-                    document.getElementById('escud1').src = 'img/roleta.gif';
-                    document.getElementById('escud2').src = 'img/roleta.gif';
-                    document.getElementById('escud3').src = 'img/roleta.gif';
-                    document.getElementById('escud4').src = 'img/roleta.gif';
-
-                    // (Lógica para slots continua aqui...)
-                }
-            }
+        .opcao:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
-        // Chama verificarLogin ao carregar a página
-        window.onload = verificarLogin;
-    </script>
+        .botao {
+            margin-top: 20px;
+        }
+
+        #giraroleta {
+            background-color: #66BB6A;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #giraroleta:hover {
+            background-color: #57A859;
+        }
+    </style>
 </head>
 <body>
-    <div id="corpo">
-        <div id="creditos_txt">Saldo</div>
-        <div id="creditos">
-            <form>
-                <input id="credito" type="text" size="5" value="R$ 0" readonly />
-            </form>
-        </div>
-
-        <div id="valor_txt">Valor da Aposta</div>
-        <div id="valor">
-            <form>
-                <input id="aposta" type="text" size="1" value="R$ 1" readonly />
-            </form>
-        </div>
-
-        <div id="tela">
-            <div id="slot1"><img id="escud1" src="img/diamante_verde.png" /></div>
-            <div id="slot2"><img id="escud2" src="img/diamante_mesclado.png" /></div>
-            <div id="slot3"><img id="escud3" src="img/diamante_rosa.png" /></div>
-            <div id="slot4"><img id="escud4" src="img/cifrao.png" /></div>
-        </div>
-
-        <div id="botoes">
-            <img src="img/apostamenos.gif" onclick="apostaMenos();" />
-            <img src="img/apostamais.gif" onclick="apostaMais();" />
-            <img src="img/jogar.gif" onclick="jogar();" />
-        </div>
-
-        <div id="rodapé">
-            <a href="tabela.html" target='_blank'>Clique aqui para ver a Tabela de prêmios que você poderá ganhar neste jogo!</a>
-        </div>
+    <h1>Bem-vindo ao Jogo!</h1>
+    
+    <div class="roleta">
+        <div class="opcao" data-option="1">⭐ Diamante 1 ⭐</div>
+        <div class="opcao" data-option="2">⭐ Diamante 2 ⭐</div>
+        <div class="opcao" data-option="3">⭐ Diamante 3 ⭐</div>
+        <div class="opcao" data-option="4">⭐ Diamante 4 ⭐</div>
     </div>
+    
+    <div class="botao">
+        <button id="giraroleta">Girar Roleta!</button>
+    </div>
+
+    <script>
+        document.getElementById('giraroleta').addEventListener('click', function () {
+            const opcoes = document.querySelectorAll('.opcao');
+            const randomIndex = Math.floor(Math.random() * opcoes.length);
+            
+            opcoes.forEach(opcao => {
+                opcao.style.transform = ''; // Reseta transform
+            });
+
+            const escolha = opcoes[randomIndex];
+            escolha.style.transform = 'scale(1.1)';
+            alert('Você ganhou: ' + escolha.textContent);
+        });
+    </script>
 </body>
 </html>
