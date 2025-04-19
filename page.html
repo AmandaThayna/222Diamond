@@ -33,10 +33,10 @@
         }
 
         .diamante {
-            width: 60px;
-            height: 60px;
+            width: 40px; /* Tamanho dos diamantes */
+            height: 40px;
             position: absolute;
-            /* Adicione imagens de diamantes em posições aleatórias */
+            opacity: 0.8;
         }
 
         #controls {
@@ -61,6 +61,12 @@
             margin-top: 20px;
             text-align: center;
         }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -70,11 +76,13 @@
     
     <main>
         <div id="roleta">
-            <!-- Adicione as imagens dos diamantes -->
-            <img src="img/diamante1.png" class="diamante" style="top: 50%; left: 20%;" alt="Diamante 1" />
-            <img src="img/diamante2.png" class="diamante" style="top: 30%; left: 40%;" alt="Diamante 2" />
-            <img src="img/diamante3.png" class="diamante" style="top: 70%; left: 70%;" alt="Diamante 3" />
-            <img src="img/cifrao.png" class="diamante" style="top: 10%; left: 80%;" alt="Cifrão" />
+            <!-- Adicionando diversos diamantes -->
+            <img src="img/diamante1.png" class="diamante" style="top: 10%; left: 10%;" alt="Diamante 1" />
+            <img src="img/diamante2.png" class="diamante" style="top: 20%; left: 50%;" alt="Diamante 2" />
+            <img src="img/diamante3.png" class="diamante" style="top: 30%; left: 30%;" alt="Diamante 3" />
+            <img src="img/diamante4.png" class="diamante" style="top: 40%; left: 70%;" alt="Diamante 4" />
+            <img src="img/diamante5.png" class="diamante" style="top: 60%; left: 20%;" alt="Diamante 5" />
+            <img src="img/diamante6.png" class="diamante" style="top: 70%; left: 50%;" alt="Diamante 6" />
             <!-- Adicione mais diamantes conforme necessário -->
         </div>
 
@@ -92,8 +100,10 @@
         <div id="apostaContainer">
             <button onclick="aumentarAposta()">Aumentar Aposta</button>
             <button onclick="diminuirAposta()">Diminuir Aposta</button>
-            <button onclick="realizarAposta()">Realizar Aposta</button>
+            <button onclick="realizarAposta()">Jogar</button>
         </div>
+
+        <div id="result"></div>
     </main>
     
     <footer>
@@ -118,13 +128,18 @@
 
         function realizarAposta() {
             const resultado = Math.random() > 0.5; // Simulando um resultado aleatório
+            let ganho = 0;
+
+            // Verificação de prêmio (exemplo simples)
             if (resultado) {
-                saldo += aposta; // Se ganha, adiciona à saldo
-                alert('Você ganhou!');
+                ganho = aposta * 2; // Ganha o dobro da aposta
+                saldo += ganho; 
+                document.getElementById('result').innerText = `Você ganhou ${ganho}!`;
             } else {
-                saldo -= aposta; // Se perde, subtrai do saldo
-                alert('Você perdeu!');
+                saldo -= aposta; 
+                document.getElementById('result').innerText = 'Você perdeu a aposta.';
             }
+
             document.getElementById('saldoValor').innerText = saldo;
         }
     </script>
