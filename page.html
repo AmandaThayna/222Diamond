@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
     <style>
-        /* Estilo base */
         body {
             background-image: url(./img/up.png);
             background-size: cover;
@@ -21,21 +20,34 @@
             justify-content: center;
         }
 
-        /* Estilo do título */
         h1 {
             color: #fff;
             text-align: center;
             margin-bottom: 20px;
         }
 
-        /* Estilo da roleta */
+        .aposta-container {
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .aposta-input {
+            padding: 10px;
+            border: 1px solid #fff;
+            border-radius: 5px;
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
         .roleta {
             display: grid;
             grid-template-columns: repeat(4, 150px);
             gap: 20px;
         }
 
-        /* Estilo dos diamantes */
         .opcao {
             background: linear-gradient(45deg, #f6d02f, #f7797d);
             border: 2px solid #ffcc00;
@@ -74,10 +86,32 @@
         #giraroleta:hover {
             background-color: #57A859;
         }
+
+        .diamante {
+            display: none;
+            font-size: 48px;
+            color: gold;
+            position: absolute;
+            animation: shimmer 1s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
     </style>
 </head>
 <body>
     <h1>Bem-vindo ao Jogo!</h1>
+    
+    <div class="aposta-container">
+        <input type="number" id="aposta" class="aposta-input" placeholder="Digite sua aposta" />
+        <div>
+            <button id="aumentar" onclick="ajustarAposta(10)">+ R$10</button>
+            <button id="diminuir" onclick="ajustarAposta(-10)">- R$10</button>
+        </div>
+    </div>
     
     <div class="roleta">
         <div class="opcao" data-option="1">⭐ Diamante 1 ⭐</div>
@@ -89,19 +123,38 @@
     <div class="botao">
         <button id="giraroleta">Girar Roleta!</button>
     </div>
+    
+    <div id="anuncio-diamante" class="diamante">💎 Você Ganhou um Diamante! 💎</div>
 
     <script>
+        let apostaValor = 0;
+
+        function ajustarAposta(valor) {
+            apostaValor = Math.max(0, apostaValor + valor);
+            document.getElementById('aposta').value = apostaValor;
+        }
+
         document.getElementById('giraroleta').addEventListener('click', function () {
             const opcoes = document.querySelectorAll('.opcao');
             const randomIndex = Math.floor(Math.random() * opcoes.length);
+            const chanceDeGanho = Math.random() < 0.90; // 90% de chance de ganhar
             
             opcoes.forEach(opcao => {
                 opcao.style.transform = ''; // Reseta transform
             });
-
+            
             const escolha = opcoes[randomIndex];
             escolha.style.transform = 'scale(1.1)';
-            alert('Você ganhou: ' + escolha.textContent);
+
+            if (chanceDeGanho) {
+                document.getElementById('anuncio-diamante').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('anuncio-diamante').style.display = 'none';
+                }, 3000);
+                alert(`Você ganhou: ${escolha.textContent}! A sua aposta de R$${apostaValor} foi bem-sucedida!`);
+            } else {
+                alert(`Você perdeu sua aposta de R$${apostaValor}. Tente novamente!`);
+            }
         });
     </script>
 </body>
