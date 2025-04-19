@@ -31,6 +31,7 @@
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 20px;
+            width: 300px;
         }
 
         .aposta-input {
@@ -40,32 +41,7 @@
             font-size: 18px;
             margin-bottom: 10px;
             color: #333;
-        }
-
-        .roleta {
-            display: grid;
-            grid-template-columns: repeat(4, 150px);
-            gap: 20px;
-        }
-
-        .opcao {
-            background: linear-gradient(45deg, #f6d02f, #f7797d);
-            border: 2px solid #ffcc00;
-            border-radius: 20px;
-            text-align: center;
-            padding: 20px;
-            font-size: 18px;
-            font-weight: bold;
-            color: white;
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .opcao:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            width: 100%;
         }
 
         .botao {
@@ -81,6 +57,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
+            width: 100%;
         }
 
         #giraroleta:hover {
@@ -100,24 +77,36 @@
             50% { opacity: 1; }
             100% { opacity: 0.5; }
         }
+
+        #corpo2 {
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            width: 400px;
+        }
+
+        #tabela {
+            color: white;
+            line-height: 1.5;
+        }
+
+        #tabela img {
+            width: 100px;
+            display: block;
+            margin: 10px auto;
+        }
     </style>
 </head>
 <body>
     <h1>Bem-vindo ao Jogo!</h1>
     
     <div class="aposta-container">
-        <input type="number" id="aposta" class="aposta-input" placeholder="Digite sua aposta" />
+        <input type="number" id="aposta" class="aposta-input" placeholder="Digite sua aposta" min="0.50" max="10000" step="0.50"/>
         <div>
             <button id="aumentar" onclick="ajustarAposta(10)">+ R$10</button>
             <button id="diminuir" onclick="ajustarAposta(-10)">- R$10</button>
         </div>
-    </div>
-    
-    <div class="roleta">
-        <div class="opcao" data-option="1">⭐ Diamante 1 ⭐</div>
-        <div class="opcao" data-option="2">⭐ Diamante 2 ⭐</div>
-        <div class="opcao" data-option="3">⭐ Diamante 3 ⭐</div>
-        <div class="opcao" data-option="4">⭐ Diamante 4 ⭐</div>
     </div>
     
     <div class="botao">
@@ -126,34 +115,51 @@
     
     <div id="anuncio-diamante" class="diamante">💎 Você Ganhou um Diamante! 💎</div>
 
+    <div id="corpo2">
+        <h1>Tabela de Prêmios</h1>
+        <div id="tabela">
+            <br>Caso todos os escudos sejam diferentes, o seu prêmio é de 2X o Valor da Aposta.</br>
+            <p><img src="img/premio1.png" /></p>
+            <br>Caso todos os escudos sejam do Diamante Mesclado, o seu prêmio é de 4X o Valor da Aposta.</br>
+            <p><img src="img/premio2.png" /></p>
+            <br>Caso todos os escudos sejam do Diamante Rosa, o seu prêmio é de 2X o Valor da Aposta.</br>
+            <p><img src="img/premio3.png" /></p>
+            <br>Caso todos os escudos sejam do Diamante Verde, o seu prêmio é de 5X o Valor da Aposta.</br>
+            <p><img src="img/premio4.png" /></p>
+            <br>Caso todos os escudos sejam o Cifrão, o seu prêmio é de 10X o Valor da Aposta.</br>
+            <p><img src="img/premio5.png" /></p>
+        </div>
+    </div>
+
     <script>
         let apostaValor = 0;
 
         function ajustarAposta(valor) {
-            apostaValor = Math.max(0, apostaValor + valor);
-            document.getElementById('aposta').value = apostaValor;
+            apostaValor = Math.max(0.50, Math.min(10000, apostaValor + valor));
+            document.getElementById('aposta').value = apostaValor.toFixed(2);
         }
 
         document.getElementById('giraroleta').addEventListener('click', function () {
-            const opcoes = document.querySelectorAll('.opcao');
-            const randomIndex = Math.floor(Math.random() * opcoes.length);
-            const chanceDeGanho = Math.random() < 0.90; // 90% de chance de ganhar
-            
-            opcoes.forEach(opcao => {
-                opcao.style.transform = ''; // Reseta transform
-            });
-            
-            const escolha = opcoes[randomIndex];
-            escolha.style.transform = 'scale(1.1)';
+            if (apostaValor < 0.50 || apostaValor > 10000) {
+                alert("O valor da aposta deve estar entre R$0,50 e R$10.000,00.");
+                return;
+            }
 
-            if (chanceDeGanho) {
+            const multiplicadores = [2, 4, 5, 10, 15, 20, 500];
+            const randomMultiplier = multiplicadores[Math.floor(Math.random() * multiplicadores.length)];
+            const resultado = apostaValor * randomMultiplier;
+
+            // Simulação de ganhar ou perder
+            const ganhou = Math.random() < 0.9; // 90% de chance de ganhar
+            
+            if (ganhou) {
                 document.getElementById('anuncio-diamante').style.display = 'block';
                 setTimeout(() => {
                     document.getElementById('anuncio-diamante').style.display = 'none';
                 }, 3000);
-                alert(`Você ganhou: ${escolha.textContent}! A sua aposta de R$${apostaValor} foi bem-sucedida!`);
+                alert(`Você ganhou! Seu prêmio é R$${resultado.toFixed(2)} (Multiplicador: ${randomMultiplier}x)`);
             } else {
-                alert(`Você perdeu sua aposta de R$${apostaValor}. Tente novamente!`);
+                alert(`Você perdeu sua aposta de R$${apostaValor.toFixed(2)}. Tente novamente!`);
             }
         });
     </script>
