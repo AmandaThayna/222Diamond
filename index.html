@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
     <style>
+        /* Estilos do formulário */
         body {
             background-image: url(./img/up.png);
             background-size: cover;
@@ -16,11 +17,9 @@
             height: 100%;
             font-family: Arial, sans-serif;
         }
-
         h3 {
             color: #fff;
         }
-
         form {
             display: flex;
             flex-direction: column;
@@ -33,29 +32,24 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
             transition: box-shadow 0.3s ease;
         }
-
         form:hover {
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
         }
-
         input {
             margin: 10px 0;
             padding: 10px;
             border: none;
             border-radius: 5px;
         }
-
         input[type="submit"] {
             background-color: #66BB6A;
             color: white;
             cursor: pointer;
             transition: background-color 0.3s;
         }
-
         input[type="submit"]:hover {
             background-color: #57A859;
         }
-
         .alert {
             display: none;
             background-color: #f44336;
@@ -69,26 +63,16 @@
             border-radius: 5px;
             animation: slide-down 0.5s;
         }
-
         @keyframes slide-down {
-            from {
-                top: -50px;
-            }
-            to {
-                top: 20px;
-            }
+            from { top: -50px; }
+            to { top: 20px; }
         }
-
-        .success {
-            background-color: #4CAF50; /* Verde para sucesso */
-        }
-
+        .success { background-color: #4CAF50; }
         .toggle-link {
             margin-top: 10px;
             color: #66BB6A;
             text-decoration: none;
         }
-
         .toggle-link:hover {
             text-decoration: underline;
         }
@@ -96,7 +80,6 @@
 </head>
 <body>
     <div id="alert" class="alert">Usuário ou Senha incorretos</div>
-
     <form id="login-form">
         <h3>Login</h3>
         <input type="text" placeholder="Email" id="login-email" required>
@@ -118,16 +101,14 @@
             const email = document.getElementById('login-email').value.trim();
             const senha = document.getElementById('login-senha').value;
 
-            // Debug: Verifique se estamos pegando os dados certos
             console.log("Tentativa de login com:", email, senha);
-
             const usuario = JSON.parse(localStorage.getItem(email));
 
-            // Debug: Exibir o usuário recuperado
             console.log("Usuário recuperado:", usuario);
 
             if (usuario && usuario.senha === senha) {
                 console.log("Login bem-sucedido! Redirecionando para page.html");
+                localStorage.setItem('usuarioLogado', email); // Armazenar e-mail do usuário logado
                 location.href = "page.html"; // Redirecionar para a página do jogo
             } else {
                 mostrarAlerta('Usuário ou senha incorretos');
@@ -143,7 +124,6 @@
                 return;
             }
 
-            // Debug: Verificando o e-mail antes de registrar
             if (localStorage.getItem(email)) {
                 alert('Este e-mail já está registrado.');
                 return;
@@ -153,6 +133,7 @@
             localStorage.setItem(email, JSON.stringify(novoUsuario));
             mostrarAlerta('Conta criada com sucesso!', true);
             setTimeout(() => {
+                localStorage.setItem('usuarioLogado', email); // Armazena o e-mail do novo usuário logado
                 location.href = "page.html"; // Redirecionar após 2 segundos
             }, 2000);
         }
