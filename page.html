@@ -1,29 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html version="-//W3C//DTD XHTML 1.1//EN"
-      xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.w3.org/1999/xhtml
-                          http://www.w3.org/MarkUp/SCHEMA/xhtml11.xsd">
-
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
     <title>222Diamond</title>
     <link type="text/css" rel="stylesheet" href="style.css" />
     <script type="text/javascript">
         var credito = 0;
         var aposta = 1;
-        var nSort = 0;
-        var slt1, slt2, slt3, slt4;
 
         // Função para verificar se o usuário está logado
         function verificarLogin() {
             var usuarioLogado = localStorage.getItem('usuarioLogado');
             if (!usuarioLogado) {
-                // Redireciona para index.html se não houver usuário logado
-                window.location.href = 'index.html';
+                window.location.href = 'index.html'; // Redireciona se não houver usuário logado
             } else {
-                // Se o usuário estiver logado, pode carregar seus créditos
+                // Se o usuário estiver logado, carregar seus créditos
                 credito = parseInt(localStorage.getItem(usuarioLogado)) || 0;
                 document.getElementById('credito').value = 'R$ ' + credito;
             }
@@ -50,15 +41,13 @@
             }
         }
 
-        // (A função verificaPremio() e outras lógicas de jogo continuam aqui)
-
         function jogar() {
             if (credito < 1 || credito < aposta) {
                 var aux = window.prompt("Coloque mais créditos, digite a quantidade em R$:", "1");
                 aux = parseInt(aux);
                 credito = parseInt(credito);
                 credito = credito + aux;
-                document.getElementById('credito').value = 'R$ ' + credito
+                document.getElementById('credito').value = 'R$ ' + credito;
                 localStorage.setItem(localStorage.getItem('usuarioLogado'), credito); // Atualiza créditos no localStorage
             } else {
                 if (credito > 0 && credito >= aposta) {
@@ -70,35 +59,24 @@
                     document.getElementById('escud4').src = 'img/roleta.gif';
 
                     // (Lógica para slots continua aqui...)
-
-                    cont = setTimeout("verificaPremio()", 9000);
                 }
             }
         }
-        
+
         // Chama verificarLogin ao carregar a página
         window.onload = verificarLogin;
     </script>
 </head>
-
 <body>
-
     <div id="corpo">
-
-        <div id="creditos_txt">
-            Saldo
-        </div>
-
+        <div id="creditos_txt">Saldo</div>
         <div id="creditos">
             <form>
                 <input id="credito" type="text" size="5" value="R$ 0" readonly />
             </form>
         </div>
 
-        <div id="valor_txt">
-            Valor da Aposta
-        </div>
-
+        <div id="valor_txt">Valor da Aposta</div>
         <div id="valor">
             <form>
                 <input id="aposta" type="text" size="1" value="R$ 1" readonly />
@@ -106,32 +84,21 @@
         </div>
 
         <div id="tela">
-            <div id="slot1">
-                <img id="escud1" src="img/diamante_verde.png" />
-            </div>
-            <div id="slot2">
-                <img id="escud2" src="img/diamante_mesclado.png" />
-            </div>
-            <div id="slot3">
-                <img id="escud3" src="img/diamante_rosa.png" />
-            </div>
-            <div id="slot4">
-                <img id="escud4" src="img/cifrao.png" />
-            </div>
+            <div id="slot1"><img id="escud1" src="img/diamante_verde.png" /></div>
+            <div id="slot2"><img id="escud2" src="img/diamante_mesclado.png" /></div>
+            <div id="slot3"><img id="escud3" src="img/diamante_rosa.png" /></div>
+            <div id="slot4"><img id="escud4" src="img/cifrao.png" /></div>
         </div>
 
         <div id="botoes">
-            <img src="img/apostamenos.gif" onMouseDown="this.src='img/apostamenos_p.gif';" onMouseUp="this.src='img/apostamenos.gif';" onclick="apostaMenos();" />
-            <img src="img/apostamais.gif" onMouseDown="this.src='img/apostamais_p.gif';" onMouseUp="this.src='img/apostamais.gif';" onclick="apostaMais();" />
-            <img src="img/jogar.gif" onMouseDown="this.src='img/jogar_p.gif';" onMouseUp="this.src='img/jogar.gif';" onclick="jogar();" />
+            <img src="img/apostamenos.gif" onclick="apostaMenos();" />
+            <img src="img/apostamais.gif" onclick="apostaMais();" />
+            <img src="img/jogar.gif" onclick="jogar();" />
         </div>
 
         <div id="rodapé">
             <a href="tabela.html" target='_blank'>Clique aqui para ver a Tabela de prêmios que você poderá ganhar neste jogo!</a>
         </div>
-
     </div>
-
 </body>
-
 </html>
