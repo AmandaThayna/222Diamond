@@ -7,6 +7,7 @@
     <script type="text/javascript">
         var credito = 0;
         var aposta = 1;
+        var diamantesSelecionados = [];
 
         // Função para verificar se o usuário está logado
         function verificarLogin() {
@@ -18,13 +19,6 @@
                 credito = parseInt(localStorage.getItem(usuarioLogado)) || 0;
                 document.getElementById('credito').value = 'R$ ' + credito;
             }
-        }
-
-        function aleatorio(inferior, superior) {
-            var numPossibilidades = superior - inferior;
-            var aleat = Math.random() * numPossibilidades;
-            aleat = Math.floor(aleat);
-            return parseInt(inferior) + aleat;
         }
 
         function apostaMenos() {
@@ -41,26 +35,65 @@
             }
         }
 
+        function selecionarDiamante(diamante) {
+            var index = diamantesSelecionados.indexOf(diamante);
+            if (index !== -1) {
+                diamantesSelecionados.splice(index, 1); // Remove se já estiver selecionado
+            } else {
+                if (diamantesSelecionados.length < 4) { // Limita a 4 seleções
+                    diamantesSelecionados.push(diamante);
+                }
+            }
+            document.getElementById('resultadoSelecionados').innerText = "Aposte em: " + diamantesSelecionados.join(', ');
+        }
+
         function jogar() {
             if (credito < 1 || credito < aposta) {
                 var aux = window.prompt("Coloque mais créditos, digite a quantidade em R$:", "1");
                 aux = parseInt(aux);
                 credito = parseInt(credito);
-                credito = credito + aux;
+                credito += aux;
                 document.getElementById('credito').value = 'R$ ' + credito;
                 localStorage.setItem(localStorage.getItem('usuarioLogado'), credito); // Atualiza créditos no localStorage
             } else {
                 if (credito > 0 && credito >= aposta) {
-                    credito = credito - aposta;
+                    credito -= aposta;
                     document.getElementById('credito').value = 'R$ ' + credito;
-                    document.getElementById('escud1').src = 'img/roleta.gif';
-                    document.getElementById('escud2').src = 'img/roleta.gif';
-                    document.getElementById('escud3').src = 'img/roleta.gif';
-                    document.getElementById('escud4').src = 'img/roleta.gif';
 
-                    // (Lógica para slots continua aqui...)
+                    // Gira os slots
+                    for (var i = 1; i <= 4; i++) {
+                        var resultado = aleatorio(1, 5); // Gera número entre 1 e 4
+                        document.getElementById("escud" + i).src = "img/diamante_" + ["verde", "rosa", "mesclado", "cifrao"][resultado - 1] + ".png";
+                    }
+
+                    // Verifica o resultado
+                    verificarResultado();
                 }
             }
+        }
+
+        function verificarResultado() {
+            var resultados = [];
+            for (var i = 1; i <= 4; i++) {
+                var imgSrc = document.getElementById("escud" + i).src;
+                resultados.push(imgSrc.substring(imgSrc.lastIndexOf('/') + 1, imgSrc.lastIndexOf('.png')));
+            }
+            var vitoria = diamantesSelecionados.some(diamante => resultados.includes("diamante_" + diamante + ".png") || diamante === "cifrao.png");
+            if (vitoria) {
+                alert("Você ganhou!"); // Notifica o jogador
+                // Aqui você pode implementar a lógica de premios baseada no resultado (você pode ajustar conforme sua tabela de prêmio)
+            } else {
+                alert("Você perdeu. Tente novamente!");
+            }
+            diamantesSelecionados = []; // Reseta as seleções
+            document.getElementById('resultadoSelecionados').innerText = "";
+        }
+
+        function aleatorio(inferior, superior) {
+            var numPossibilidades = superior - inferior;
+            var aleat = Math.random() * numPossibilidades;
+            aleat = Math.floor(aleat);
+            return parseInt(inferior) + aleat;
         }
 
         // Chama verificarLogin ao carregar a página
@@ -84,11 +117,13 @@
         </div>
 
         <div id="tela">
-            <div id="slot1"><img id="escud1" src="img/diamante_verde.png" /></div>
-            <div id="slot2"><img id="escud2" src="img/diamante_mesclado.png" /></div>
-            <div id="slot3"><img id="escud3" src="img/diamante_rosa.png" /></div>
-            <div id="slot4"><img id="escud4" src="img/cifrao.png" /></div>
+            <div id="slot1" onclick="selecionarDiamante('verde');"><img id="escud1" src="img/diamante_verde.png" /></div>
+            <div id="slot2" onclick="selecionarDiamante('mesclado');"><img id="escud2" src="img/diamante_mesclado.png" /></div>
+            <div id="slot3" onclick="selecionarDiamante('rosa');"><img id="escud3" src="img/diamante_rosa.png" /></div>
+            <div id="slot4" onclick="selecionarDiamante('cifrao');"><img id="escud4" src="img/cifrao.png" /></div>
         </div>
+
+        <div id="resultadoSelecionados"></div>
 
         <div id="botoes">
             <img src="img/apostamenos.gif" onclick="apostaMenos();" />
