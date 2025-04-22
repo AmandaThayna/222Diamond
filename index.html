@@ -102,7 +102,9 @@
             width: 80px;
             height: 80px;
             margin: 5px;
-            display: inline-block;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
             border: 2px solid rgba(0, 0, 0, 0.5);
             border-radius: 5px;
             background-size: cover;
@@ -189,6 +191,7 @@
         #slotsContainer {
             display: grid;
             grid-template-columns: repeat(4, 1fr); /* 4 colunas */
+            grid-template-rows: repeat(3, 1fr); /* 3 linhas, totalizando 12 slots */
             gap: 10px; /* Espaçamento entre slots */
             justify-items: center; /* Centraliza os slots */
         }
@@ -367,7 +370,6 @@
                 return;
             }
 
-            let premios = [];
             let totalGanho = 0;
 
             // Sortear diamantes
@@ -378,12 +380,8 @@
                 slot.style.backgroundRepeat = 'no-repeat';
                 const ganho = valorInput * valores[randomIndex]; // Cálculo do ganho
                 totalGanho += ganho;
-
-                premios.push(`Slot ${index + 1}: ${valores[randomIndex]}x (${ganho.toFixed(2)})`);
             });
 
-            resultado.innerHTML = `Resultados: <br>${premios.join('<br>')}`;
-            
             // Atualiza o saldo e verifica se o jogador ganhou ou perdeu
             saldoUsuario += totalGanho - valorInput;
 
