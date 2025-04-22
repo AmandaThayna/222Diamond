@@ -1,44 +1,119 @@
 /* style.css */
 body {
-    background-image: url(./img/background.jpg);
-    background-size: cover;
-    background-position: top;
-    font-family: 'Poppins', sans-serif; /* Fonte amigável */
-    margin: 0; /* Reset default body margin */
-    padding: 0; /* Reset default body padding */
+    background-image: url(./img/background.jpg); /* Fundo com imagem */
+    background-size: cover; /* Ajusta a imagem de fundo para cobrir toda a tela */
+    background-position: center; /* Centraliza a imagem de fundo */
+    font-family: 'Poppins', sans-serif; /* Fonte moderna e amigável */
+    margin: 0;
+    padding: 0;
     display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-    min-height: 100vh; /* Ensure full viewport height */
-    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    min-height: 100vh; /* Ocupa a altura total da viewport */
+    box-sizing: border-box; /* Inclui preenchimento e borda no total */
 }
 
 h1 {
-    text-align: center;
+    text-align: center; /* Centraliza o texto */
     color: #FFC107; /* Amarelo vibrante */
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-    font-size: 2.5em; /* Tamanho ajustado */
-    margin-bottom: 20px; /* Add some space below the title */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Sombra escura para destaque */
+    font-size: 2.5em; /* Tamanho do título */
+    margin-bottom: 20px; /* Espaço abaixo do título */
 }
 
 a {
-    color: rgb(86, 19, 209);
-    text-decoration: none; /* Remove underlines from links */
-    transition: color 0.3s ease; /* Smooth color transition on hover */
+    color: rgb(86, 19, 209); /* Cor do texto dos links */
+    text-decoration: none; /* Remove o sublinhado dos links */
+    transition: color 0.3s ease; /* Transição suave ao passar o mouse */
 }
 
 a:hover {
-    color: white;
+    color: white; /* Cor quando o mouse passa sobre o link */
 }
 
 #corpo {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Exibe os elementos em coluna */
     width: 700px; /* Largura do painel */
-    height: 500px; /* Altura do painel */
+    max-width: 90%; /* Largura máxima para dispositivos menores */
+    height: auto; /* Altura automática com base no conteúdo */
     border-radius: 10px; /* Bordas arredondadas */
-    padding: 20px 30px;
-    background-color: rgba(0, 0, 0, 0.8); /* Fundo preto semi-transparente */
-    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
-    color: white;
-    box-sizing: border-box
+    padding: 20px 30px; /* Espaçamento interno */
+    background-color: rgba(20, 20, 20, 0.8); /* Fundo escuro com transparência */
+    box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.7); /* Sombra para dar profundidade */
+    color: white; /* Cor do texto */
+    box-sizing: border-box; /* Inclui borda e margem no total */
+}
+
+/* Adicionando estilo ao formulário */
+form {
+    background-color: rgba(30, 30, 30, 0.9); /* Fundo do formulário um tom mais escuro */
+    padding: 20px; /* Espaçamento interno */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6); /* Sombra para profundidade */
+}
+
+input {
+    padding: 10px; /* Padding interno nos campos de entrada */
+    border-radius: 5px; /* Arredondar as bordas dos campos de entrada */
+    border: 1px solid rgba(255, 255, 255, 0.5); /* Borda branca com leve transparência */
+    margin: 10px 0; /* Margem entre os campos */
+    background-color: rgba(50, 50, 50, 0.8); /* Fundo dos campos de entrada */
+    color: white; /* Cor do texto dos campos */
+}
+
+input[type="submit"] {
+    background-color: #66BB6A; /* Cor vibrante para o botão */
+    color: white; /* Cor do texto do botão */
+    cursor: pointer; /* Muda o cursor ao passar sobre o botão */
+    transition: background-color 0.3s; /* Transição suave para o botão */
+}
+
+input[type="submit"]:hover {
+    background-color: #57A859; /* Cor quando o mouse passa sobre o botão */
+}
+
+/* Estilo para slots do jogo */
+.slot {
+    width: 80px;
+    height: 80px;
+    padding: 5px; /* Adiciona um padding para dar espaço interno */
+    background: rgba(0, 0, 0, 0.6); /* Fundo escuro para os slots */
+    border-radius: 5px; /* Bordas arredondadas */
+    border: 2px solid rgba(255, 255, 255, 0.2); /* Borda clara com transparência */
+    transition: transform 0.2s, border-color 0.2s; /* Transição para hover */
+}
+
+.slot:hover {
+    transform: scale(1.1); /* Efeito de escalonamento ao passar o mouse */
+    border-color: #FFC107; /* Muda a borda para amarelo ao passar o mouse */
+}
+
+/* Feedback do jogo */
+#feedback {
+    font-size: 24px; /* Tamanho do feedback */
+    margin-top: 10px; /* Espaçamento superior */
+    transition: color 0.3s; /* Transição suave para mudança de cor */
+}
+
+/* Alerta de mensagem */
+.alert {
+    background-color: rgba(255, 0, 0, 0.8); /* Fundo vermelho para alertas */
+    color: white; /* Cor do texto do alerta */
+    border-radius: 5px; /* Bordas arredondadas */
+    padding: 15px; /* Padding do alerta */
+    position: relative; /* Para permitir animações */
+    animation: slide-down 0.5s; /* Animação */
+}
+
+/* Animação */
+@keyframes slide-down {
+    from {
+        top: -50px; /* Começa acima do viewport */
+    }
+    to {
+        top: 20px; /* Move para a posição final */
+    }
+}
+
+/* Outros estilos podem ser adicionados abaixo para personalizar mais o jogo */
