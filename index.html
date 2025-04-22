@@ -238,6 +238,14 @@
             font-size: 18px;
             color: white;
         }
+
+        /* Formulário de Definição de Saldo Inicial */
+        #initialBalanceForm {
+            display: flex;
+            flex-direction: column;
+            margin: 20px auto;
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -262,6 +270,13 @@
         <p>Já tem uma conta? <a href="#" id="show-login-form" class="toggle-link">Entrar</a></p>
     </form>
 
+    <!-- Formulário para Definir Saldo Inicial -->
+    <div id="initialBalanceForm" style="display: none;">
+        <h3>Defina seu saldo inicial</h3>
+        <input type="number" id="userBalance" placeholder="Saldo Inicial" required />
+        <button id="startGameBtn" class="button">Iniciar Jogo</button>
+    </div>
+
     <!-- Seção do Jogo -->
     <div id="jogo">
         <div id="tela">
@@ -270,7 +285,7 @@
 
         <!-- Informações do jogador -->
         <div id="infoPanel">
-            <div>Saldo: R$ <span id="saldoUsuario">100.00</span></div>
+            <div>Saldo: R$ <span id="saldoUsuario">0.00</span></div>
             <div>Aposta: R$ <span id="valorAposta">0.50</span></div>
             <div>Ganho: R$ <span id="ganhoAtual">0.00</span></div>
         </div>
@@ -305,8 +320,7 @@
     </div>
 
     <script>
-        // Variável para armazenar o saldo do usuário
-        let saldoUsuario = 100; // Valor inicial do saldo
+        let saldoUsuario = 0; // Inicializa o saldo como 0
         let valorAposta = 0.50; // Valor inicial da aposta
         let rodadaAutomatica = false; // Flag para indicar se será rodadas automáticas
         let rodadasRestantes = 0; // Para armazenar a quantidade de rodadas automáticas
@@ -327,9 +341,7 @@
 
             if (usuario && usuario.senha === senha) {
                 localStorage.setItem('usuarioLogado', email);
-                exibirJogo(); // Chama função para exibir a parte do jogo
-                alert(`Bem-vindo! Seu saldo: R$ ${saldoUsuario.toFixed(2)}`);
-                atualizarInformacoes(); // Atualiza o saldo na interface
+                exibirInicialBalanceForm(); // Chama função para exibir o formulário de saldo inicial
             } else {
                 mostrarAlerta('Usuário ou senha incorretos');
             }
@@ -354,7 +366,7 @@
             mostrarAlerta('Conta criada com sucesso!', true);
             setTimeout(() => {
                 localStorage.setItem('usuarioLogado', email);
-                exibirJogo();  // Chama a função para exibir a parte do jogo
+                exibirInicialBalanceForm(); // Chama a função para exibir o formulário de saldo inicial
             }, 2000);
         }
 
@@ -380,6 +392,25 @@
                 registerForm.style.display = "block";
             }
         }
+
+        function exibirInicialBalanceForm() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'none';
+            document.getElementById('jogo').style.display = 'none';
+            document.getElementById('initialBalanceForm').style.display = 'block';
+        }
+
+        document.getElementById('startGameBtn').addEventListener('click', () => {
+            const saldoInicial = parseFloat(document.getElementById('userBalance').value);
+            if (isNaN(saldoInicial) || saldoInicial <= 0) {
+                alert('Por favor, insira um saldo válido.');
+                return;
+            }
+            saldoUsuario = saldoInicial;
+            document.getElementById('initialBalanceForm').style.display = 'none';
+            document.getElementById('jogo').style.display = 'block';
+            atualizarInformacoes(); // Atualiza informações do usuário no início do jogo
+        });
 
         // Funções do Jogo
         const imagens = [
@@ -488,14 +519,12 @@
 
         // Adiciona eventos aos botões de aposta
         document.getElementById('apostarMaisBtn').addEventListener('click', () => {
-            valorAposta = Math.min(valorAposta + 0.50, 2000); // Limita a aposta ao máximo de 2000
-            document.getElementById('valor_input').value = valorAposta.toFixed(2);
+            valorAposta = Math.min(valorAposta + 0.50, saldoUsuario); // Limita a aposta ao máximo do saldo
             document.getElementById('valorAposta').innerText = valorAposta.toFixed(2);
         });
 
         document.getElementById('apostarMenosBtn').addEventListener('click', () => {
             valorAposta = Math.max(valorAposta - 0.50, 0.50); // Limita a aposta ao mínimo de 0.50
-            document.getElementById('valor_input').value = valorAposta.toFixed(2);
             document.getElementById('valorAposta').innerText = valorAposta.toFixed(2);
         });
 
@@ -509,7 +538,7 @@
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('register-form').style.display = 'none';
             jogoSection.style.display = 'block';
-            atualizarInformacoes(); // Atualiza informações assim que o jogo é exibido
+            atualizarInformacoes(); // Atualiza informações
         }
 
         document.getElementById('login-form').addEventListener('submit', function (e) {
