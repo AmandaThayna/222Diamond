@@ -8,7 +8,6 @@
     <title>22Diamond - Jogo de Sorte</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Estilos do formulário */
         body {
             background-image: url(./img/up.png);
             background-size: cover;
@@ -197,10 +196,47 @@
         /* Grid de Slots */
         #slotsContainer {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(3, 1fr);
             gap: 10px;
             justify-items: center;
+        }
+
+        /* Estilo dos botões */
+        .button {
+            background-color: #66BB6A;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        .button:hover {
+            background-color: #57A859;
+        }
+
+        #sortearBtn {
+            background-color: #4CAF50; /* Cor verde chamativa para o botão de sortear */
+            border-radius: 50%; /* Formato de botão circular */
+            width: 80px;
+            height: 80px;
+            font-size: 32px;
+            transition: background-color 0.3s;
+        }
+
+        #sortearBtn:hover {
+            background-color: #43A047; /* Muda a cor ao passar o mouse */
+        }
+
+        /* Estilos do saldo, aposta e ganho */
+        #infoPanel {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: white;
         }
     </style>
 </head>
@@ -232,21 +268,11 @@
             <p id="resultado" class="highlight">Clique em "Sortear Diamantes" para jogar!</p>
         </div>
 
-        <div id="botoes">
-            <input type="text" id="valor_input" placeholder="Aposte" value="0.50" />
-            <button id="apostarMaisBtn">Apostar Mais</button>
-            <button id="apostarMenosBtn">Apostar Menos</button>
-            <button id="automaticoBtn">Rodadas Rápidas</button>
-
-            <label for="quantidadeJogadas">Quantas jogadas automáticas?</label>
-            <select id="quantidadeJogadas">
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="15">15</option>
-                <option value="20">20</option>
-                <option value="30">30</option>
-            </select>
-            <button id="sortearBtn">Sortear Diamantes</button>
+        <!-- Informações do jogador -->
+        <div id="infoPanel">
+            <div>Saldo: R$ <span id="saldoUsuario">100.00</span></div>
+            <div>Aposta: R$ <span id="valorAposta">0.50</span></div>
+            <div>Ganho: R$ <span id="ganhoAtual">0.00</span></div>
         </div>
 
         <div id="slotsContainer">
@@ -259,9 +285,13 @@
             <div class="slot" id="slot7"></div>
             <div class="slot" id="slot8"></div>
             <div class="slot" id="slot9"></div>
-            <div class="slot" id="slot10"></div>
-            <div class="slot" id="slot11"></div>
-            <div class="slot" id="slot12"></div>
+        </div>
+
+        <!-- Painel de Botões -->
+        <div id="botoes">
+            <button id="apostarMenosBtn" class="button">-</button>
+            <button id="sortearBtn">♦</button>
+            <button id="apostarMaisBtn" class="button">+</button>
         </div>
     </div>
 
@@ -281,6 +311,13 @@
         let rodadaAutomatica = false; // Flag para indicar se será rodadas automáticas
         let rodadasRestantes = 0; // Para armazenar a quantidade de rodadas automáticas
 
+        // Atualiza a exibição de saldo, aposta e ganho
+        function atualizarInformacoes() {
+            document.getElementById('saldoUsuario').innerText = saldoUsuario.toFixed(2);
+            document.getElementById('valorAposta').innerText = valorAposta.toFixed(2);
+            document.getElementById('ganhoAtual').innerText = 0.00; // Resetar ganho atual após cada rodada
+        }
+
         // Funções de Login/Register
         function logar() {
             const email = document.getElementById('login-email').value.trim();
@@ -292,6 +329,7 @@
                 localStorage.setItem('usuarioLogado', email);
                 exibirJogo(); // Chama função para exibir a parte do jogo
                 alert(`Bem-vindo! Seu saldo: R$ ${saldoUsuario.toFixed(2)}`);
+                atualizarInformacoes(); // Atualiza o saldo na interface
             } else {
                 mostrarAlerta('Usuário ou senha incorretos');
             }
@@ -358,7 +396,7 @@
         function checarVitoria() {
             let combinacoes = [];
             // Verificação horizontal
-            for (let i = 0; i < 12; i += 4) {
+            for (let i = 0; i < 9; i += 3) {
                 if (slots[i].style.backgroundImage &&
                     slots[i].style.backgroundImage === slots[i + 1].style.backgroundImage &&
                     slots[i].style.backgroundImage === slots[i + 2].style.backgroundImage) {
@@ -367,20 +405,20 @@
             }
 
             // Verificação vertical
-            for (let i = 0; i < 4; i++) {
+            for (let i = 0; i < 3; i++) {
                 if (slots[i].style.backgroundImage &&
-                    slots[i].style.backgroundImage === slots[i + 4].style.backgroundImage &&
-                    slots[i].style.backgroundImage === slots[i + 8].style.backgroundImage) {
-                    combinacoes.push([slots[i], slots[i + 4], slots[i + 8]]);
+                    slots[i].style.backgroundImage === slots[i + 3].style.backgroundImage &&
+                    slots[i].style.backgroundImage === slots[i + 6].style.backgroundImage) {
+                    combinacoes.push([slots[i], slots[i + 3], slots[i + 6]]);
                 }
             }
 
             // Verificação diagonal
-            if (slots[0].style.backgroundImage && slots[0].style.backgroundImage === slots[5].style.backgroundImage && slots[10].style.backgroundImage === slots[0].style.backgroundImage) {
-                combinacoes.push([slots[0], slots[5], slots[10]]);
+            if (slots[0].style.backgroundImage && slots[0].style.backgroundImage === slots[4].style.backgroundImage && slots[8].style.backgroundImage === slots[0].style.backgroundImage) {
+                combinacoes.push([slots[0], slots[4], slots[8]]);
             }
-            if (slots[2].style.backgroundImage && slots[2].style.backgroundImage === slots[5].style.backgroundImage && slots[8].style.backgroundImage === slots[2].style.backgroundImage) {
-                combinacoes.push([slots[2], slots[5], slots[8]]);
+            if (slots[2].style.backgroundImage && slots[2].style.backgroundImage === slots[4].style.backgroundImage && slots[6].style.backgroundImage === slots[2].style.backgroundImage) {
+                combinacoes.push([slots[2], slots[4], slots[6]]);
             }
 
             return combinacoes;
@@ -438,56 +476,31 @@
                 });
                 mostrarAnimaAlerta(true, totalGanho);
                 saldoUsuario += totalGanho; // Adiciona ganho ao saldo
+                document.getElementById('ganhoAtual').innerText = totalGanho.toFixed(2); // Atualiza ganho atual
             } else {
                 mostrarAnimaAlerta(false);
                 saldoUsuario -= valorAposta; // Deduz valor da aposta se perder
             }
 
             // Atualiza o alerta de saldo
-            alert(`Seu saldo atual: R$ ${saldoUsuario.toFixed(2)}`);
-        }
-
-        // Função para rodadas automáticas
-        function jogarAutomaticamente() {
-            if (rodadasRestantes > 0) {
-                sortearDiamantes();
-                rodadasRestantes--;
-                if (rodadasRestantes === 0) {
-                    rodadaAutomatica = false;
-                }
-            }
+            atualizarInformacoes(); // Chama função para atualizar informações
         }
 
         // Adiciona eventos aos botões de aposta
         document.getElementById('apostarMaisBtn').addEventListener('click', () => {
             valorAposta = Math.min(valorAposta + 0.50, 2000); // Limita a aposta ao máximo de 2000
             document.getElementById('valor_input').value = valorAposta.toFixed(2);
+            document.getElementById('valorAposta').innerText = valorAposta.toFixed(2);
         });
 
         document.getElementById('apostarMenosBtn').addEventListener('click', () => {
             valorAposta = Math.max(valorAposta - 0.50, 0.50); // Limita a aposta ao mínimo de 0.50
             document.getElementById('valor_input').value = valorAposta.toFixed(2);
+            document.getElementById('valorAposta').innerText = valorAposta.toFixed(2);
         });
 
         document.getElementById('sortearBtn').addEventListener('click', () => {
-            if (rodadaAutomatica) {
-                // Se já estiver em rodadas automáticas, não faz nada
-                return;
-            }
-            sortearDiamantes();
-        });
-
-        document.getElementById('automaticoBtn').addEventListener('click', () => {
-            if (!rodadaAutomatica) {
-                rodadasRestantes = parseInt(document.getElementById('quantidadeJogadas').value, 10);
-                rodadaAutomatica = true;
-                const intervalId = setInterval(() => {
-                    jogarAutomaticamente();
-                    if (rodadasRestantes <= 0) {
-                        clearInterval(intervalId);
-                    }
-                }, 1000); // Intervalo de um segundo entre as jogadas
-            }
+            sortearDiamantes(); // Chama a função de sortear diamantes
         });
 
         // Exibe a seção do jogo
@@ -496,6 +509,7 @@
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('register-form').style.display = 'none';
             jogoSection.style.display = 'block';
+            atualizarInformacoes(); // Atualiza informações assim que o jogo é exibido
         }
 
         document.getElementById('login-form').addEventListener('submit', function (e) {
