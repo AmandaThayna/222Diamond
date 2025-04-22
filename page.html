@@ -1,139 +1,35 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8" />
-    <title>222Diamond</title>
-    <link type="text/css" rel="stylesheet" href="style.css" />
-    <script type="text/javascript">
-        var credito = 0;
-        var aposta = 1;
-        var diamantesSelecionados = [];
-
-        // Função para verificar se o usuário está logado
-        function verificarLogin() {
-            var usuarioLogado = localStorage.getItem('usuarioLogado');
-            if (!usuarioLogado) {
-                window.location.href = 'index.html'; // Redireciona se não houver usuário logado
-            } else {
-                // Se o usuário estiver logado, carregar seus créditos
-                credito = parseInt(localStorage.getItem(usuarioLogado)) || 0;
-                document.getElementById('credito').value = 'R$ ' + credito;
-            }
-        }
-
-        function apostaMenos() {
-            if (aposta > 1) {
-                aposta--;
-                document.getElementById('aposta').value = 'R$ ' + aposta;
-            }
-        }
-
-        function apostaMais() {
-            if (aposta < 500) {
-                aposta++;
-                document.getElementById('aposta').value = 'R$ ' + aposta;
-            }
-        }
-
-        function selecionarDiamante(diamante) {
-            var index = diamantesSelecionados.indexOf(diamante);
-            if (index !== -1) {
-                diamantesSelecionados.splice(index, 1); // Remove se já estiver selecionado
-            } else {
-                if (diamantesSelecionados.length < 4) { // Limita a 4 seleções
-                    diamantesSelecionados.push(diamante);
-                }
-            }
-            document.getElementById('resultadoSelecionados').innerText = "Aposte em: " + diamantesSelecionados.join(', ');
-        }
-
-        function jogar() {
-            if (credito < 1 || credito < aposta) {
-                var aux = window.prompt("Coloque mais créditos, digite a quantidade em R$:", "1");
-                aux = parseInt(aux);
-                credito = parseInt(credito);
-                credito += aux;
-                document.getElementById('credito').value = 'R$ ' + credito;
-                localStorage.setItem(localStorage.getItem('usuarioLogado'), credito); // Atualiza créditos no localStorage
-            } else {
-                if (credito > 0 && credito >= aposta) {
-                    credito -= aposta;
-                    document.getElementById('credito').value = 'R$ ' + credito;
-
-                    // Gira os slots
-                    for (var i = 1; i <= 4; i++) {
-                        var resultado = aleatorio(1, 5); // Gera número entre 1 e 4
-                        document.getElementById("escud" + i).src = "img/diamante_" + ["verde", "rosa", "mesclado", "cifrao"][resultado - 1] + ".png";
-                    }
-
-                    // Verifica o resultado
-                    verificarResultado();
-                }
-            }
-        }
-
-        function verificarResultado() {
-            var resultados = [];
-            for (var i = 1; i <= 4; i++) {
-                var imgSrc = document.getElementById("escud" + i).src;
-                resultados.push(imgSrc.substring(imgSrc.lastIndexOf('/') + 1, imgSrc.lastIndexOf('.png')));
-            }
-            var vitoria = diamantesSelecionados.some(diamante => resultados.includes("diamante_" + diamante + ".png") || diamante === "cifrao.png");
-            if (vitoria) {
-                alert("Você ganhou!"); // Notifica o jogador
-                // Aqui você pode implementar a lógica de premios baseada no resultado (você pode ajustar conforme sua tabela de prêmio)
-            } else {
-                alert("Você perdeu. Tente novamente!");
-            }
-            diamantesSelecionados = []; // Reseta as seleções
-            document.getElementById('resultadoSelecionados').innerText = "";
-        }
-
-        function aleatorio(inferior, superior) {
-            var numPossibilidades = superior - inferior;
-            var aleat = Math.random() * numPossibilidades;
-            aleat = Math.floor(aleat);
-            return parseInt(inferior) + aleat;
-        }
-
-        // Chama verificarLogin ao carregar a página
-        window.onload = verificarLogin;
-    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Inicial - Jogos do Tigrinho</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <h1>Jogos do Tigrinho</h1>
     <div id="corpo">
-        <div id="creditos_txt">Saldo</div>
-        <div id="creditos">
-            <form>
-                <input id="credito" type="text" size="5" value="R$ 0" readonly />
-            </form>
-        </div>
-
-        <div id="valor_txt">Valor da Aposta</div>
-        <div id="valor">
-            <form>
-                <input id="aposta" type="text" size="1" value="R$ 1" readonly />
-            </form>
-        </div>
-
         <div id="tela">
-            <div id="slot1" onclick="selecionarDiamante('verde');"><img id="escud1" src="img/diamante_verde.png" /></div>
-            <div id="slot2" onclick="selecionarDiamante('mesclado');"><img id="escud2" src="img/diamante_mesclado.png" /></div>
-            <div id="slot3" onclick="selecionarDiamante('rosa');"><img id="escud3" src="img/diamante_rosa.png" /></div>
-            <div id="slot4" onclick="selecionarDiamante('cifrao');"><img id="escud4" src="img/cifrao.png" /></div>
+            <!-- Espaço para exibir informações ou resultados do jogo -->
         </div>
-
-        <div id="resultadoSelecionados"></div>
-
         <div id="botoes">
-            <img src="img/apostamenos.gif" onclick="apostaMenos();" />
-            <img src="img/apostamais.gif" onclick="apostaMais();" />
-            <img src="img/jogar.gif" onclick="jogar();" />
+            <button>Iniciar Jogo</button>
+            <button>Créditos</button>
         </div>
-
-        <div id="rodapé">
-            <a href="tabela.html" target='_blank'>Clique aqui para ver a Tabela de prêmios que você poderá ganhar neste jogo!</a>
+        <div id="corpo2">
+            <div id="slot1">Slot 1</div>
+            <div id="slot2">Slot 2</div>
+            <div id="slot3">Slot 3</div>
+            <div id="slot4">Slot 4</div>
         </div>
+        <div id="creditos_txt">Créditos:</div>
+        <div id="creditos">Seu nome aqui</div>
+        <div id="valor_txt">Valor:</div>
+        <div id="valor">R$ 0,00</div>
     </div>
+    <footer id="rodapé">
+        &copy; 2023 Jogos do Tigrinho
+    </footer>
 </body>
 </html>
