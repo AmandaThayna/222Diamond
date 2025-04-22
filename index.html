@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>22Diamond - Login</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
     <style>
         /* Estilos do formulário */
         body {
@@ -25,7 +24,7 @@
             flex-direction: column;
             background-color: rgba(0, 0, 0, 0.7);
             text-align: center;
-            margin: 200px auto;
+            margin: 20px auto;
             width: 360px;
             border-radius: 10px;
             padding: 20px 30px;
@@ -76,10 +75,53 @@
         .toggle-link:hover {
             text-decoration: underline;
         }
+        /* Estilos do jogo */
+        #jogo {
+            display: none;
+            text-align: center;
+        }
+        .slot {
+            width: 80px;
+            height: 80px;
+            margin: 5px;
+            display: inline-block;
+            border: 2px solid rgba(0, 0, 0, 0.5);
+            border-radius: 5px; /* Bordas arredondadas */
+            background-size: cover;
+            transition: transform 0.2s; /* Efeito de transição suave */
+        }
+        .slot:hover {
+            transform: scale(1.1); /* Efeito de aumento ao passar o mouse */
+        }
+        #tela {
+            margin: 20px auto;
+            width: 500px;
+            height: 100px;
+            background-color: white;
+            border: medium solid black;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #botoes {
+            margin-top: 20px; /* Margem acima dos botões */
+        }
+        #creditos_txt, #valor_txt {
+            margin-top: 30px;
+            font-weight: bold;
+            color: white;
+        }
+        #creditos, #valor {
+            display: flex; /* Para evitar o uso de float */
+            margin-left: 20px;
+        }
     </style>
 </head>
 <body>
     <div id="alert" class="alert">Usuário ou Senha incorretos</div>
+
+    <!-- Formulário de Login -->
     <form id="login-form">
         <h3>Login</h3>
         <input type="text" placeholder="Email" id="login-email" required>
@@ -88,6 +130,7 @@
         <p>Ou <a href="#" id="show-register-form" class="toggle-link">criar uma nova conta</a></p>
     </form>
 
+    <!-- Formulário de Cadastro -->
     <form id="register-form" style="display: none;">
         <h3>Criar Conta</h3>
         <input type="text" placeholder="Email" id="register-email" required>
@@ -96,7 +139,45 @@
         <p>Já tem uma conta? <a href="#" id="show-login-form" class="toggle-link">Entrar</a></p>
     </form>
 
+    <!-- Seção do Jogo -->
+    <div id="jogo">
+        <div id="tela">
+            <p id="resultado">Clique nos slots para jogar!</p>
+        </div>
+        <div id="botoes">
+            <button id="iniciarBtn">Iniciar Jogo</button>
+            <button id="creditosBtn">Créditos</button>
+        </div>
+        <div id="corpo2" style="display: flex; flex-wrap: wrap; justify-content: center;">
+            <div class="slot" id="slot1"></div>
+            <div class="slot" id="slot2"></div>
+            <div class="slot" id="slot3"></div>
+            <div class="slot" id="slot4"></div>
+            <div class="slot" id="slot5"></div>
+            <div class="slot" id="slot6"></div>
+            <div class="slot" id="slot7"></div>
+            <div class="slot" id="slot8"></div>
+            <div class="slot" id="slot9"></div>
+            <div class="slot" id="slot10"></div>
+            <div class="slot" id="slot11"></div>
+            <div class="slot" id="slot12"></div>
+            <div class="slot" id="slot13"></div>
+            <div class="slot" id="slot14"></div>
+            <div class="slot" id="slot15"></div>
+            <div class="slot" id="slot16"></div>
+            <div class="slot" id="slot17"></div>
+            <div class="slot" id="slot18"></div>
+            <div class="slot" id="slot19"></div>
+            <div class="slot" id="slot20"></div>
+        </div>
+        <div id="creditos_txt">Créditos:</div>
+        <div id="creditos">Seu nome aqui</div>
+        <div id="valor_txt">Valor:</div>
+        <div id="valor">R$ 0,00</div>
+    </div>
+
     <script>
+        // Funções de Login/Register
         function logar() {
             const email = document.getElementById('login-email').value.trim();
             const senha = document.getElementById('login-senha').value;
@@ -107,9 +188,9 @@
             console.log("Usuário recuperado:", usuario);
 
             if (usuario && usuario.senha === senha) {
-                console.log("Login bem-sucedido! Redirecionando para page.html");
+                console.log("Login bem-sucedido! Exibindo o jogo.");
                 localStorage.setItem('usuarioLogado', email); // Armazenar e-mail do usuário logado
-                location.href = "page.html"; // Redirecionar para a página do jogo
+                exibirJogo(); // Chama função para exibir a parte do jogo
             } else {
                 mostrarAlerta('Usuário ou senha incorretos');
             }
@@ -134,7 +215,7 @@
             mostrarAlerta('Conta criada com sucesso!', true);
             setTimeout(() => {
                 localStorage.setItem('usuarioLogado', email); // Armazena o e-mail do novo usuário logado
-                location.href = "page.html"; // Redirecionar após 2 segundos
+                exibirJogo();  // Chama a função para exibir a parte do jogo
             }, 2000);
         }
 
@@ -159,6 +240,53 @@
                 loginForm.style.display = "none";
                 registerForm.style.display = "block";
             }
+        }
+
+        // Funções do Jogo
+        const imagens = [
+            'img/diamante_rosa.png',
+            'img/diamante_verde.png',
+            'img/diamante_mesclado.png',
+            'img/cifrao.png'
+        ];
+
+        const slots = document.querySelectorAll('.slot');
+        const resultado = document.getElementById('resultado');
+        const valorDisplay = document.getElementById('valor');
+        let valorTotal = 0;
+
+        // Função para iniciar o jogo
+        document.getElementById('iniciarBtn').addEventListener('click', () => {
+            // Preencher os slots com imagens aleatórias
+            slots.forEach(slot => {
+                const randomIndex = Math.floor(Math.random() * imagens.length);
+                slot.style.backgroundImage = `url(${imagens[randomIndex]})`;
+                slot.dataset.value = randomIndex + 1; // Adiciona um valor ao slot
+            });
+            resultado.textContent = "Slots preenchidos! Clique em um slot para jogar.";
+        });
+
+        // Adiciona evento de clique em cada slot
+        slots.forEach(slot => {
+            slot.addEventListener('click', () => {
+                const value = Number(slot.dataset.value);
+                valorTotal += value; // Adiciona o valor ao total
+                valorDisplay.textContent = `R$ ${valorTotal.toFixed(2)}`; // Atualiza o display do valor
+                resultado.textContent = `Você clicou no slot com valor: ${value}!`;
+            });
+        });
+
+        // Função para mostrar os créditos
+        document.getElementById('creditosBtn').addEventListener('click', () => {
+            alert('Créditos: Seu Nome Aqui');
+        });
+
+        // Exibe a seção do jogo
+        function exibirJogo() {
+            const jogoSection = document.getElementById('jogo');
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'none';
+            jogoSection.style.display = 'block';
         }
 
         document.getElementById('login-form').addEventListener('submit', function (e) {
