@@ -20,6 +20,7 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            overflow: hidden; /* Evitar overflow durante animações */
         }
 
         h3 {
@@ -110,7 +111,7 @@
         }
 
         .slot:hover {
-            transform: scale(1.1); /* Efeito de aumento ao passar o mouse */
+            transform: scale(1.1);
         }
 
         #tela {
@@ -140,21 +141,35 @@
             font-weight: bold;
         }
 
-        /* Estilos de animação */
-        .anima-alerta {
+        /* Estilos para Mega Ganho */
+        #megaGanho {
+            display: none;
             position: fixed;
             z-index: 9999;
             left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: all 0.5s ease-in-out;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 215, 0, 0.8);
+            border: 2px solid gold;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            animation: shine 1s infinite;
         }
 
-        .anima-alerta img {
-            width: 100px; /* Tamanho do GIF */
-            margin-bottom: 10px;
+        @keyframes shine {
+            0% {
+                background-color: rgba(255, 215, 0, 0.9);
+            }
+
+            50% {
+                background-color: rgba(255, 223, 186, 0.9);
+            }
+
+            100% {
+                background-color: rgba(255, 215, 0, 0.9);
+            }
         }
 
         /* Responsividade */
@@ -164,9 +179,18 @@
                 height: 60px;
             }
 
-            input[type="submit"], #valor_input {
-                width: 100%; /* Largura total em dispositivos móveis */
+            input[type="submit"],
+            #valor_input {
+                width: 100%;
             }
+        }
+
+        /* Grid de Slots */
+        #slotsContainer {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 colunas */
+            gap: 10px; /* Espaçamento entre slots */
+            justify-items: center; /* Centraliza os slots */
         }
     </style>
 </head>
@@ -203,7 +227,7 @@
             <button id="sortearBtn">Sortear Diamantes</button>
         </div>
 
-        <div id="corpo2" style="display: flex; flex-wrap: wrap; justify-content: center;">
+        <div id="slotsContainer">
             <div class="slot" id="slot1"></div>
             <div class="slot" id="slot2"></div>
             <div class="slot" id="slot3"></div>
@@ -214,8 +238,13 @@
             <div class="slot" id="slot8"></div>
             <div class="slot" id="slot9"></div>
             <div class="slot" id="slot10"></div>
+            <div class="slot" id="slot11"></div>
+            <div class="slot" id="slot12"></div>
         </div>
     </div>
+
+    <!-- Div para Mega Ganho -->
+    <div id="megaGanho">🎉 Mega Ganho! 🎉</div>
 
     <!-- Div para Alertas Animados -->
     <div id="anima-alerta" class="anima-alerta" style="display: none;">
@@ -224,6 +253,9 @@
     </div>
 
     <script>
+        // Variável para armazenar o saldo do usuário
+        let saldoUsuario = 100; // Valor inicial do saldo
+
         // Funções de Login/Register
         function logar() {
             const email = document.getElementById('login-email').value.trim();
@@ -234,6 +266,7 @@
             if (usuario && usuario.senha === senha) {
                 localStorage.setItem('usuarioLogado', email);
                 exibirJogo(); // Chama função para exibir a parte do jogo
+                alert(`Bem-vindo! Seu saldo: R$ ${saldoUsuario.toFixed(2)}`);
             } else {
                 mostrarAlerta('Usuário ou senha incorretos');
             }
@@ -298,7 +331,7 @@
         const resultado = document.getElementById('resultado');
 
         // Função para exibir animação de resultado
-        function mostrarAnimaAlerta(ganhou, totalGanho) {
+        function mostrarAnimaAlerta(ganhou, totalGanho, valorAposta) {
             const animaAlerta = document.getElementById('anima-alerta');
             const mensagemAlerta = document.getElementById('mensagem-alerta');
             const alertaGif = document.getElementById('alerta-gif');
@@ -317,11 +350,20 @@
             }, 3000);
         }
 
+        // Função para mostrar alerta de Mega Ganho
+        function mostrarMegaGanho() {
+            const megaGanho = document.getElementById('megaGanho');
+            megaGanho.style.display = 'block';
+            setTimeout(() => {
+                megaGanho.style.display = 'none';
+            }, 3000);
+        }
+
         // Função para iniciar o sorteio
         document.getElementById('sortearBtn').addEventListener('click', () => {
             const valorInput = parseFloat(document.getElementById('valor_input').value);
-            if (isNaN(valorInput) || valorInput <= 0) {
-                alert('Por favor, digite um valor válido para a aposta.');
+            if (isNaN(valorInput) || valorInput <= 0 || valorInput > saldoUsuario) {
+                alert('Por favor, digite um valor válido para a aposta que você possui.');
                 return;
             }
 
@@ -341,7 +383,19 @@
             });
 
             resultado.innerHTML = `Resultados: <br>${premios.join('<br>')}`;
-            mostrarAnimaAlerta(totalGanho > 0, totalGanho);
+            
+            // Atualiza o saldo e verifica se o jogador ganhou ou perdeu
+            saldoUsuario += totalGanho - valorInput;
+
+            // Atualiza o alerta de saldo
+            alert(`Seu saldo atual: R$ ${saldoUsuario.toFixed(2)}`);
+
+            // Verifica se houve mega ganho
+            if (totalGanho > valorInput * 15) {
+                mostrarMegaGanho();
+            }
+
+            mostrarAnimaAlerta(totalGanho > 0, totalGanho, valorInput);
         });
 
         // Exibe a seção do jogo
