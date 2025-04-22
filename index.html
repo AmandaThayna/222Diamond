@@ -33,7 +33,7 @@
             font-size: 20px;
         }
 
-        /* Formulários */
+        /* Estilos do formulário */
         form {
             display: flex;
             flex-direction: column;
@@ -354,22 +354,22 @@
         const valores = [2, 5, 10, 20]; // Valores correspondentes
         const slots = document.querySelectorAll('.slot');
 
-        // Function to check if there are matching slots
+        // Função para verificar se há combinações ganhas
         function checarVitoria() {
             let combinacoes = [];
             // Verificação horizontal
             for (let i = 0; i < 12; i += 4) {
-                if (slots[i].style.backgroundImage && 
-                    slots[i].style.backgroundImage === slots[i + 1].style.backgroundImage && 
+                if (slots[i].style.backgroundImage &&
+                    slots[i].style.backgroundImage === slots[i + 1].style.backgroundImage &&
                     slots[i].style.backgroundImage === slots[i + 2].style.backgroundImage) {
                     combinacoes.push([slots[i], slots[i + 1], slots[i + 2]]);
                 }
             }
-            
+
             // Verificação vertical
             for (let i = 0; i < 4; i++) {
                 if (slots[i].style.backgroundImage &&
-                    slots[i].style.backgroundImage === slots[i + 4].style.backgroundImage && 
+                    slots[i].style.backgroundImage === slots[i + 4].style.backgroundImage &&
                     slots[i].style.backgroundImage === slots[i + 8].style.backgroundImage) {
                     combinacoes.push([slots[i], slots[i + 4], slots[i + 8]]);
                 }
@@ -442,7 +442,7 @@
                 mostrarAnimaAlerta(false);
                 saldoUsuario -= valorAposta; // Deduz valor da aposta se perder
             }
-            
+
             // Atualiza o alerta de saldo
             alert(`Seu saldo atual: R$ ${saldoUsuario.toFixed(2)}`);
         }
@@ -460,12 +460,12 @@
 
         // Adiciona eventos aos botões de aposta
         document.getElementById('apostarMaisBtn').addEventListener('click', () => {
-            valorAposta = Math.min(valorAposta + 0.50, 2000);
+            valorAposta = Math.min(valorAposta + 0.50, 2000); // Limita a aposta ao máximo de 2000
             document.getElementById('valor_input').value = valorAposta.toFixed(2);
         });
 
         document.getElementById('apostarMenosBtn').addEventListener('click', () => {
-            valorAposta = Math.max(valorAposta - 0.50, 0.50);
+            valorAposta = Math.max(valorAposta - 0.50, 0.50); // Limita a aposta ao mínimo de 0.50
             document.getElementById('valor_input').value = valorAposta.toFixed(2);
         });
 
