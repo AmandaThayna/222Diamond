@@ -83,7 +83,7 @@
         .slot {
             width: 80px;
             height: 80px;
-            margin: 5px;
+            margin: 2px; /* Reduzido para diminuir a distância */
             display: inline-block;
             border: 2px solid rgba(0, 0, 0, 0.5);
             border-radius: 5px; /* Bordas arredondadas */
@@ -107,14 +107,21 @@
         #botoes {
             margin-top: 20px; /* Margem acima dos botões */
         }
-        #creditos_txt, #valor_txt {
+        #valor_txt {
             margin-top: 30px;
             font-weight: bold;
             color: white;
         }
-        #creditos, #valor {
-            display: flex; /* Para evitar o uso de float */
+        #valor_input {
+            display: inline-block;
             margin-left: 20px;
+            padding: 5px;
+            width: 120px; /* Largura da caixa de entrada */
+        }
+        #valor_display {
+            color: white;
+            font-weight: bold;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -170,10 +177,9 @@
             <div class="slot" id="slot19"></div>
             <div class="slot" id="slot20"></div>
         </div>
-        <div id="creditos_txt">Créditos:</div>
-        <div id="creditos">Seu nome aqui</div>
         <div id="valor_txt">Valor:</div>
-        <div id="valor">R$ 0,00</div>
+        <input type="text" id="valor_input" placeholder="Digite seu valor aqui" />
+        <div id="valor_display">R$ 0,00</div>
     </div>
 
     <script>
@@ -252,7 +258,7 @@
 
         const slots = document.querySelectorAll('.slot');
         const resultado = document.getElementById('resultado');
-        const valorDisplay = document.getElementById('valor');
+        const valorDisplay = document.getElementById('valor_display');
         let valorTotal = 0;
 
         // Função para iniciar o jogo
@@ -278,7 +284,12 @@
 
         // Função para mostrar os créditos
         document.getElementById('creditosBtn').addEventListener('click', () => {
-            alert('Créditos: Seu Nome Aqui');
+            const valorInput = document.getElementById('valor_input').value;
+            if (valorInput) {
+                alert(`Valor digitado: R$ ${valorInput}`);
+            } else {
+                alert('Por favor, digite um valor.');
+            }
         });
 
         // Exibe a seção do jogo
