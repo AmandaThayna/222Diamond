@@ -1,8 +1,16 @@
+/* style.css */
 body {
     background-image: url(./img/background.jpg);
     background-size: cover;
     background-position: top;
     font-family: 'Poppins', sans-serif; /* Fonte amigável */
+    margin: 0; /* Reset default body margin */
+    padding: 0; /* Reset default body padding */
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    min-height: 100vh; /* Ensure full viewport height */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
 }
 
 h1 {
@@ -10,10 +18,13 @@ h1 {
     color: #FFC107; /* Amarelo vibrante */
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
     font-size: 2.5em; /* Tamanho ajustado */
+    margin-bottom: 20px; /* Add some space below the title */
 }
 
 a {
     color: rgb(86, 19, 209);
+    text-decoration: none; /* Remove underlines from links */
+    transition: color 0.3s ease; /* Smooth color transition on hover */
 }
 
 a:hover {
@@ -23,7 +34,6 @@ a:hover {
 #corpo {
     display: flex;
     flex-direction: column;
-    margin: auto;
     width: 700px; /* Largura do painel */
     height: 500px; /* Altura do painel */
     border-radius: 10px; /* Bordas arredondadas */
@@ -31,87 +41,4 @@ a:hover {
     background-color: rgba(0, 0, 0, 0.8); /* Fundo preto semi-transparente */
     box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
     color: white;
-}
-
-#corpo2 {
-    display: flex;
-    margin: auto;
-    width: 700px;
-    height: 1050px;
-    background-color: transparent;
-    border: medium dashed rgb(226, 1, 1);
-}
-
-#tela {
-    margin: 20px auto;
-    width: 500px;
-    height: 100px;
-    background-color: white;
-    border: medium solid black;
-    border-radius: 5px;
-}
-
-#botoes {
-    display: flex;
-    justify-content: center; /* Centraliza os botões */
-    gap: 10px; /* Espaçamento entre botões */
-    margin: 20px auto; /* Centraliza os botões */
-}
-
-#botoes button {
-    padding: 10px 20px;
-    background-color: #007BFF; /* Azul vibrante */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-#botoes button:hover {
-    background-color: #28A745; /* Verde ao passar o mouse */
-    transform: scale(1.05); /* Efeito de aumento */
-}
-
-#creditos_txt, #valor_txt {
-    margin-top: 30px;
-    font-weight: bold;
-    color: white;
-}
-
-#creditos, #valor {
-    display: flex; /* Para evitar o uso de float */
-    margin-left: 20px;
-}
-
-#slot1, #slot2, #slot3, #slot4 {
-    margin: 5px; /* Espaçamento */
-    display: inline-block; /* Mantém slots lado a lado */
-    width: 90px;
-    height: 90px;
-    padding: 10px;
-    border: 2px solid rgba(0, 0, 0, 0.5);
-    border-radius: 5px; /* Bordas arredondadas para os slots */
-    transition: transform 0.2s; /* Efeito de transição suave */
-}
-
-#slot1:hover, #slot2:hover, #slot3:hover, #slot4:hover {
-    transform: scale(1.1); /* Efeito de aumento ao passar o mouse */
-}
-
-#rodapé {
-    margin-left: 113px;
-    color: white;
-}
-
-#tabela {
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-    width: 700px;
-    height: 900px;
-    border-radius: 6px;
-    padding: 20px 30px;
-    background-color: rgba(0, 0, 0, 0.9);
-    box-shadow: 3px 3px 10px rgba(255, 252, 252, 0.5);
-}
+    box-sizing: border-box
