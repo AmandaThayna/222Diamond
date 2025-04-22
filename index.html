@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>22Diamond - Login</title>
+    <title>22Diamond - Jogo de Sorte</title>
     <link rel="stylesheet" href="style.css">
     <style>
         /* Estilos do formulário */
@@ -15,40 +16,50 @@
             width: 100%;
             height: 100%;
             font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
+
         h3 {
             color: #fff;
         }
+
+        /* Formulários */
         form {
             display: flex;
             flex-direction: column;
             background-color: rgba(0, 0, 0, 0.7);
             text-align: center;
             margin: 20px auto;
-            width: 360px;
-            border-radius: 10px;
             padding: 20px 30px;
+            border-radius: 10px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
             transition: box-shadow 0.3s ease;
+            width: 90%;
+            max-width: 400px;
         }
-        form:hover {
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
-        }
+
         input {
             margin: 10px 0;
             padding: 10px;
             border: none;
             border-radius: 5px;
         }
+
         input[type="submit"] {
             background-color: #66BB6A;
             color: white;
             cursor: pointer;
             transition: background-color 0.3s;
         }
+
         input[type="submit"]:hover {
             background-color: #57A859;
         }
+
+        /* Alertas */
         .alert {
             display: none;
             background-color: #f44336;
@@ -62,40 +73,50 @@
             border-radius: 5px;
             animation: slide-down 0.5s;
         }
+
+        .success {
+            background-color: #4CAF50;
+        }
+
         @keyframes slide-down {
-            from { top: -50px; }
-            to { top: 20px; }
+            from {
+                top: -50px;
+            }
+
+            to {
+                top: 20px;
+            }
         }
-        .success { background-color: #4CAF50; }
-        .toggle-link {
-            margin-top: 10px;
-            color: #66BB6A;
-            text-decoration: none;
-        }
-        .toggle-link:hover {
-            text-decoration: underline;
-        }
+
         /* Estilos do jogo */
         #jogo {
             display: none;
             text-align: center;
+            margin-top: 20px;
+            width: 90%;
+            max-width: 500px;
         }
+
         .slot {
             width: 80px;
             height: 80px;
-            margin: 2px; /* Reduzido para diminuir a distância */
+            margin: 5px;
             display: inline-block;
             border: 2px solid rgba(0, 0, 0, 0.5);
-            border-radius: 5px; /* Bordas arredondadas */
+            border-radius: 5px;
             background-size: cover;
-            transition: transform 0.2s; /* Efeito de transição suave */
+            transition: transform 0.2s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
+
         .slot:hover {
             transform: scale(1.1); /* Efeito de aumento ao passar o mouse */
         }
+
         #tela {
             margin: 20px auto;
-            width: 500px;
+            width: 100%;
+            max-width: 500px;
             height: 100px;
             background-color: white;
             border: medium solid black;
@@ -103,28 +124,53 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-direction: column;
         }
-        #botoes {
-            margin-top: 20px; /* Margem acima dos botões */
-        }
-        #valor_txt {
-            margin-top: 30px;
-            font-weight: bold;
-            color: white;
-        }
+
         #valor_input {
             display: inline-block;
             margin-left: 20px;
             padding: 5px;
-            width: 120px; /* Largura da caixa de entrada */
+            width: 120px;
         }
-        #valor_display {
+
+        #resultado {
+            margin-top: 20px;
             color: white;
             font-weight: bold;
-            margin-top: 10px;
+        }
+
+        /* Estilos de animação */
+        .anima-alerta {
+            position: fixed;
+            z-index: 9999;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.5s ease-in-out;
+        }
+
+        .anima-alerta img {
+            width: 100px; /* Tamanho do GIF */
+            margin-bottom: 10px;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .slot {
+                width: 60px;
+                height: 60px;
+            }
+
+            input[type="submit"], #valor_input {
+                width: 100%; /* Largura total em dispositivos móveis */
+            }
         }
     </style>
 </head>
+
 <body>
     <div id="alert" class="alert">Usuário ou Senha incorretos</div>
 
@@ -149,12 +195,14 @@
     <!-- Seção do Jogo -->
     <div id="jogo">
         <div id="tela">
-            <p id="resultado">Clique nos slots para jogar!</p>
+            <p id="resultado">Clique em "Sortear Diamantes" para jogar!</p>
         </div>
+
         <div id="botoes">
-            <button id="iniciarBtn">Iniciar Jogo</button>
-            <button id="creditosBtn">Créditos</button>
+            <input type="text" id="valor_input" placeholder="Digite seu valor aqui" />
+            <button id="sortearBtn">Sortear Diamantes</button>
         </div>
+
         <div id="corpo2" style="display: flex; flex-wrap: wrap; justify-content: center;">
             <div class="slot" id="slot1"></div>
             <div class="slot" id="slot2"></div>
@@ -166,20 +214,13 @@
             <div class="slot" id="slot8"></div>
             <div class="slot" id="slot9"></div>
             <div class="slot" id="slot10"></div>
-            <div class="slot" id="slot11"></div>
-            <div class="slot" id="slot12"></div>
-            <div class="slot" id="slot13"></div>
-            <div class="slot" id="slot14"></div>
-            <div class="slot" id="slot15"></div>
-            <div class="slot" id="slot16"></div>
-            <div class="slot" id="slot17"></div>
-            <div class="slot" id="slot18"></div>
-            <div class="slot" id="slot19"></div>
-            <div class="slot" id="slot20"></div>
         </div>
-        <div id="valor_txt">Valor:</div>
-        <input type="text" id="valor_input" placeholder="Digite seu valor aqui" />
-        <div id="valor_display">R$ 0,00</div>
+    </div>
+
+    <!-- Div para Alertas Animados -->
+    <div id="anima-alerta" class="anima-alerta" style="display: none;">
+        <img id="alerta-gif" src="" alt="Resultado" />
+        <p id="mensagem-alerta"></p>
     </div>
 
     <script>
@@ -188,14 +229,10 @@
             const email = document.getElementById('login-email').value.trim();
             const senha = document.getElementById('login-senha').value;
 
-            console.log("Tentativa de login com:", email, senha);
             const usuario = JSON.parse(localStorage.getItem(email));
 
-            console.log("Usuário recuperado:", usuario);
-
             if (usuario && usuario.senha === senha) {
-                console.log("Login bem-sucedido! Exibindo o jogo.");
-                localStorage.setItem('usuarioLogado', email); // Armazenar e-mail do usuário logado
+                localStorage.setItem('usuarioLogado', email);
                 exibirJogo(); // Chama função para exibir a parte do jogo
             } else {
                 mostrarAlerta('Usuário ou senha incorretos');
@@ -220,7 +257,7 @@
             localStorage.setItem(email, JSON.stringify(novoUsuario));
             mostrarAlerta('Conta criada com sucesso!', true);
             setTimeout(() => {
-                localStorage.setItem('usuarioLogado', email); // Armazena o e-mail do novo usuário logado
+                localStorage.setItem('usuarioLogado', email);
                 exibirJogo();  // Chama a função para exibir a parte do jogo
             }, 2000);
         }
@@ -250,46 +287,61 @@
 
         // Funções do Jogo
         const imagens = [
-            'img/diamante_rosa.png',
-            'img/diamante_verde.png',
-            'img/diamante_mesclado.png',
-            'img/cifrao.png'
+            'img/diamante_rosa.png', // Valor: 2x
+            'img/diamante_verde.png', // Valor: 5x
+            'img/diamante_mesclado.png', // Valor: 10x
+            'img/cifrao.png' // Valor: 20x
         ];
 
+        const valores = [2, 5, 10, 20]; // Valores correspondentes
         const slots = document.querySelectorAll('.slot');
         const resultado = document.getElementById('resultado');
-        const valorDisplay = document.getElementById('valor_display');
-        let valorTotal = 0;
 
-        // Função para iniciar o jogo
-        document.getElementById('iniciarBtn').addEventListener('click', () => {
-            // Preencher os slots com imagens aleatórias
-            slots.forEach(slot => {
+        // Função para exibir animação de resultado
+        function mostrarAnimaAlerta(ganhou, totalGanho) {
+            const animaAlerta = document.getElementById('anima-alerta');
+            const mensagemAlerta = document.getElementById('mensagem-alerta');
+            const alertaGif = document.getElementById('alerta-gif');
+
+            if (ganhou) {
+                alertaGif.src = 'img/gif_vitoria.gif'; // URL do GIF de vitória
+                mensagemAlerta.textContent = `Parabéns! Você ganhou R$ ${totalGanho.toFixed(2)}!`;
+            } else {
+                alertaGif.src = 'img/gif_derrota.gif'; // URL do GIF de derrota
+                mensagemAlerta.textContent = 'Você perdeu! Tente novamente.';
+            }
+
+            animaAlerta.style.display = 'flex';
+            setTimeout(() => {
+                animaAlerta.style.display = 'none';
+            }, 3000);
+        }
+
+        // Função para iniciar o sorteio
+        document.getElementById('sortearBtn').addEventListener('click', () => {
+            const valorInput = parseFloat(document.getElementById('valor_input').value);
+            if (isNaN(valorInput) || valorInput <= 0) {
+                alert('Por favor, digite um valor válido para a aposta.');
+                return;
+            }
+
+            let premios = [];
+            let totalGanho = 0;
+
+            // Sortear diamantes
+            slots.forEach((slot, index) => {
                 const randomIndex = Math.floor(Math.random() * imagens.length);
                 slot.style.backgroundImage = `url(${imagens[randomIndex]})`;
-                slot.dataset.value = randomIndex + 1; // Adiciona um valor ao slot
-            });
-            resultado.textContent = "Slots preenchidos! Clique em um slot para jogar.";
-        });
+                slot.style.backgroundSize = 'contain';
+                slot.style.backgroundRepeat = 'no-repeat';
+                const ganho = valorInput * valores[randomIndex]; // Cálculo do ganho
+                totalGanho += ganho;
 
-        // Adiciona evento de clique em cada slot
-        slots.forEach(slot => {
-            slot.addEventListener('click', () => {
-                const value = Number(slot.dataset.value);
-                valorTotal += value; // Adiciona o valor ao total
-                valorDisplay.textContent = `R$ ${valorTotal.toFixed(2)}`; // Atualiza o display do valor
-                resultado.textContent = `Você clicou no slot com valor: ${value}!`;
+                premios.push(`Slot ${index + 1}: ${valores[randomIndex]}x (${ganho.toFixed(2)})`);
             });
-        });
 
-        // Função para mostrar os créditos
-        document.getElementById('creditosBtn').addEventListener('click', () => {
-            const valorInput = document.getElementById('valor_input').value;
-            if (valorInput) {
-                alert(`Valor digitado: R$ ${valorInput}`);
-            } else {
-                alert('Por favor, digite um valor.');
-            }
+            resultado.innerHTML = `Resultados: <br>${premios.join('<br>')}`;
+            mostrarAnimaAlerta(totalGanho > 0, totalGanho);
         });
 
         // Exibe a seção do jogo
@@ -321,4 +373,5 @@
         });
     </script>
 </body>
+
 </html>
