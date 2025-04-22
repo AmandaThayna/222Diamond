@@ -3,19 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página Inicial - Jogos do Tigrinho</title>
+    <title>Página Inicial - 222Diamond</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilos adicionais específicos para esta página */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-image: url(./img/up.png);
+            background-size: cover;
+            background-position: top;
+            color: #fff;
+            text-align: center;
+        }
+
+        #corpo {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            margin: 20px auto;
+            max-width: 600px;
+        }
+
+        #botoes button {
+            background-color: #66BB6A;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        #botoes button:hover {
+            background-color: #57A859;
+        }
+
+        #slot1, #slot2, #slot3, #slot4 {
+            width: 100px;
+            height: 100px;
+            margin: 5px;
+            display: inline-block;
+            border: 2px solid #fff;
+            border-radius: 5px;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        #rodapé {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Jogos do Tigrinho</h1>
+    <h1>222Diamond</h1>
     <div id="corpo">
         <div id="tela">
-            <!-- Espaço para exibir informações ou resultados do jogo -->
+            <p id="resultado">Clique em "Iniciar Jogo" para começar!</p>
         </div>
         <div id="botoes">
-            <button>Iniciar Jogo</button>
-            <button>Créditos</button>
+            <button id="iniciarJogoBtn">Iniciar Jogo</button>
+            <button id="creditosBtn">Créditos</button>
         </div>
         <div id="corpo2">
             <div id="slot1">Slot 1</div>
@@ -29,7 +80,20 @@
         <div id="valor">R$ 0,00</div>
     </div>
     <footer id="rodapé">
-        &copy; 2023 Jogos do Tigrinho
+        © 2025 222Diamond
     </footer>
+
+    <script>
+        // Lógica para o botão de Iniciar Jogo
+        document.getElementById('iniciarJogoBtn').addEventListener('click', function() {
+            // O que acontece ao iniciar o jogo (como redirecionar ou mostrar uma nova página/modal)
+            window.location.href = 'index.html'; // Redirecionar para o index.html onde o jogo está implementado
+        });
+
+        // Lógica para eventuais créditos ou outras funcionalidades pode ser adicionada aqui
+        document.getElementById('creditosBtn').addEventListener('click', function() {
+            alert('Créditos: Seu Nome'); // Exemplo de uma mensagem de alerta
+        });
+    </script>
 </body>
 </html>
