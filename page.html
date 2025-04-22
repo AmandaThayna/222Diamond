@@ -23,7 +23,7 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             margin: 20px auto;
-            max-width: 600px;
+            max-width: 90%; /* Ajuste para maior flexibilidade */
         }
 
         #botoes button {
@@ -31,10 +31,12 @@
             color: white;
             border: none;
             border-radius: 5px;
-            padding: 10px;
+            padding: 15px; /* Aumentar área do botão */
             margin: 5px;
             cursor: pointer;
             font-size: 18px;
+            width: 90%; /* Botões ocupam 90% da largura */
+            max-width: 250px; /* Limitar a largura máxima dos botões */
         }
 
         #botoes button:hover {
@@ -42,8 +44,8 @@
         }
 
         #slot1, #slot2, #slot3, #slot4 {
-            width: 100px;
-            height: 100px;
+            width: 22%; /* Ajuste para que os slots se encaixem na linha */
+            height: auto; /* Ajusta a altura proporcionalmente */
             margin: 5px;
             display: inline-block;
             border: 2px solid #fff;
@@ -55,6 +57,26 @@
         #rodapé {
             margin-top: 20px;
             font-size: 14px;
+        }
+
+        /* Media Queries para dispositivos móveis */
+        @media (max-width: 600px) {
+            #corpo {
+                padding: 10px; /* Reduzir o preenchimento em telas menores */
+            }
+        
+            #botoes button {
+                font-size: 16px; /* Ajustar o tamanho da fonte dos botões */
+            }
+
+            #slot1, #slot2, #slot3, #slot4 {
+                width: 45%; /* Ajustar para dois slots por linha */
+                margin: 2.5%; /* Ajuste da margem para os slots */
+            }
+        
+            #tela {
+                font-size: 14px; /* Ajustar o tamanho da fonte da resposta */
+            }
         }
     </style>
 </head>
