@@ -1,141 +1,95 @@
 body {
-	background-image: url(./img/background.jpg);
-	background-size: cover;
-	background-position: top;
-	
+    background-image: url(./img/background.jpg);
+    background-size: cover;
+    background-position: top;
 }
 
 h1 {
-	text-align: center;
-	color: rgb(10, 10, 10);
+    text-align: center;
+    color: rgb(10, 10, 10);
+    font-family: 'Arial', sans-serif;
 }
 
 a {
-	color: rgb(86, 19, 209);
+    color: rgb(86, 19, 209);
 }
 
 a:hover {
-	color: white;
+    color: white;
 }
 
 #corpo {
-	flex-direction: column;
-	margin-left: auto;
-	margin-right: auto;
-	width: 700px;
-	height: 500px;
-	border-radius: 6px;
-	padding: 20px 30px;
-	background-color: var(--preto);
-	box-shadow: 3px 3px 6px 2px rgba(0, 0, 0, 0.2), -4px -4px 7px 3px;
-};
+    flex-direction: column;
+    margin: auto;
+    width: 700px;
+    height: 500px;
+    border-radius: 10px;
+    padding: 20px 30px;
+    background-color: rgba(0, 0, 0, 0.8); /* Menos opaco */
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+    color: white; /* Para uma melhor visibilidade */
+}
 
 #corpo2 {
-	margin-left: auto;
-	margin-right: auto;
-	width: 700px;
-	height: 1050px;
-	background-color: transparent;
-	border: medium dashed rgb(226, 1, 1);
+    margin: auto;
+    width: 700px;
+    height: 1050px;
+    background-color: transparent;
+    border: medium dashed rgb(226, 1, 1);
 }
 
 #tela {
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 100px;
-	width: 500px;
-	height: 100px;
-	background-color: white;
-	border: medium solid black;
+    margin: 20px auto;
+    width: 500px;
+    height: 100px;
+    background-color: white;
+    border: medium solid black;
+    border-radius: 5px; /* Bordas arredondadas */
 }
 
 #botoes {
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 85px;
-	width: 460px;
+    margin: 20px auto;
+    width: 460px;
+    text-align: center; /* Centraliza os botões */
 }
 
-#creditos_txt {
-	margin-left: 80px;
-	margin-top: 30px;
-	font-weight: bold;
-	color: rgb(5, 5, 5);
-	float: left;
+#creditos_txt, #valor_txt {
+    margin-top: 30px;
+    font-weight: bold;
+    color: white;
 }
 
-#creditos {
-	clear: left;
-	margin-left: 80px;
-	float: left;
+#creditos, #valor {
+    float: left;
 }
 
-#valor_txt {
-	margin-left: 500px;
-	margin-top: 30px;
-	font-weight: bold;
-	color: rgb(7, 7, 7);
+#slot1, #slot2, #slot3, #slot4 {
+    margin: 5px;
+    display: inline-block;
+    width: 90px;
+    height: 90px;
+    padding: 10px;
+    border: 2px solid rgba(0, 0, 0, 0.5);
+    border-radius: 5px; /* Bordas arredondadas para os slots */
+    transition: transform 0.2s; /* Transição suave */
 }
 
-#valor {
-	margin-left: 500px;
-}
-
-#slot1 {
-	margin-top: 5px;
-	padding-left: 17px;
-	padding-right: 17px;
-	float: left;
-	border-right: thin dashed black;
-	width: 90px;
-	height: 90px;
-	vertical-align: middle;
-}
-
-#slot2 {
-	margin-top: 5px;
-	padding-left: 17px;
-	padding-right: 17px;
-	float: left;
-	border-right: thin dashed black;
-	width: 90px;
-	height: 90px;
-	vertical-align: middle;
-}
-
-#slot3 {
-	margin-top: 5px;
-	padding-left: 17px;
-	padding-right: 17px;
-	float: left;
-	border-right: thin dashed black;
-	width: 90px;
-	height: 90px;
-	vertical-align: middle;
-}
-
-#slot4 {
-	margin-top: 5px;
-	padding-left: 17px;
-	padding-right: 17px;
-	float: left;
-	width: 90px;
-	height: 90px;
-	vertical-align: middle;
+#slot1:hover, #slot2:hover, #slot3:hover, #slot4:hover {
+    transform: scale(1.1); /* Efeito de aumento ao passar o mouse */
 }
 
 #rodapé {
-	margin-left: 113px
+    margin-left: 113px;
+    color: white; /* Para melhor visibilidade */
 }
 
 #tabela {
-	flex-direction: column;
-	margin-left: auto;
-	margin-right: auto;
-	width: 700px;
-	height: 900px;
-	border-radius: 6px;
-	padding: 20px 30px;
-	background-color: var(--preto);
-	box-shadow: 3px 3px 6px 2px rgba(255,252,252), -4px -4px 7px 3px;
+    flex-direction: column;
+    margin: auto;
+    width: 700px;
+    height: 900px;
+    border-radius: 6px;
+    padding: 20px 30px;
+    background-color: rgba(0, 0, 0, 0.9);
+    box-shadow: 3px 3px 10px rgba(255, 252, 252, 0.5);
 }
