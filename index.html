@@ -7,343 +7,603 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>22Diamond - Jogo de Sorte</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            background-image: url(./img/background.jpg);
+            background-image: url(./img/up.png);
             background-size: cover;
             background-position: top;
-            font-family: 'Poppins', sans-serif; /* Fonte amigável */
-            margin: 0; /* Reset default body margin */
-            padding: 0; /* Reset default body padding */
+            width: 100%;
+            height: 100%;
+            font-family: Arial, sans-serif;
             display: flex;
-            justify-content: center; /* Center horizontally */
-            align-items: center; /* Center vertically */
-            min-height: 100vh; /* Ensure full viewport height */
-            box-sizing: border-box; /* Include padding and border in element's total width and height */
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            overflow: hidden;
         }
 
-        h1 {
-            text-align: center;
-            color: #FFC107; /* Amarelo vibrante */
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-            font-size: 2.5em; /* Tamanho ajustado */
-            margin-bottom: 20px; /* Add some space below the title */
+        h3 {
+            color: #fff;
         }
 
-        a {
-            color: rgb(86, 19, 209);
-            text-decoration: none; /* Remove underlines from links */
-            transition: color 0.3s ease; /* Smooth color transition on hover */
+        .highlight {
+            color: yellow; /* Cor vibrante para o texto do jogo */
+            font-weight: bold;
+            font-size: 20px;
         }
 
-        a:hover {
-            color: white;
-        }
-
-        #corpo {
+        form {
             display: flex;
             flex-direction: column;
-            width: 700px; /* Largura do painel */
-            height: 500px; /* Altura do painel */
-            border-radius: 10px; /* Bordas arredondadas */
+            background-color: rgba(0, 0, 0, 0.7);
+            text-align: center;
+            margin: 20px auto;
             padding: 20px 30px;
-            background-color: rgba(0, 0, 0, 0.8); /* Fundo preto semi-transparente */
-            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
-            color: white;
-            box-sizing: border-box; /* Include padding in width and height */
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            transition: box-shadow 0.3s ease;
+            width: 90%;
+            max-width: 400px;
         }
 
-        #corpo2 {
-            display: flex;
-            width: 700px;
-            height: auto; /* Adjust height based on content */
-            background-color: transparent;
-            border: medium dashed rgb(226, 1, 1);
-            margin-top: 20px; /* Add space between the two sections */
-            box-sizing: border-box;
+        input {
+            margin: 10px 0;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #66BB6A;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #57A859;
+        }
+
+        .alert {
+            display: none;
+            background-color: #f44336;
+            color: white;
+            padding: 15px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            top: 20px;
+            transform: translateX(-50%);
+            border-radius: 5px;
+            animation: slide-down 0.5s;
+        }
+
+        .success {
+            background-color: #4CAF50;
+        }
+
+        @keyframes slide-down {
+            from {
+                top: -50px;
+            }
+
+            to {
+                top: 20px;
+            }
+        }
+
+        #jogo {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .slot {
+            width: 80px;
+            height: 80px;
+            margin: 5px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            background-size: cover;
+            transition: transform 0.2s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .slot:hover {
+            transform: scale(1.1);
         }
 
         #tela {
             margin: 20px auto;
-            width: 500px;
+            width: 100%;
+            max-width: 500px;
             height: 100px;
             background-color: white;
             border: medium solid black;
             border-radius: 5px;
             display: flex;
-            justify-content: center; /* Center content horizontally */
-            align-items: center; /* Center content vertically */
-            font-size: 1.2em; /* Adjust font size inside the tela */
-            color: black; /* Set text color inside tela */
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
         }
 
-        #botoes {
-            display: flex;
-            justify-content: center; /* Centraliza os botões */
-            gap: 10px; /* Espaçamento entre botões */
-            margin: 20px auto; /* Centraliza os botões */
+        #feedback {
+            color: #FFFFFF; /* Mudado para branco atraente */
+            margin-bottom: 10px;
+            font-size: 24px;
+            padding: 10px;
+            background-color: rgba(255, 215, 0, 0.8); /* Fundo dourado */
+            border: 2px solid #ffd700; /* Bordar dourada */
+            border-radius: 5px;
+            animation: pulse 1s infinite alternate; /* Animação pulsante */
+            box-shadow: 0 0 15px rgba(255, 215, 0, 1); /* Efeito de brilho */
         }
 
-        #botoes button {
-            padding: 10px 20px;
-            background-color: #007BFF; /* Azul vibrante */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(1.05);
+            }
+        }
+
+        .info {
+            color: #2196F3; /* Vibrant blue for text */
+            background-color: rgba(230, 230, 230, 0.8); /* Light grey background */
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin: 5px;
+            font-size: 18px;
+        }
+
+        #slotsContainer {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 10px;
+            justify-items: center;
+        }
+
+        .button {
+            background-color: #66BB6A;
             color: white;
             border: none;
             border-radius: 5px;
+            padding: 10px 15px;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            font-size: 1em; /* Adjust font size inside buttons */
+            font-size: 24px;
         }
 
-        #botoes button:hover {
-            background-color: #28A745; /* Verde ao passar o mouse */
-            transform: scale(1.05); /* Efeito de aumento */
+        .button:hover {
+            background-color: #57A859;
         }
 
-        #creditos_txt,
-        #valor_txt {
-            margin-top: 30px;
-            font-weight: bold;
-            color: white;
+        #sortearBtn {
+            background-color: #4CAF50; /* Cor verde chamativa para o botão de sortear */
+            border-radius: 50%; /* Formato de botão circular */
+            width: 80px;
+            height: 80px;
+            font-size: 32px;
+            transition: background-color 0.3s;
         }
 
-        #creditos,
-        #valor {
-            display: flex; /* Para evitar o uso de float */
-            margin-left: 20px;
-            align-items: center; /* Align items vertically in the flex container */
+        #sortearBtn:hover {
+            background-color: #43A047; /* Muda a cor ao passar o mouse */
         }
 
-        #slot1,
-        #slot2,
-        #slot3,
-        #slot4 {
-            margin: 5px; /* Espaçamento */
-            display: inline-block; /* Mantém slots lado a lado */
-            width: 90px;
-            height: 90px;
-            padding: 10px;
-            border: 2px solid rgba(0, 0, 0, 0.5);
-            border-radius: 5px; /* Bordas arredondadas para os slots */
-            transition: transform 0.2s; /* Efeito de transição suave */
-            background-color: #f0f0f0; /* Default background color for slots */
-            background-size: contain; /* Ensure image fits within the slot */
-            background-repeat: no-repeat; /* Prevent image from repeating */
-            background-position: center; /* Center the image in the slot */
-            box-sizing: border-box; /* Include padding and border in slot dimensions */
-        }
-
-        #slot1:hover,
-        #slot2:hover,
-        #slot3:hover,
-        #slot4:hover {
-            transform: scale(1.1); /* Efeito de aumento ao passar o mouse */
-        }
-
-        #rodapé {
-            margin-left: 113px;
-            color: white;
-            margin-top: 20px; /* Add some space above the footer */
-        }
-
-        #tabela {
+        #infoPanel {
             display: flex;
-            flex-direction: column;
-            width: 700px;
-            height: auto; /* Adjust height based on content */
-            border-radius: 6px;
-            padding: 20px 30px;
-            background-color: rgba(0, 0, 0, 0.9);
-            box-shadow: 3px 3px 10px rgba(255, 252, 252, 0.5);
-            margin-top: 20px; /* Add space between the two sections */
-            box-sizing: border-box;
-            color: white; /* Set default text color inside the table */
-        }
-
-        #tabela h2 {
-            color: #FFC107; /* Highlight color for table heading */
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        #tabela table {
-            width: 100%;
-            border-collapse: collapse; /* Collapse borders for a cleaner look */
-            margin-top: 10px;
-        }
-
-        #tabela th,
-        #tabela td {
-            border: 1px solid #ddd; /* Light gray border for table cells */
-            padding: 8px;
-            text-align: left;
-        }
-
-        #tabela th {
-            background-color: #333; /* Dark background for table headers */
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 18px;
             color: white;
         }
 
-        #tabela tr:nth-child(even) {
-            background-color: #444; /* Slightly lighter background for even rows */
+        #automaticBetBtn {
+            font-size: 24px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            color: yellow; /* Cor do ícone */
+        }
+
+        #megaGanho {
+            display: none;
+            position: fixed;
+            top: 50%; /* Centraliza verticalmente */
+            left: 50%; /* Centraliza horizontalmente */
+            transform: translate(-50%, -50%); /* Ajusta a posição */
+            background-color: rgba(255, 215, 0, 0.9); /* Fundo levemente transparente */
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 30px;
+            color: #FFF;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); /* Efeito de brilho */
+            z-index: 100; /* Se estiver em cima de outros elementos */
+        }
+
+        #automaticBetRounds {
+            display: none; /* Inicialmente oculto */
+            margin: 10px 0;
         }
     </style>
 </head>
 
 <body>
-    <div id="corpo">
-        <h1>Jogo dos Diamantes</h1>
-        <div id="tela">Clique em "Girar" para jogar!</div>
-        <div id="botoes">
-            <button id="girarBtn">Girar</button>
-        </div>
-        <div id="creditos_txt">Créditos: <span id="creditos">10.00</span></div>
-        <div id="valor_txt">Valor da Aposta: <span id="valor">1.00</span></div>
-        <div id="slots">
-            <div id="slot1"></div>
-            <div id="slot2"></div>
-            <div id="slot3"></div>
-            <div id="slot4"></div>
-        </div>
-        <div id="rodapé">© 2023 Jogo dos Diamantes</div>
+    <div id="alert" class="alert">Usuário ou Senha incorretos</div>
+
+    <!-- Formulário de Login -->
+    <form id="login-form">
+        <h3>Login</h3>
+        <input type="text" placeholder="Email" id="login-email" required>
+        <input type="password" placeholder="Senha" id="login-senha" required>
+        <input type="submit" value="Entrar">
+        <p>Ou <a href="#" id="show-register-form" class="toggle-link">criar uma nova conta</a></p>
+    </form>
+
+    <!-- Formulário de Cadastro -->
+    <form id="register-form" style="display: none;">
+        <h3>Criar Conta</h3>
+        <input type="text" placeholder="Email" id="register-email" required>
+        <input type="password" placeholder="Senha" id="register-senha" required>
+        <input type="submit" value="Registrar">
+        <p>Já tem uma conta? <a href="#" id="show-login-form" class="toggle-link">Entrar</a></p>
+    </form>
+
+    <!-- Formulário para Definir Saldo Inicial -->
+    <div id="initialBalanceForm" style="display: none;">
+        <h3>Defina seu saldo inicial</h3>
+        <input type="number" id="userBalance" placeholder="Saldo Inicial" required />
+        <button id="startGameBtn" class="button">Iniciar Jogo</button>
     </div>
 
-    <div id="corpo2">
-        <div id="tabela">
-            <h2>Tabela de Pagamentos</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Combinação</th>
-                        <th>Multiplicador</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Diamante Rosa x3</td>
-                        <td>2x</td>
-                    </tr>
-                    <tr>
-                        <td>Diamante Verde x3</td>
-                        <td>5x</td>
-                    </tr>
-                    <tr>
-                        <td>Diamante Mesclado x3</td>
-                        <td>10x</td>
-                    </tr>
-                    <tr>
-                        <td>Cifrão x3</td>
-                        <td>20x</td>
-                    </tr>
-                    <tr>
-                        <td>Qualquer Combinação x4</td>
-                        <td>50x</td>
-                    </tr>
-                </tbody>
-            </table>
+    <!-- Seção do Jogo -->
+    <div id="jogo">
+        <div id="feedback"></div> <!-- Coluna para feedback de ganhos/perdas -->
+
+        <div id="tela">
+            <p id="resultado" class="highlight">Clique em "Sortear Diamantes" para jogar!</p>
         </div>
+
+        <!-- Informações do jogador -->
+        <div id="infoPanel">
+            <div class="info">Saldo: R$ <span id="saldoUsuario">0.00</span></div>
+            <div class="info">Aposta: R$ <span id="valorAposta">0.50</span></div>
+            <div class="info">Ganho: R$ <span id="ganhoAtual">0.00</span></div>
+        </div>
+
+        <div id="slotsContainer">
+            <div class="slot" id="slot1"></div>
+            <div class="slot" id="slot2"></div>
+            <div class="slot" id="slot3"></div>
+            <div class="slot" id="slot4"></div>
+            <div class="slot" id="slot5"></div>
+            <div class="slot" id="slot6"></div>
+            <div class="slot" id="slot7"></div>
+            <div class="slot" id="slot8"></div>
+            <div class="slot" id="slot9"></div>
+        </div>
+
+        <!-- Painel de Botões -->
+        <div id="botoes">
+            <button id="apostarMenosBtn" class="button">-</button>
+            <button id="sortearBtn">♦</button>
+            <button id="apostarMaisBtn" class="button">+</button>
+            <button id="automaticBetBtn"><span>⚡</span></button> <!-- Botão de Aposta Automática -->
+        </div>
+
+        <!-- Seção para escolha de rodadas automáticas -->
+        <div id="automaticBetRounds">
+            <label for="rounds">Escolha o número de rodadas automáticas (5 a 30):</label>
+            <input type="number" id="rounds" min="5" max="30" step="1" value="5">
+        </div>
+    </div>
+
+    <!-- Div para Mega Ganho -->
+    <div id="megaGanho">🎉 Mega Ganho! 🎉</div>
+
+    <!-- Div para Alertas Animados -->
+    <div id="anima-alerta" class="anima-alerta" style="display: none;">
+        <img id="alerta-gif" src="" alt="Resultado" />
+        <p id="mensagem-alerta"></p>
     </div>
 
     <script>
-        const slotsElements = [
-            document.getElementById('slot1'),
-            document.getElementById('slot2'),
-            document.getElementById('slot3'),
-            document.getElementById('slot4')
-        ];
-        const girarBtn = document.getElementById('girarBtn');
-        const tela = document.getElementById('tela');
-        const creditosSpan = document.getElementById('creditos');
-        const valorApostaSpan = document.getElementById('valor');
+        let saldoUsuario = 0; // Inicializa o saldo como 0
+        let valorAposta = 0.50; // Valor inicial da aposta
+        let automaticBetting = false; // Flag para apostas automáticas
+        let rodadasRestantesAutomatica; // Quantidade de rodadas automáticas escolhidas
 
-        let creditos = 10.00;
-        const valorAposta = 1.00;
-        const imagens = [
-            './img/diamante_rosa.png',
-            './img/diamante_verde.png',
-            './img/diamante_mesclado.png',
-            './img/cifrao.png'
-        ];
-        const multiplicadores = [2, 5, 10, 20];
-
-        function atualizarInterface() {
-            creditosSpan.textContent = creditos.toFixed(2);
-            valorApostaSpan.textContent = valorAposta.toFixed(2);
+        // Atualiza a exibição de saldo, aposta e ganho
+        function atualizarInformacoes() {
+            document.getElementById('saldoUsuario').innerText = saldoUsuario.toFixed(2);
+            document.getElementById('valorAposta').innerText = valorAposta.toFixed(2);
+            document.getElementById('ganhoAtual').innerText = 0.00; // Resetar ganho atual após cada rodada
         }
 
-        function girarSlots() {
-            if (creditos >= valorAposta) {
-                creditos -= valorAposta;
-                atualizarInterface();
-                tela.textContent = 'Girando...';
-                girarBtn.disabled = true;
+        // Funções de Login/Register
+        function logar() {
+            const email = document.getElementById('login-email').value.trim();
+            const senha = document.getElementById('login-senha').value;
 
-                const resultados = [];
-                slotsElements.forEach((slot, index) => {
-                    const randomIndex = Math.floor(Math.random() * imagens.length);
-                    slot.style.backgroundImage = `url('${imagens[randomIndex]}')`;
-                    slot.style.backgroundSize = 'contain';
-                    slot.style.backgroundRepeat = 'no-repeat';
-                    slot.style.backgroundColor = '#f0f0f0'; // Reset background color
-                    resultados.push(randomIndex);
+            const usuario = JSON.parse(localStorage.getItem(email));
+
+            if (usuario && usuario.senha === senha) {
+                localStorage.setItem('usuarioLogado', email);
+                exibirInicialBalanceForm(); // Chama função para exibir o formulário de saldo inicial
+            } else {
+                mostrarAlerta('Usuário ou senha incorretos');
+            }
+        }
+
+        function registrar() {
+            const email = document.getElementById('register-email').value.trim();
+            const senha = document.getElementById('register-senha').value;
+
+            if (!email || !senha) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            if (localStorage.getItem(email)) {
+                alert('Este e-mail já está registrado.');
+                return;
+            }
+
+            const novoUsuario = { email, senha };
+            localStorage.setItem(email, JSON.stringify(novoUsuario));
+            mostrarAlerta('Conta criada com sucesso!', true);
+            setTimeout(() => {
+                localStorage.setItem('usuarioLogado', email);
+                exibirInicialBalanceForm(); // Chama a função para exibir o formulário de saldo inicial
+            }, 2000);
+        }
+
+        function mostrarAlerta(mensagem, sucesso = false) {
+            const alertBox = document.getElementById('alert');
+            alertBox.textContent = mensagem;
+            alertBox.className = 'alert' + (sucesso ? ' success' : '');
+            alertBox.style.display = 'block';
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 3000);
+        }
+
+        function toggleForms() {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+
+            if (loginForm.style.display === "none") {
+                loginForm.style.display = "block";
+                registerForm.style.display = "none";
+            } else {
+                loginForm.style.display = "none";
+                registerForm.style.display = "block";
+            }
+        }
+
+        function exibirInicialBalanceForm() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'none';
+            document.getElementById('jogo').style.display = 'none';
+            document.getElementById('initialBalanceForm').style.display = 'block';
+        }
+
+        document.getElementById('startGameBtn').addEventListener('click', () => {
+            const saldoInicial = parseFloat(document.getElementById('userBalance').value);
+            if (isNaN(saldoInicial) || saldoInicial <= 0) {
+                alert('Por favor, insira um saldo válido.');
+                return;
+            }
+            saldoUsuario = saldoInicial;
+            document.getElementById('initialBalanceForm').style.display = 'none';
+            document.getElementById('jogo').style.display = 'block';
+            atualizarInformacoes(); // Atualiza informações do usuário no início do jogo
+        });
+
+        // Funções do Jogo
+        const imagens = [
+            'img/diamante_rosa.png', // Valor: 2x
+            'img/diamante_verde.png', // Valor: 5x
+            'img/diamante_mesclado.png', // Valor: 10x
+            'img/cifrao.png' // Valor: 20x
+        ];
+
+        const valores = [2, 5, 10, 20]; // Valores correspondentes
+        const slots = document.querySelectorAll('.slot');
+
+        // Função para verificar se há combinações ganhas
+        function checarVitoria() {
+            let combinacoes = [];
+            const vencidos = [];
+
+            // Verificação horizontal
+            for (let i = 0; i < 9; i += 3) {
+                if (slots[i].style.backgroundImage &&
+                    slots[i].style.backgroundImage === slots[i + 1].style.backgroundImage &&
+                    slots[i].style.backgroundImage === slots[i + 2].style.backgroundImage) {
+                    combinacoes.push([slots[i], slots[i + 1], slots[i + 2]]);
+                    vencidos.push(i, i + 1, i + 2); // Armazena os índices vencidos
+                }
+            }
+
+            // Verificação vertical
+            for (let i = 0; i < 3; i++) {
+                if (slots[i].style.backgroundImage &&
+                    slots[i].style.backgroundImage === slots[i + 3].style.backgroundImage &&
+                    slots[i].style.backgroundImage === slots[i + 6].style.backgroundImage) {
+                    combinacoes.push([slots[i], slots[i + 3], slots[i + 6]]);
+                    vencidos.push(i, i + 3, i + 6); // Armazena os índices vencidos
+                }
+            }
+
+            // Verificação diagonal
+            if (slots[0].style.backgroundImage && slots[0].style.backgroundImage === slots[4].style.backgroundImage && slots[8].style.backgroundImage === slots[0].style.backgroundImage) {
+                combinacoes.push([slots[0], slots[4], slots[8]]);
+                vencidos.push(0, 4, 8); // Armazena os índices vencidos
+            }
+            if (slots[2].style.backgroundImage && slots[2].style.backgroundImage === slots[4].style.backgroundImage && slots[6].style.backgroundImage === slots[2].style.backgroundImage) {
+                combinacoes.push([slots[2], slots[4], slots[6]]);
+                vencidos.push(2, 4, 6); // Armazena os índices vencidos
+            }
+
+            return { combinacoes, vencidos }; // Retorna as combinações e os índice vencidos
+        }
+
+        // Função para exibir animação de resultado
+        function mostrarAnimaAlerta(ganhou, totalGanho) {
+            const animaAlerta = document.getElementById('anima-alerta');
+            const mensagemAlerta = document.getElementById('mensagem-alerta');
+            const alertaGif = document.getElementById('alerta-gif');
+
+            if (ganhou) {
+                alertaGif.src = 'img/gif_vitoria.gif'; // URL do GIF de vitória
+                mensagemAlerta.textContent = `Parabéns! Você ganhou R$ ${totalGanho.toFixed(2)}!`;
+                mostrarMegaGanho();
+            } else {
+                alertaGif.src = 'img/gif_derrota.gif'; // URL do GIF de derrota
+                mensagemAlerta.textContent = 'Você perdeu! Tente novamente.';
+            }
+
+            animaAlerta.style.display = 'flex';
+            setTimeout(() => {
+                animaAlerta.style.display = 'none';
+            }, 3000);
+        }
+
+        // Função para mostrar alerta de Mega Ganho
+        function mostrarMegaGanho() {
+            const megaGanho = document.getElementById('megaGanho');
+            megaGanho.style.display = 'block';
+            setTimeout(() => {
+                megaGanho.style.display = 'none';
+            }, 3000);
+        }
+
+        // Função para iniciar o sorteio
+        function sortearDiamantes() {
+            let totalGanho = 0;
+            const { combinacoes, vencidos } = checarVitoria();
+
+            // Sortear diamantes
+            slots.forEach((slot) => {
+                const randomIndex = Math.floor(Math.random() * imagens.length);
+                slot.style.backgroundImage = `url(${imagens[randomIndex]})`;
+                slot.style.backgroundSize = 'contain';
+                slot.style.backgroundRepeat = 'no-repeat';
+                const ganho = valorAposta * valores[randomIndex]; // Cálculo do ganho
+                totalGanho += ganho;
+            });
+
+            // Atualiza o saldo e verifica se o jogador ganhou ou perdeu
+            if (combinacoes.length > 0) {
+                combinacoes.forEach(combinacao => {
+                    combinacao.forEach(slot => slot.style.border = "2px solid green"); // Adiciona uma borda verde ao ganhar
                 });
 
-                setTimeout(() => {
-                    verificarResultado(resultados);
-                    girarBtn.disabled = false;
-                }, 1500); // Tempo para a animação de girar
+                // Exibe a linha de vitórias
+                vencidos.forEach(index => {
+                    slots[index].style.border = "2px solid red"; // Mostra as posições ganhas em vermelho
+                });
+
+                mostrarAnimaAlerta(true, totalGanho);
+                saldoUsuario += totalGanho; // Adiciona ganho ao saldo
+                document.getElementById('ganhoAtual').innerText = totalGanho.toFixed(2); // Atualiza ganho atual
+                document.getElementById('feedback').innerText = 'Você ganhou!'; // Feedback de ganho
             } else {
-                tela.textContent = 'Créditos Insuficientes!';
+                mostrarAnimaAlerta(false);
+                saldoUsuario -= valorAposta; // Deduz valor da aposta se perder
+                document.getElementById('feedback').innerText = 'Você perdeu!'; // Feedback de perda
+            }
+
+            // Atualiza o alerta de saldo
+            atualizarInformacoes(); // Chama função para atualizar informações
+        }
+
+        // Adiciona eventos aos botões de aposta
+        document.getElementById('apostarMaisBtn').addEventListener('click', () => {
+            valorAposta = Math.min(valorAposta + 0.50, saldoUsuario); // Limita a aposta ao máximo do saldo
+            document.getElementById('valorAposta').innerText = valorAposta.toFixed(2);
+        });
+
+        document.getElementById('apostarMenosBtn').addEventListener('click', () => {
+            valorAposta = Math.max(valorAposta - 0.50, 0.50); // Limita a aposta ao mínimo de 0.50
+            document.getElementById('valorAposta').innerText = valorAposta.toFixed(2);
+        });
+
+        document.getElementById('sortearBtn').addEventListener('click', () => {
+            sortearDiamantes(); // Chama a função de sortear diamantes
+        });
+
+        // Função para apostas automáticas
+        function iniciarApostasAutomaticas() {
+            if (!automaticBetting && saldoUsuario > 0) {
+                // Pega o número de rodadas da caixa de seleção
+                const roundsInput = document.getElementById('rounds');
+                rodadasRestantesAutomatica = parseInt(roundsInput.value);
+                if (rodadasRestantesAutomatica < 5 || rodadasRestantesAutomatica > 30) {
+                    alert('Por favor, escolha entre 5 a 30 rodadas.');
+                    return;
+                }
+
+                automaticBetting = true;
+                const feedback = document.getElementById('feedback');
+                feedback.innerText = "Apostas automáticas ativadas!";
+                const intervalo = setInterval(() => {
+                    if (rodadasRestantesAutomatica > 0 && saldoUsuario > 0) {
+                        sortearDiamantes(); // Realiza a sorteio
+                        rodadasRestantesAutomatica--;
+                    } else {
+                        clearInterval(intervalo);
+                        automaticBetting = false;
+                        feedback.innerText = "Apostas automáticas desativadas!";
+                        document.getElementById('automaticBetRounds').style.display = 'none'; // Oculta o campo de seleção novamente
+                    }
+                }, 1000); // Intervalo de 1 segundo para as apostas automáticas
+            } else {
+                alert('Apostas automáticas já estão ativadas ou saldo insuficiente.');
             }
         }
 
-        function verificarResultado(resultados) {
-            let ganho = 0;
-            let mensagem = '';
+        document.getElementById('automaticBetBtn').addEventListener('click', () => {
+            document.getElementById('automaticBetRounds').style.display = 'block'; // Mostra o campo para escolher rodadas
+            iniciarApostasAutomaticas(); // Inicia apostas automáticas
+        });
 
-            // Verificar combinações de 3 (ignorando o quarto slot por enquanto)
-            if (resultados[0] === resultados[1] && resultados[1] === resultados[2]) {
-                ganho = valorAposta * multiplicadores[resultados[0]];
-                mensagem = `Você ganhou ${multiplicadores[resultados[0]]}x a aposta com 3 diamantes iguais!`;
-            } else if (resultados[0] === resultados[1] && resultados[1] === resultados[3]) {
-                ganho = valorAposta * multiplicadores[resultados[0]];
-                mensagem = `Você ganhou ${multiplicadores[resultados[0]]}x a aposta com 3 diamantes iguais!`;
-            } else if (resultados[0] === resultados[2] && resultados[2] === resultados[3]) {
-                ganho = valorAposta * multiplicadores[resultados[0]];
-                mensagem = `Você ganhou ${multiplicadores[resultados[0]]}x a aposta com 3 diamantes iguais!`;
-            } else if (resultados[1] === resultados[2] && resultados[2] === resultados[3]) {
-                ganho = valorAposta * multiplicadores[resultados[1]];
-                mensagem = `Você ganhou ${multiplicadores[resultados[1]]}x a aposta com 3 diamantes iguais!`;
-            } else if (resultados[0] === resultados[1] && resultados[2] === resultados[3]) {
-                ganho = valorAposta * 5; // Exemplo de ganho para 2 pares
-                mensagem = `Você ganhou com dois pares!`;
-            } else if (resultados[0] === resultados[2] && resultados[1] === resultados[3]) {
-                ganho = valorAposta * 5; // Exemplo de ganho para dois pares
-                mensagem = `Você ganhou com dois pares!`;
-            } else if (resultados[0] === resultados[3] && resultados[1] === resultados[2]) {
-                ganho = valorAposta * 5; // Exemplo de ganho para dois pares
-                mensagem = `Você ganhou com dois pares!`;
-            } else if (resultados[0] === resultados[1] || resultados[0] === resultados[2] || resultados[0] === resultados[3] ||
-                       resultados[1] === resultados[2] || resultados[1] === resultados[3] || resultados[2] === resultados[3]) {
-                // Ganho mínimo por ter pelo menos um par (ajuste conforme a lógica do seu jogo)
-                ganho = valorAposta * 0.5;
-                mensagem = `Você teve um par!`;
-            } else if (resultados[0] !== resultados[1] && resultados[0] !== resultados[2] && resultados[0] !== resultados[3] &&
-                       resultados[1] !== resultados[2] && resultados[1] !== resultados[3] && resultados[2] !== resultados[3]) {
-                mensagem = 'Não houve ganho nesta rodada.';
-            }
-
-            creditos += ganho;
-            atualizarInterface();
-            tela.textContent = mensagem || 'Não houve ganho nesta rodada.';
+        // Exibe a seção do jogo
+        function exibirJogo() {
+            const jogoSection = document.getElementById('jogo');
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'none';
+            jogoSection.style.display = 'block';
+            atualizarInformacoes(); // Atualiza informações
         }
 
-        girarBtn.addEventListener('click', girarSlots);
+        document.getElementById('login-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            logar();
+        });
 
-        atualizarInterface(); // Inicializar a interface
+        document.getElementById('register-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            registrar();
+        });
+
+        document.getElementById('show-register-form').addEventListener('click', function (e) {
+            e.preventDefault();
+            toggleForms();
+        });
+
+        document.getElementById('show-login-form').addEventListener('click', function (e) {
+            e.preventDefault();
+            toggleForms();
+        });
     </script>
 </body>
 
