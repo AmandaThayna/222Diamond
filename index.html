@@ -20,11 +20,17 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            overflow: hidden; /* Evitar overflow durante animações */
+            overflow: hidden;
         }
 
         h3 {
             color: #fff;
+        }
+
+        .highlight {
+            color: yellow; /* Cor vibrante para o texto do jogo */
+            font-weight: bold;
+            font-size: 20px;
         }
 
         /* Formulários */
@@ -138,6 +144,7 @@
         }
 
         #resultado {
+            display: none;
             margin-top: 20px;
             color: white;
             font-weight: bold;
@@ -190,10 +197,10 @@
         /* Grid de Slots */
         #slotsContainer {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 4 colunas */
-            grid-template-rows: repeat(3, 1fr); /* 3 linhas, totalizando 12 slots */
-            gap: 10px; /* Espaçamento entre slots */
-            justify-items: center; /* Centraliza os slots */
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 10px;
+            justify-items: center;
         }
     </style>
 </head>
@@ -222,11 +229,23 @@
     <!-- Seção do Jogo -->
     <div id="jogo">
         <div id="tela">
-            <p id="resultado">Clique em "Sortear Diamantes" para jogar!</p>
+            <p id="resultado" class="highlight">Clique em "Sortear Diamantes" para jogar!</p>
         </div>
 
         <div id="botoes">
-            <input type="text" id="valor_input" placeholder="Digite seu valor aqui" />
+            <input type="text" id="valor_input" placeholder="Aposte" value="0.50" />
+            <button id="apostarMaisBtn">Apostar Mais</button>
+            <button id="apostarMenosBtn">Apostar Menos</button>
+            <button id="automaticoBtn">Rodadas Rápidas</button>
+
+            <label for="quantidadeJogadas">Quantas jogadas automáticas?</label>
+            <select id="quantidadeJogadas">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+            </select>
             <button id="sortearBtn">Sortear Diamantes</button>
         </div>
 
@@ -258,6 +277,9 @@
     <script>
         // Variável para armazenar o saldo do usuário
         let saldoUsuario = 100; // Valor inicial do saldo
+        let valorAposta = 0.50; // Valor inicial da aposta
+        let rodadaAutomatica = false; // Flag para indicar se será rodadas automáticas
+        let rodadasRestantes = 0; // Para armazenar a quantidade de rodadas automáticas
 
         // Funções de Login/Register
         function logar() {
@@ -331,10 +353,41 @@
 
         const valores = [2, 5, 10, 20]; // Valores correspondentes
         const slots = document.querySelectorAll('.slot');
-        const resultado = document.getElementById('resultado');
+
+        // Function to check if there are matching slots
+        function checarVitoria() {
+            let combinacoes = [];
+            // Verificação horizontal
+            for (let i = 0; i < 12; i += 4) {
+                if (slots[i].style.backgroundImage && 
+                    slots[i].style.backgroundImage === slots[i + 1].style.backgroundImage && 
+                    slots[i].style.backgroundImage === slots[i + 2].style.backgroundImage) {
+                    combinacoes.push([slots[i], slots[i + 1], slots[i + 2]]);
+                }
+            }
+            
+            // Verificação vertical
+            for (let i = 0; i < 4; i++) {
+                if (slots[i].style.backgroundImage &&
+                    slots[i].style.backgroundImage === slots[i + 4].style.backgroundImage && 
+                    slots[i].style.backgroundImage === slots[i + 8].style.backgroundImage) {
+                    combinacoes.push([slots[i], slots[i + 4], slots[i + 8]]);
+                }
+            }
+
+            // Verificação diagonal
+            if (slots[0].style.backgroundImage && slots[0].style.backgroundImage === slots[5].style.backgroundImage && slots[10].style.backgroundImage === slots[0].style.backgroundImage) {
+                combinacoes.push([slots[0], slots[5], slots[10]]);
+            }
+            if (slots[2].style.backgroundImage && slots[2].style.backgroundImage === slots[5].style.backgroundImage && slots[8].style.backgroundImage === slots[2].style.backgroundImage) {
+                combinacoes.push([slots[2], slots[5], slots[8]]);
+            }
+
+            return combinacoes;
+        }
 
         // Função para exibir animação de resultado
-        function mostrarAnimaAlerta(ganhou, totalGanho, valorAposta) {
+        function mostrarAnimaAlerta(ganhou, totalGanho) {
             const animaAlerta = document.getElementById('anima-alerta');
             const mensagemAlerta = document.getElementById('mensagem-alerta');
             const alertaGif = document.getElementById('alerta-gif');
@@ -342,6 +395,7 @@
             if (ganhou) {
                 alertaGif.src = 'img/gif_vitoria.gif'; // URL do GIF de vitória
                 mensagemAlerta.textContent = `Parabéns! Você ganhou R$ ${totalGanho.toFixed(2)}!`;
+                mostrarMegaGanho();
             } else {
                 alertaGif.src = 'img/gif_derrota.gif'; // URL do GIF de derrota
                 mensagemAlerta.textContent = 'Você perdeu! Tente novamente.';
@@ -363,37 +417,77 @@
         }
 
         // Função para iniciar o sorteio
-        document.getElementById('sortearBtn').addEventListener('click', () => {
-            const valorInput = parseFloat(document.getElementById('valor_input').value);
-            if (isNaN(valorInput) || valorInput <= 0 || valorInput > saldoUsuario) {
-                alert('Por favor, digite um valor válido para a aposta que você possui.');
-                return;
-            }
-
+        function sortearDiamantes() {
             let totalGanho = 0;
+            const ganhapatron = checarVitoria();
 
             // Sortear diamantes
-            slots.forEach((slot, index) => {
+            slots.forEach((slot) => {
                 const randomIndex = Math.floor(Math.random() * imagens.length);
                 slot.style.backgroundImage = `url(${imagens[randomIndex]})`;
                 slot.style.backgroundSize = 'contain';
                 slot.style.backgroundRepeat = 'no-repeat';
-                const ganho = valorInput * valores[randomIndex]; // Cálculo do ganho
+                const ganho = valorAposta * valores[randomIndex]; // Cálculo do ganho
                 totalGanho += ganho;
             });
 
             // Atualiza o saldo e verifica se o jogador ganhou ou perdeu
-            saldoUsuario += totalGanho - valorInput;
-
+            if (ganhapatron.length > 0) {
+                ganhapatron.forEach(combinacao => {
+                    combinacao.forEach(slot => slot.style.border = "2px solid green"); // Adiciona uma borda verde ao ganhar
+                });
+                mostrarAnimaAlerta(true, totalGanho);
+                saldoUsuario += totalGanho; // Adiciona ganho ao saldo
+            } else {
+                mostrarAnimaAlerta(false);
+                saldoUsuario -= valorAposta; // Deduz valor da aposta se perder
+            }
+            
             // Atualiza o alerta de saldo
             alert(`Seu saldo atual: R$ ${saldoUsuario.toFixed(2)}`);
+        }
 
-            // Verifica se houve mega ganho
-            if (totalGanho > valorInput * 15) {
-                mostrarMegaGanho();
+        // Função para rodadas automáticas
+        function jogarAutomaticamente() {
+            if (rodadasRestantes > 0) {
+                sortearDiamantes();
+                rodadasRestantes--;
+                if (rodadasRestantes === 0) {
+                    rodadaAutomatica = false;
+                }
             }
+        }
 
-            mostrarAnimaAlerta(totalGanho > 0, totalGanho, valorInput);
+        // Adiciona eventos aos botões de aposta
+        document.getElementById('apostarMaisBtn').addEventListener('click', () => {
+            valorAposta = Math.min(valorAposta + 0.50, 2000);
+            document.getElementById('valor_input').value = valorAposta.toFixed(2);
+        });
+
+        document.getElementById('apostarMenosBtn').addEventListener('click', () => {
+            valorAposta = Math.max(valorAposta - 0.50, 0.50);
+            document.getElementById('valor_input').value = valorAposta.toFixed(2);
+        });
+
+        document.getElementById('sortearBtn').addEventListener('click', () => {
+            if (rodadaAutomatica) {
+                // Se já estiver em rodadas automáticas, não faz nada
+                return;
+            }
+            sortearDiamantes();
+        });
+
+        document.getElementById('automaticoBtn').addEventListener('click', () => {
+            if (!rodadaAutomatica) {
+                rodadasRestantes = parseInt(document.getElementById('quantidadeJogadas').value, 10);
+                rodadaAutomatica = true;
+                const intervalId = setInterval(() => {
+                    jogarAutomaticamente();
+                    if (rodadasRestantes <= 0) {
+                        clearInterval(intervalId);
+                    }
+                }, 1000); // Intervalo de um segundo entre as jogadas
+            }
         });
 
         // Exibe a seção do jogo
