@@ -239,12 +239,20 @@
             color: white;
         }
 
-        /* Formulário de Definição de Saldo Inicial */
-        #initialBalanceForm {
-            display: flex;
-            flex-direction: column;
-            margin: 20px auto;
-            text-align: center;
+        /* Nova coluna para feedback de ganhos/perdas */
+        #feedback {
+            color: #ffd700; /* Cor vibrante para o feedback */
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        /* Ícone do raio para apostas automáticas */
+        #automaticBetBtn {
+            font-size: 24px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            color: yellow; /* Cor do ícone */
         }
     </style>
 </head>
@@ -279,15 +287,17 @@
 
     <!-- Seção do Jogo -->
     <div id="jogo">
+        <div id="feedback"></div> <!-- Coluna para feedback de ganhos/perdas -->
+
         <div id="tela">
             <p id="resultado" class="highlight">Clique em "Sortear Diamantes" para jogar!</p>
         </div>
 
         <!-- Informações do jogador -->
         <div id="infoPanel">
-            <div>Saldo: R$ <span id="saldoUsuario">0.00</span></div>
-            <div>Aposta: R$ <span id="valorAposta">0.50</span></div>
-            <div>Ganho: R$ <span id="ganhoAtual">0.00</span></div>
+            <div style="color: #76ff03;">Saldo: R$ <span id="saldoUsuario">0.00</span></div>
+            <div style="color: #00b0ff;">Aposta: R$ <span id="valorAposta">0.50</span></div>
+            <div style="color: #ff9100;">Ganho: R$ <span id="ganhoAtual">0.00</span></div>
         </div>
 
         <div id="slotsContainer">
@@ -307,6 +317,7 @@
             <button id="apostarMenosBtn" class="button">-</button>
             <button id="sortearBtn">♦</button>
             <button id="apostarMaisBtn" class="button">+</button>
+            <button id="automaticBetBtn"><span>⚡</span></button> <!-- Botão de Aposta Automática -->
         </div>
     </div>
 
@@ -322,8 +333,9 @@
     <script>
         let saldoUsuario = 0; // Inicializa o saldo como 0
         let valorAposta = 0.50; // Valor inicial da aposta
-        let rodadaAutomatica = false; // Flag para indicar se será rodadas automáticas
-        let rodadasRestantes = 0; // Para armazenar a quantidade de rodadas automáticas
+        let automaticBetting = false; // Flag para apostas automáticas
+        let rodadasRestantesAutomatica = 5; // Quantidade de rodadas automáticas
+        let ganhapatron; // Variável para armazenar combinações ganhas
 
         // Atualiza a exibição de saldo, aposta e ganho
         function atualizarInformacoes() {
@@ -426,12 +438,15 @@
         // Função para verificar se há combinações ganhas
         function checarVitoria() {
             let combinacoes = [];
+            const vencidos = [];
+
             // Verificação horizontal
             for (let i = 0; i < 9; i += 3) {
                 if (slots[i].style.backgroundImage &&
                     slots[i].style.backgroundImage === slots[i + 1].style.backgroundImage &&
                     slots[i].style.backgroundImage === slots[i + 2].style.backgroundImage) {
                     combinacoes.push([slots[i], slots[i + 1], slots[i + 2]]);
+                    vencidos.push(i, i + 1, i + 2); // Armazena os índices vencidos
                 }
             }
 
@@ -441,18 +456,21 @@
                     slots[i].style.backgroundImage === slots[i + 3].style.backgroundImage &&
                     slots[i].style.backgroundImage === slots[i + 6].style.backgroundImage) {
                     combinacoes.push([slots[i], slots[i + 3], slots[i + 6]]);
+                    vencidos.push(i, i + 3, i + 6); // Armazena os índices vencidos
                 }
             }
 
             // Verificação diagonal
             if (slots[0].style.backgroundImage && slots[0].style.backgroundImage === slots[4].style.backgroundImage && slots[8].style.backgroundImage === slots[0].style.backgroundImage) {
                 combinacoes.push([slots[0], slots[4], slots[8]]);
+                vencidos.push(0, 4, 8); // Armazena os índices vencidos
             }
             if (slots[2].style.backgroundImage && slots[2].style.backgroundImage === slots[4].style.backgroundImage && slots[6].style.backgroundImage === slots[2].style.backgroundImage) {
                 combinacoes.push([slots[2], slots[4], slots[6]]);
+                vencidos.push(2, 4, 6); // Armazena os índices vencidos
             }
 
-            return combinacoes;
+            return { combinacoes, vencidos }; // Retorna as combinações e os índice vencidos
         }
 
         // Função para exibir animação de resultado
@@ -488,7 +506,7 @@
         // Função para iniciar o sorteio
         function sortearDiamantes() {
             let totalGanho = 0;
-            const ganhapatron = checarVitoria();
+            const { combinacoes, vencidos } = checarVitoria();
 
             // Sortear diamantes
             slots.forEach((slot) => {
@@ -501,16 +519,24 @@
             });
 
             // Atualiza o saldo e verifica se o jogador ganhou ou perdeu
-            if (ganhapatron.length > 0) {
-                ganhapatron.forEach(combinacao => {
+            if (combinacoes.length > 0) {
+                combinacoes.forEach(combinacao => {
                     combinacao.forEach(slot => slot.style.border = "2px solid green"); // Adiciona uma borda verde ao ganhar
                 });
+                
+                // Exibe a linha de vitórias
+                vencidos.forEach(index => {
+                    slots[index].style.border = "2px solid red"; // Mostra as posições ganhas em vermelho
+                });
+
                 mostrarAnimaAlerta(true, totalGanho);
                 saldoUsuario += totalGanho; // Adiciona ganho ao saldo
                 document.getElementById('ganhoAtual').innerText = totalGanho.toFixed(2); // Atualiza ganho atual
+                document.getElementById('feedback').innerText = 'Você ganhou!'; // Feedback de ganho
             } else {
                 mostrarAnimaAlerta(false);
                 saldoUsuario -= valorAposta; // Deduz valor da aposta se perder
+                document.getElementById('feedback').innerText = 'Você perdeu!'; // Feedback de perda
             }
 
             // Atualiza o alerta de saldo
@@ -531,6 +557,30 @@
         document.getElementById('sortearBtn').addEventListener('click', () => {
             sortearDiamantes(); // Chama a função de sortear diamantes
         });
+
+        // Função para apostas automáticas
+        function iniciarApostasAutomaticas() {
+            if (!automaticBetting && saldoUsuario > 0) {
+                automaticBetting = true;
+                const feedback = document.getElementById('feedback');
+                feedback.innerText = "Apostas automáticas ativadas!";
+                const intervalo = setInterval(() => {
+                    if (rodadasRestantesAutomatica > 0 && saldoUsuario > 0) {
+                        sortearDiamantes(); // Realiza a sorteio
+                        rodadasRestantesAutomatica--;
+                    } else {
+                        clearInterval(intervalo);
+                        automaticBetting = false;
+                        feedback.innerText = "Apostas automáticas desativadas!";
+                        rodadasRestantesAutomatica = 5; // Reseta para o próximo uso
+                    }
+                }, 1000); // Intervalo de 1 segundo para as apostas automáticas
+            } else {
+                alert('Apostas automáticas já estão ativadas ou saldo insuficiente.');
+            }
+        }
+
+        document.getElementById('automaticBetBtn').addEventListener('click', iniciarApostasAutomaticas); // Inicia apostas automáticas
 
         // Exibe a seção do jogo
         function exibirJogo() {
