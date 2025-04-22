@@ -136,15 +136,15 @@
         }
 
         #feedback {
-            color: #ffd700; /* Feedback text color */
+            color: #FFFFFF; /* Mudado para branco atraente */
             margin-bottom: 10px;
             font-size: 24px;
             padding: 10px;
-            background-color: rgba(255, 215, 0, 0.8); /* Gold background */
-            border: 2px solid #gold; /* Gold border */
+            background-color: rgba(255, 215, 0, 0.8); /* Fundo dourado */
+            border: 2px solid #ffd700; /* Bordar dourada */
             border-radius: 5px;
-            animation: pulse 1s infinite alternate; /* Pulsing animation */
-            box-shadow: 0 0 15px rgba(255, 215, 0, 1); /* Glowing effect */
+            animation: pulse 1s infinite alternate; /* Animação pulsante */
+            box-shadow: 0 0 15px rgba(255, 215, 0, 1); /* Efeito de brilho */
         }
 
         @keyframes pulse {
@@ -221,6 +221,27 @@
             cursor: pointer;
             color: yellow; /* Cor do ícone */
         }
+
+        /* Estilo para Mega Ganho */
+        #megaGanho {
+            display: none;
+            position: fixed;
+            top: 50%; /* Centraliza verticalmente */
+            left: 50%; /* Centraliza horizontalmente */
+            transform: translate(-50%, -50%); /* Ajusta a posição */
+            background-color: rgba(255, 215, 0, 0.9); /* Fundo levemente transparente */
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 30px;
+            color: #FFF;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); /* Efeito de brilho */
+            z-index: 100; /* Se estiver em cima de outros elementos */
+        }
+
+        #automaticBetRounds {
+            display: none; /* Inicialmente oculto */
+            margin: 10px 0;
+        }
     </style>
 </head>
 
@@ -286,6 +307,12 @@
             <button id="apostarMaisBtn" class="button">+</button>
             <button id="automaticBetBtn"><span>⚡</span></button> <!-- Botão de Aposta Automática -->
         </div>
+
+        <!-- Seção para escolha de rodadas automáticas -->
+        <div id="automaticBetRounds">
+            <label for="rounds">Escolha o número de rodadas automáticas (5 a 30):</label>
+            <input type="number" id="rounds" min="5" max="30" step="1" value="5">
+        </div>
     </div>
 
     <!-- Div para Mega Ganho -->
@@ -301,7 +328,7 @@
         let saldoUsuario = 0; // Inicializa o saldo como 0
         let valorAposta = 0.50; // Valor inicial da aposta
         let automaticBetting = false; // Flag para apostas automáticas
-        let rodadasRestantesAutomatica = 5; // Quantidade de rodadas automáticas
+        let rodadasRestantesAutomatica; // Quantidade de rodadas automáticas escolhidas
         let ganhapatron; // Variável para armazenar combinações ganhas
 
         // Atualiza a exibição de saldo, aposta e ganho
@@ -528,6 +555,14 @@
         // Função para apostas automáticas
         function iniciarApostasAutomaticas() {
             if (!automaticBetting && saldoUsuario > 0) {
+                // Pega o número de rodadas da caixa de seleção
+                const roundsInput = document.getElementById('rounds');
+                rodadasRestantesAutomatica = parseInt(roundsInput.value);
+                if (rodadasRestantesAutomatica < 5 || rodadasRestantesAutomatica > 30) {
+                    alert('Por favor, escolha entre 5 a 30 rodadas.');
+                    return;
+                }
+
                 automaticBetting = true;
                 const feedback = document.getElementById('feedback');
                 feedback.innerText = "Apostas automáticas ativadas!";
@@ -539,7 +574,7 @@
                         clearInterval(intervalo);
                         automaticBetting = false;
                         feedback.innerText = "Apostas automáticas desativadas!";
-                        rodadasRestantesAutomatica = 5; // Reseta para o próximo uso
+                        document.getElementById('automaticBetRounds').style.display = 'none'; // Oculta o campo de seleção novamente
                     }
                 }, 1000); // Intervalo de 1 segundo para as apostas automáticas
             } else {
@@ -547,7 +582,10 @@
             }
         }
 
-        document.getElementById('automaticBetBtn').addEventListener('click', iniciarApostasAutomaticas); // Inicia apostas automáticas
+        document.getElementById('automaticBetBtn').addEventListener('click', () => {
+            document.getElementById('automaticBetRounds').style.display = 'block'; // Mostra o campo para escolher rodadas
+            iniciarApostasAutomaticas(); // Inicia apostas automáticas
+        }); // Inicia apostas automáticas
 
         // Exibe a seção do jogo
         function exibirJogo() {
