@@ -27,41 +27,100 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    z-index: 100; /* Para sobrepor ao jogo */
+    background-color: rgba(0, 0, 0, 0.7); /* Fundo semitransparente */
+    display: none;
+    padding: 20px;
+    z-index: 100; /* Fazer a animação ficar por cima de tudo */
   }
-  #animation-container img {
-    width: 100px;
-    height: 100px;
+  #animation-container span {
+    font-size: 2em;
+    color: white;
   }
 </style>
 </head>
 <body>
-  <div id="animation-container">
-    <img src="loading.gif" alt="Loading"> <span id="multiplier-display"></span> 
-  </div>
 
-  <table>
-    <tr>
-      <td id="cell00"></td>
-      <td id="cell01"></td>
-      <td id="cell02"></td>
-    </tr>
-    <tr>
-      <td id="cell10"></td>
-      <td id="cell11"></td>
-      <td id="cell12"></td>
-    </tr>
-    <tr>
-      <td id="cell20"></td>
-      <td id="cell21"></td>
-      <td id="cell22"></td>
-    </tr>
-  </table>
-  <div id="result"></div>
-  <input type="number" id="bet" placeholder="Aposta (R$)" step="0.01">
-  <button onclick="startGame()">Jogar</button>
-  <script src="game.js"></script>
+<table>
+  <tr>
+    <td id="cell00"></td>
+    <td id="cell01"></td>
+    <td id="cell02"></td>
+  </tr>
+  <tr>
+    <td id="cell10"></td>
+    <td id="cell11"></td>
+    <td id="cell12"></td>
+  </tr>
+  <tr>
+    <td id="cell20"></td>
+    <td id="cell21"></td>
+    <td id="cell22"></td>
+  </tr>
+</table>
+
+<p>Aposta (R$): <input type="number" id="bet" value="0.50" step="0.01"></p>
+<button onclick="startGame()">Iniciar Jogo</button>
+<div id="result"></div>
+<div id="animation-container">
+  <span id="animation-text"></span>
+</div>
+
+<script>
+  const cells = document.querySelectorAll('td');
+  const betInput = document.getElementById('bet');
+  const resultDiv = document.getElementById('result');
+  const animationContainer = document.getElementById('animation-container');
+  const animationText = document.getElementById('animation-text');
+
+  let betAmount = 0;
+  let multipliers = [2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 50, 100, 200];
+
+  function startGame() {
+    betAmount = parseFloat(betInput.value);
+    // ... (resto do código para gerar imagens aleatórias e verificar ganhadores)
+    // ... (código para a animação)
+
+    // Inicializar os slots com imagens vazias
+    for (let i = 0; i < cells.length; i++) {
+      cells[i].textContent = "";
+      cells[i].style.backgroundImage = "none"; // Remover background
+    }
+
+    // ... lógica para gerar imagens aleatórias
+
+    checkWin();
+  }
+
+
+
+  function checkWin() {
+    // ... lógica para verificar combinações vencedoras
+
+
+    let winMultiplier = calculateMultiplier();
+    if (winMultiplier > 1) {
+      let winAmount = betAmount * winMultiplier;
+        //  Animação
+        animationContainer.style.display = "block";
+        animationText.textContent = `Ganhou X${winMultiplier}!  Ganho Final: R$ ${winAmount.toFixed(2)}`;
+
+
+    } else {
+      resultDiv.textContent = "Sem ganho!";
+    }
+
+    // ... lógica para gerar imagens aleatórias e verificar ganhadores)
+  }
+
+  function calculateMultiplier() {
+   // ... lógica para calcular o multiplicador com base em combinações iguais
+   // ... retornar o multiplicador (ex: 2, 3, 5, 10)
+     return Math.floor(Math.random() * multipliers.length);
+  }
+
+  // ... (resto do código para lidar com cliques em slots, imagens etc.)
+
+</script>
+
 </body>
 </html>
