@@ -1,167 +1,72 @@
 // game.js
+let currentPlayer = "X"; // Inicia com o jogador X
+let gameBoard = ["", "", "", "", "", "", "", "", ""]; // Array para representar o tabuleiro
+let gameOver = false;
 
-// Variáveis globais
-let canvas;
-let ctx;
-let player;
-let enemies = [];
-let score = 0;
+const cells = document.querySelectorAll("td");
 
-// Configurações
-const canvasWidth = 800;
-const canvasHeight = 600;
-const playerSpeed = 5;
-const enemySpeed = 3;
-const enemySpawnRate = 1000; // em milissegundos
+cells.forEach(cell => {
+  cell.addEventListener("click", handleClick);
+});
 
-// Classe para o jogador
-class Player {
-  constructor(x, y, width, height) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
-    this.image = new Image();
-    this.image.src = 'player.png'; // Substitua por seu arquivo de imagem.
-    this.image.onload = () => {
-        requestAnimationFrame(gameLoop); // garante que o jogo inicie
-    }
-  }
+function handleClick(event) {
+  if (gameOver) return; //Sai da função se o jogo acabou
 
-  draw() {
-    ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-  }
+  const cellIndex = parseInt(event.target.id.slice(-2)); // Pega o índice da célula
 
-  update() {
-    // Movimento do player
-    this.x = Math.max(0, Math.min(this.x + this.dx, canvasWidth - this.width)); // Impede de sair do canvas.
-    this.y = Math.max(0, Math.min(this.y + this.dy, canvasHeight - this.height)); // Impede de sair do canvas.
-    this.dx = 0;
-    this.dy = 0;
-  }
-}
+  if (gameBoard[cellIndex] === "") {
+     //logica do jogo da velha com possibilidade de resultados aleatorios
+     gameBoard[cellIndex] = currentPlayer;
+     event.target.textContent = currentPlayer;
 
 
-// Classe para inimigos
-class Enemy {
-  constructor(x, y, width, height) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
-    this.image = new Image();
-    this.image.src = 'enemy.png'; // Substitua por seu arquivo de imagem.
-  }
+     //Verifica se o jogador atual venceu
+     if (checkWin(currentPlayer)) {
+        document.getElementById("result").textContent = `Jogador ${currentPlayer} venceu!`;
+        gameOver = true;
+        return; // Para a execução da função
+      }
 
+      //Verifica se há empate
+     if (checkDraw()) {
+        document.getElementById("result").textContent = "Empate!";
+        gameOver = true;
+        return; // Para a execução da função
+      }
 
-  draw() {
-    ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-  }
-
-  update() {
-    // Movimento dos inimigos
-    this.x -= enemySpeed; // Movimento para a esquerda
-    if (this.x + this.width < 0) {
-      this.x = canvasWidth;
-    }
+      // Inverte o jogador atual
+     currentPlayer = currentPlayer === "X" ? "O" : "X";
+    
+     //Simulação de resultados aleatórios do tigrinho
+     const randomNumber = Math.floor(Math.random() * 3) + 1;
+    
+     if (randomNumber === 3 && !gameOver){ // 33% de chance de um jogador ganhar aleatoriamente
+         let winner = "X"; // O ganhador pode ser X ou O. A lógica atual escolhe X.
+         document.getElementById("result").textContent = `Jogador ${winner} venceu!`;
+         gameOver = true;
+         return;
+      }
     
   }
 }
 
-function createEnemy() {
-    const enemy = new Enemy(canvasWidth, Math.random() * (canvasHeight - 50), 50, 50);
-    enemies.push(enemy);
-}
 
+function checkWin(player) {
+    const winPatterns = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],  // Linhas
+      [0, 3, 6], [1, 4, 7], [2, 5, 8],  // Colunas
+      [0, 4, 8], [2, 4, 6]             // Diagonais
+    ];
 
-function init() {
-  canvas = document.getElementById('myCanvas');
-  ctx = canvas.getContext('2d');
-
-  player = new Player(canvasWidth / 2 - 25, canvasHeight / 2 - 25, 50, 50);
-  
-  setInterval(createEnemy, enemySpawnRate);
-
-  document.addEventListener('keydown', (event) => {
-    switch (event.key) {
-      case 'ArrowUp':
-        player.dy = -playerSpeed;
-        break;
-      case 'ArrowDown':
-        player.dy = playerSpeed;
-        break;
-      case 'ArrowLeft':
-        player.dx = -playerSpeed;
-        break;
-      case 'ArrowRight':
-        player.dx = playerSpeed;
-        break;
-    }
-  });
-
-  document.addEventListener('keyup', (event) => {
-    switch (event.key) {
-      case 'ArrowUp':
-      case 'ArrowDown':
-        player.dy = 0;
-        break;
-      case 'ArrowLeft':
-      case 'ArrowRight':
-        player.dx = 0;
-        break;
-    }
-  });
-}
-
-
-
-function gameLoop() {
-  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-
-  player.update();
-  player.draw();
-
-  // Atualiza e desenha os inimigos
-  for (let i = 0; i < enemies.length; i++) {
-    const enemy = enemies[i];
-    enemy.update();
-    enemy.draw();
-    // Verificação de colisão (implemente a lógica aqui)
-  }
-
-  requestAnimationFrame(gameLoop);
-}
-
-
-
-window.onload = init;
-Explicação e melhorias:
-
-Classes Player e Enemy: Organiza o código em classes para melhor estrutura.
-Imagens: Adicionei image.src = 'player.png' (e enemy.png). É crucial ter esses arquivos na mesma pasta que o seu index.html ou especifique o caminho correto para eles.
-Movimento do Player: O movimento agora é suave e limitado ao canvas.
-Movimento dos inimigos: Os inimigos se movem para a esquerda continuamente.
-Spawn de inimigos: Usando setInterval para gerar inimigos em um intervalo específico.
-Limpeza do canvas: ctx.clearRect(0, 0, canvasWidth, canvasHeight) para garantir que o canvas seja limpo a cada frame, evitando acumulação de desenhos.
-Inicialização (init): A inicialização agora garante que a imagem do jogador carregue corretamente antes de começar o loop.
-Loop de jogo (gameLoop): O loop requestAnimationFrame garante que o jogo funcione com boa performance.
-Controle de teclado: O código agora lida com a liberação das teclas, impedindo o movimento do player enquanto não houver input.
-HTML (index.html):
-
-CopyReplit
-<!DOCTYPE html>
-<html>
-<head>
-<title>First-Person Game</title>
-</head>
-<body>
-  <canvas id="myCanvas" width="800" height="600"></canvas>
-  <script src="game.js"></script> <!-- Inclui o arquivo JavaScript -->
-  
-  <style>
-      canvas {
-          border: 1px solid black;
+    for (const pattern of winPatterns) {
+      const [a, b, c] = pattern;
+      if (gameBoard[a] === player && gameBoard[b] === player && gameBoard[c] === player) {
+        return true;
       }
-  </style>
-</body>
-</html>
+    }
+    return false;
+}
+
+function checkDraw() {
+  return !gameBoard.includes("");
+}
