@@ -14,14 +14,33 @@
     text-align: center;
     font-size: 24px;
     cursor: pointer;
+    background-size: contain; /* Importante para ajustar o tamanho da imagem */
+    background-repeat: no-repeat; /* Importante para evitar repetições */
+    background-position: center; /* Centralizar a imagem no quadrado */
   }
   #result {
     font-size: 20px;
     margin-top: 10px;
   }
+  #animation-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 100; /* Para sobrepor ao jogo */
+  }
+  #animation-container img {
+    width: 100px;
+    height: 100px;
+  }
 </style>
 </head>
 <body>
+  <div id="animation-container">
+    <img src="loading.gif" alt="Loading"> <span id="multiplier-display"></span> 
+  </div>
 
   <table>
     <tr>
@@ -40,9 +59,9 @@
       <td id="cell22"></td>
     </tr>
   </table>
-
   <div id="result"></div>
-
+  <input type="number" id="bet" placeholder="Aposta (R$)" step="0.01">
+  <button onclick="startGame()">Jogar</button>
   <script src="game.js"></script>
 </body>
 </html>
