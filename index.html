@@ -1,126 +1,610 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
+
 <head>
-<title>Jogo de Azar - Jogo da Velha com Tigrinho</title>
-<style>
-  table {
-    border-collapse: collapse;
-    margin: 20px auto;
-  }
-  td {
-    width: 50px;
-    height: 50px;
-    border: 1px solid black;
-    text-align: center;
-    font-size: 24px;
-    cursor: pointer;
-    background-size: contain; /* Importante para ajustar o tamanho da imagem */
-    background-repeat: no-repeat; /* Importante para evitar repetições */
-    background-position: center; /* Centralizar a imagem no quadrado */
-  }
-  #result {
-    font-size: 20px;
-    margin-top: 10px;
-  }
-  #animation-container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(0, 0, 0, 0.7); /* Fundo semitransparente */
-    display: none;
-    padding: 20px;
-    z-index: 100; /* Fazer a animação ficar por cima de tudo */
-  }
-  #animation-container span {
-    font-size: 2em;
-    color: white;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>22Diamond - Jogo de Sorte</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-image: url(./img/up.png);
+            background-size: cover;
+            background-position: top;
+            width: 100%;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        h3 {
+            color: #fff;
+        }
+
+        .highlight {
+            color: yellow; /* Cor vibrante para o texto do jogo */
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            background-color: rgba(0, 0, 0, 0.7);
+            text-align: center;
+            margin: 20px auto;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            transition: box-shadow 0.3s ease;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        input {
+            margin: 10px 0;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #66BB6A;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #57A859;
+        }
+
+        .alert {
+            display: none;
+            background-color: #f44336;
+            color: white;
+            padding: 15px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            top: 20px;
+            transform: translateX(-50%);
+            border-radius: 5px;
+            animation: slide-down 0.5s;
+        }
+
+        .success {
+            background-color: #4CAF50;
+        }
+
+        @keyframes slide-down {
+            from {
+                top: -50px;
+            }
+
+            to {
+                top: 20px;
+            }
+        }
+
+        #jogo {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .slot {
+            width: 80px;
+            height: 80px;
+            margin: 5px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            background-size: cover;
+            transition: transform 0.2s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .slot:hover {
+            transform: scale(1.1);
+        }
+
+        #tela {
+            margin: 20px auto;
+            width: 100%;
+            max-width: 500px;
+            height: 100px;
+            background-color: white;
+            border: medium solid black;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        #feedback {
+            color: #FFFFFF; /* Mudado para branco atraente */
+            margin-bottom: 10px;
+            font-size: 24px;
+            padding: 10px;
+            background-color: rgba(255, 215, 0, 0.8); /* Fundo dourado */
+            border: 2px solid #ffd700; /* Bordar dourada */
+            border-radius: 5px;
+            animation: pulse 1s infinite alternate; /* Animação pulsante */
+            box-shadow: 0 0 15px rgba(255, 215, 0, 1); /* Efeito de brilho */
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(1.05);
+            }
+        }
+
+        .info {
+            color: #2196F3; /* Vibrant blue for text */
+            background-color: rgba(230, 230, 230, 0.8); /* Light grey background */
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin: 5px;
+            font-size: 18px;
+        }
+
+        #slotsContainer {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 10px;
+            justify-items: center;
+        }
+
+        .button {
+            background-color: #66BB6A;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        .button:hover {
+            background-color: #57A859;
+        }
+
+        #sortearBtn {
+            background-color: #4CAF50; /* Cor verde chamativa para o botão de sortear */
+            border-radius: 50%; /* Formato de botão circular */
+            width: 80px;
+            height: 80px;
+            font-size: 32px;
+            transition: background-color 0.3s;
+        }
+
+        #sortearBtn:hover {
+            background-color: #43A047; /* Muda a cor ao passar o mouse */
+        }
+
+        #infoPanel {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: white;
+        }
+
+        #automaticBetBtn {
+            font-size: 24px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            color: yellow; /* Cor do ícone */
+        }
+
+        #megaGanho {
+            display: none;
+            position: fixed;
+            top: 50%; /* Centraliza verticalmente */
+            left: 50%; /* Centraliza horizontalmente */
+            transform: translate(-50%, -50%); /* Ajusta a posição */
+            background-color: rgba(255, 215, 0, 0.9); /* Fundo levemente transparente */
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 30px;
+            color: #FFF;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); /* Efeito de brilho */
+            z-index: 100; /* Se estiver em cima de outros elementos */
+        }
+
+        #automaticBetRounds {
+            display: none; /* Inicialmente oculto */
+            margin: 10px 0;
+        }
+    </style>
 </head>
+
 <body>
+    <div id="alert" class="alert">Usuário ou Senha incorretos</div>
 
-<table>
-  <tr>
-    <td id="cell00"></td>
-    <td id="cell01"></td>
-    <td id="cell02"></td>
-  </tr>
-  <tr>
-    <td id="cell10"></td>
-    <td id="cell11"></td>
-    <td id="cell12"></td>
-  </tr>
-  <tr>
-    <td id="cell20"></td>
-    <td id="cell21"></td>
-    <td id="cell22"></td>
-  </tr>
-</table>
+    <!-- Formulário de Login -->
+    <form id="login-form">
+        <h3>Login</h3>
+        <input type="text" placeholder="Email" id="login-email" required>
+        <input type="password" placeholder="Senha" id="login-senha" required>
+        <input type="submit" value="Entrar">
+        <p>Ou <a href="#" id="show-register-form" class="toggle-link">criar uma nova conta</a></p>
+    </form>
 
-<p>Aposta (R$): <input type="number" id="bet" value="0.50" step="0.01"></p>
-<button onclick="startGame()">Iniciar Jogo</button>
-<div id="result"></div>
-<div id="animation-container">
-  <span id="animation-text"></span>
-</div>
+    <!-- Formulário de Cadastro -->
+    <form id="register-form" style="display: none;">
+        <h3>Criar Conta</h3>
+        <input type="text" placeholder="Email" id="register-email" required>
+        <input type="password" placeholder="Senha" id="register-senha" required>
+        <input type="submit" value="Registrar">
+        <p>Já tem uma conta? <a href="#" id="show-login-form" class="toggle-link">Entrar</a></p>
+    </form>
 
-<script>
-  const cells = document.querySelectorAll('td');
-  const betInput = document.getElementById('bet');
-  const resultDiv = document.getElementById('result');
-  const animationContainer = document.getElementById('animation-container');
-  const animationText = document.getElementById('animation-text');
+    <!-- Formulário para Definir Saldo Inicial -->
+    <div id="initialBalanceForm" style="display: none;">
+        <h3>Defina seu saldo inicial</h3>
+        <input type="number" id="userBalance" placeholder="Saldo Inicial" required />
+        <button id="startGameBtn" class="button">Iniciar Jogo</button>
+    </div>
 
-  let betAmount = 0;
-  let multipliers = [2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 50, 100, 200];
+    <!-- Seção do Jogo -->
+    <div id="jogo">
+        <div id="feedback"></div> <!-- Coluna para feedback de ganhos/perdas -->
 
-  function startGame() {
-    betAmount = parseFloat(betInput.value);
-    // ... (resto do código para gerar imagens aleatórias e verificar ganhadores)
-    // ... (código para a animação)
+        <div id="tela">
+            <p id="resultado" class="highlight">Clique em "Sortear Diamantes" para jogar!</p>
+        </div>
 
-    // Inicializar os slots com imagens vazias
-    for (let i = 0; i < cells.length; i++) {
-      cells[i].textContent = "";
-      cells[i].style.backgroundImage = "none"; // Remover background
-    }
+        <!-- Informações do jogador -->
+        <div id="infoPanel">
+            <div class="info">Saldo: R$ <span id="saldoUsuario">0.00</span></div>
+            <div class="info">Aposta: R$ <span id="valorAposta">0.50</span></div>
+            <div class="info">Ganho: R$ <span id="ganhoAtual">0.00</span></div>
+        </div>
 
-    // ... lógica para gerar imagens aleatórias
+        <div id="slotsContainer">
+            <div class="slot" id="slot1"></div>
+            <div class="slot" id="slot2"></div>
+            <div class="slot" id="slot3"></div>
+            <div class="slot" id="slot4"></div>
+            <div class="slot" id="slot5"></div>
+            <div class="slot" id="slot6"></div>
+            <div class="slot" id="slot7"></div>
+            <div class="slot" id="slot8"></div>
+            <div class="slot" id="slot9"></div>
+        </div>
 
-    checkWin();
-  }
+        <!-- Painel de Botões -->
+        <div id="botoes">
+            <button id="apostarMenosBtn" class="button">-</button>
+            <button id="sortearBtn">♦</button>
+            <button id="apostarMaisBtn" class="button">+</button>
+            <button id="automaticBetBtn"><span>⚡</span></button> <!-- Botão de Aposta Automática -->
+        </div>
 
+        <!-- Seção para escolha de rodadas automáticas -->
+        <div id="automaticBetRounds">
+            <label for="rounds">Escolha o número de rodadas automáticas (5 a 30):</label>
+            <input type="number" id="rounds" min="5" max="30" step="1" value="5">
+        </div>
+    </div>
 
+    <!-- Div para Mega Ganho -->
+    <div id="megaGanho">🎉 Mega Ganho! 🎉</div>
 
-  function checkWin() {
-    // ... lógica para verificar combinações vencedoras
+    <!-- Div para Alertas Animados -->
+    <div id="anima-alerta" class="anima-alerta" style="display: none;">
+        <img id="alerta-gif" src="" alt="Resultado" />
+        <p id="mensagem-alerta"></p>
+    </div>
 
+    <script>
+        let saldoUsuario = 0; // Inicializa o saldo como 0
+        let valorAposta = 0.50; // Valor inicial da aposta
+        let automaticBetting = false; // Flag para apostas automáticas
+        let rodadasRestantesAutomatica; // Quantidade de rodadas automáticas escolhidas
 
-    let winMultiplier = calculateMultiplier();
-    if (winMultiplier > 1) {
-      let winAmount = betAmount * winMultiplier;
-        //  Animação
-        animationContainer.style.display = "block";
-        animationText.textContent = `Ganhou X${winMultiplier}!  Ganho Final: R$ ${winAmount.toFixed(2)}`;
+        // Atualiza a exibição de saldo, aposta e ganho
+        function atualizarInformacoes() {
+            document.getElementById('saldoUsuario').innerText = saldoUsuario.toFixed(2);
+            document.getElementById('valorAposta').innerText = valorAposta.toFixed(2);
+            document.getElementById('ganhoAtual').innerText = 0.00; // Resetar ganho atual após cada rodada
+        }
 
+        // Funções de Login/Register
+        function logar() {
+            const email = document.getElementById('login-email').value.trim();
+            const senha = document.getElementById('login-senha').value;
 
-    } else {
-      resultDiv.textContent = "Sem ganho!";
-    }
+            const usuario = JSON.parse(localStorage.getItem(email));
 
-    // ... lógica para gerar imagens aleatórias e verificar ganhadores)
-  }
+            if (usuario && usuario.senha === senha) {
+                localStorage.setItem('usuarioLogado', email);
+                exibirInicialBalanceForm(); // Chama função para exibir o formulário de saldo inicial
+            } else {
+                mostrarAlerta('Usuário ou senha incorretos');
+            }
+        }
 
-  function calculateMultiplier() {
-   // ... lógica para calcular o multiplicador com base em combinações iguais
-   // ... retornar o multiplicador (ex: 2, 3, 5, 10)
-     return Math.floor(Math.random() * multipliers.length);
-  }
+        function registrar() {
+            const email = document.getElementById('register-email').value.trim();
+            const senha = document.getElementById('register-senha').value;
 
-  // ... (resto do código para lidar com cliques em slots, imagens etc.)
+            if (!email || !senha) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
 
-</script>
+            if (localStorage.getItem(email)) {
+                alert('Este e-mail já está registrado.');
+                return;
+            }
 
+            const novoUsuario = { email, senha };
+            localStorage.setItem(email, JSON.stringify(novoUsuario));
+            mostrarAlerta('Conta criada com sucesso!', true);
+            setTimeout(() => {
+                localStorage.setItem('usuarioLogado', email);
+                exibirInicialBalanceForm(); // Chama a função para exibir o formulário de saldo inicial
+            }, 2000);
+        }
+
+        function mostrarAlerta(mensagem, sucesso = false) {
+            const alertBox = document.getElementById('alert');
+            alertBox.textContent = mensagem;
+            alertBox.className = 'alert' + (sucesso ? ' success' : '');
+            alertBox.style.display = 'block';
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 3000);
+        }
+
+        function toggleForms() {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+
+            if (loginForm.style.display === "none") {
+                loginForm.style.display = "block";
+                registerForm.style.display = "none";
+            } else {
+                loginForm.style.display = "none";
+                registerForm.style.display = "block";
+            }
+        }
+
+        function exibirInicialBalanceForm() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'none';
+            document.getElementById('jogo').style.display = 'none';
+            document.getElementById('initialBalanceForm').style.display = 'block';
+        }
+
+        document.getElementById('startGameBtn').addEventListener('click', () => {
+            const saldoInicial = parseFloat(document.getElementById('userBalance').value);
+            if (isNaN(saldoInicial) || saldoInicial <= 0) {
+                alert('Por favor, insira um saldo válido.');
+                return;
+            }
+            saldoUsuario = saldoInicial;
+            document.getElementById('initialBalanceForm').style.display = 'none';
+            document.getElementById('jogo').style.display = 'block';
+            atualizarInformacoes(); // Atualiza informações do usuário no início do jogo
+        });
+
+        // Funções do Jogo
+        const imagens = [
+            'img/diamante_rosa.png', // Valor: 2x
+            'img/diamante_verde.png', // Valor: 5x
+            'img/diamante_mesclado.png', // Valor: 10x
+            'img/cifrao.png' // Valor: 20x
+        ];
+
+        const valores = [2, 5, 10, 20]; // Valores correspondentes
+        const slots = document.querySelectorAll('.slot');
+
+        // Função para verificar se há combinações ganhas
+        function checarVitoria() {
+            let combinacoes = [];
+            const vencidos = [];
+
+            // Verificação horizontal
+            for (let i = 0; i < 9; i += 3) {
+                if (slots[i].style.backgroundImage &&
+                    slots[i].style.backgroundImage === slots[i + 1].style.backgroundImage &&
+                    slots[i].style.backgroundImage === slots[i + 2].style.backgroundImage) {
+                    combinacoes.push([slots[i], slots[i + 1], slots[i + 2]]);
+                    vencidos.push(i, i + 1, i + 2); // Armazena os índices vencidos
+                }
+            }
+
+            // Verificação vertical
+            for (let i = 0; i < 3; i++) {
+                if (slots[i].style.backgroundImage &&
+                    slots[i].style.backgroundImage === slots[i + 3].style.backgroundImage &&
+                    slots[i].style.backgroundImage === slots[i + 6].style.backgroundImage) {
+                    combinacoes.push([slots[i], slots[i + 3], slots[i + 6]]);
+                    vencidos.push(i, i + 3, i + 6); // Armazena os índices vencidos
+                }
+            }
+
+            // Verificação diagonal
+            if (slots[0].style.backgroundImage && slots[0].style.backgroundImage === slots[4].style.backgroundImage && slots[8].style.backgroundImage === slots[0].style.backgroundImage) {
+                combinacoes.push([slots[0], slots[4], slots[8]]);
+                vencidos.push(0, 4, 8); // Armazena os índices vencidos
+            }
+            if (slots[2].style.backgroundImage && slots[2].style.backgroundImage === slots[4].style.backgroundImage && slots[6].style.backgroundImage === slots[2].style.backgroundImage) {
+                combinacoes.push([slots[2], slots[4], slots[6]]);
+                vencidos.push(2, 4, 6); // Armazena os índices vencidos
+            }
+
+            return { combinacoes, vencidos }; // Retorna as combinações e os índice vencidos
+        }
+
+        // Função para exibir animação de resultado
+        function mostrarAnimaAlerta(ganhou, totalGanho) {
+            const animaAlerta = document.getElementById('anima-alerta');
+            const mensagemAlerta = document.getElementById('mensagem-alerta');
+            const alertaGif = document.getElementById('alerta-gif');
+
+            if (ganhou) {
+                alertaGif.src = 'img/gif_vitoria.gif'; // URL do GIF de vitória
+                mensagemAlerta.textContent = `Parabéns! Você ganhou R$ ${totalGanho.toFixed(2)}!`;
+                mostrarMegaGanho();
+            } else {
+                alertaGif.src = 'img/gif_derrota.gif'; // URL do GIF de derrota
+                mensagemAlerta.textContent = 'Você perdeu! Tente novamente.';
+            }
+
+            animaAlerta.style.display = 'flex';
+            setTimeout(() => {
+                animaAlerta.style.display = 'none';
+            }, 3000);
+        }
+
+        // Função para mostrar alerta de Mega Ganho
+        function mostrarMegaGanho() {
+            const megaGanho = document.getElementById('megaGanho');
+            megaGanho.style.display = 'block';
+            setTimeout(() => {
+                megaGanho.style.display = 'none';
+            }, 3000);
+        }
+
+        // Função para iniciar o sorteio
+        function sortearDiamantes() {
+            let totalGanho = 0;
+            const { combinacoes, vencidos } = checarVitoria();
+
+            // Sortear diamantes
+            slots.forEach((slot) => {
+                const randomIndex = Math.floor(Math.random() * imagens.length);
+                slot.style.backgroundImage = `url(${imagens[randomIndex]})`;
+                slot.style.backgroundSize = 'contain';
+                slot.style.backgroundRepeat = 'no-repeat';
+                const ganho = valorAposta * valores[randomIndex]; // Cálculo do ganho
+                totalGanho += ganho;
+            });
+
+            // Atualiza o saldo e verifica se o jogador ganhou ou perdeu
+            if (combinacoes.length > 0) {
+                combinacoes.forEach(combinacao => {
+                    combinacao.forEach(slot => slot.style.border = "2px solid green"); // Adiciona uma borda verde ao ganhar
+                });
+
+                // Exibe a linha de vitórias
+                vencidos.forEach(index => {
+                    slots[index].style.border = "2px solid red"; // Mostra as posições ganhas em vermelho
+                });
+
+                mostrarAnimaAlerta(true, totalGanho);
+                saldoUsuario += totalGanho; // Adiciona ganho ao saldo
+                document.getElementById('ganhoAtual').innerText = totalGanho.toFixed(2); // Atualiza ganho atual
+                document.getElementById('feedback').innerText = 'Você ganhou!'; // Feedback de ganho
+            } else {
+                mostrarAnimaAlerta(false);
+                saldoUsuario -= valorAposta; // Deduz valor da aposta se perder
+                document.getElementById('feedback').innerText = 'Você perdeu!'; // Feedback de perda
+            }
+
+            // Atualiza o alerta de saldo
+            atualizarInformacoes(); // Chama função para atualizar informações
+        }
+
+        // Adiciona eventos aos botões de aposta
+        document.getElementById('apostarMaisBtn').addEventListener('click', () => {
+            valorAposta = Math.min(valorAposta + 0.50, saldoUsuario); // Limita a aposta ao máximo do saldo
+            document.getElementById('valorAposta').innerText = valorAposta.toFixed(2);
+        });
+
+        document.getElementById('apostarMenosBtn').addEventListener('click', () => {
+            valorAposta = Math.max(valorAposta - 0.50, 0.50); // Limita a aposta ao mínimo de 0.50
+            document.getElementById('valorAposta').innerText = valorAposta.toFixed(2);
+        });
+
+        document.getElementById('sortearBtn').addEventListener('click', () => {
+            sortearDiamantes(); // Chama a função de sortear diamantes
+        });
+
+        // Função para apostas automáticas
+        function iniciarApostasAutomaticas() {
+            if (!automaticBetting && saldoUsuario > 0) {
+                // Pega o número de rodadas da caixa de seleção
+                const roundsInput = document.getElementById('rounds');
+                rodadasRestantesAutomatica = parseInt(roundsInput.value);
+                if (rodadasRestantesAutomatica < 5 || rodadasRestantesAutomatica > 30) {
+                    alert('Por favor, escolha entre 5 a 30 rodadas.');
+                    return;
+                }
+
+                automaticBetting = true;
+                const feedback = document.getElementById('feedback');
+                feedback.innerText = "Apostas automáticas ativadas!";
+                const intervalo = setInterval(() => {
+                    if (rodadasRestantesAutomatica > 0 && saldoUsuario > 0) {
+                        sortearDiamantes(); // Realiza a sorteio
+                        rodadasRestantesAutomatica--;
+                    } else {
+                        clearInterval(intervalo);
+                        automaticBetting = false;
+                        feedback.innerText = "Apostas automáticas desativadas!";
+                        document.getElementById('automaticBetRounds').style.display = 'none'; // Oculta o campo de seleção novamente
+                    }
+                }, 1000); // Intervalo de 1 segundo para as apostas automáticas
+            } else {
+                alert('Apostas automáticas já estão ativadas ou saldo insuficiente.');
+            }
+        }
+
+        document.getElementById('automaticBetBtn').addEventListener('click', () => {
+            document.getElementById('automaticBetRounds').style.display = 'block'; // Mostra o campo para escolher rodadas
+            iniciarApostasAutomaticas(); // Inicia apostas automáticas
+        });
+
+        // Exibe a seção do jogo
+        function exibirJogo() {
+            const jogoSection = document.getElementById('jogo');
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'none';
+            jogoSection.style.display = 'block';
+            atualizarInformacoes(); // Atualiza informações
+        }
+
+        document.getElementById('login-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            logar();
+        });
+
+        document.getElementById('register-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            registrar();
+        });
+
+        document.getElementById('show-register-form').addEventListener('click', function (e) {
+            e.preventDefault();
+            toggleForms();
+        });
+
+        document.getElementById('show-login-form').addEventListener('click', function (e) {
+            e.preventDefault();
+            toggleForms();
+        });
+    </script>
 </body>
+
 </html>
