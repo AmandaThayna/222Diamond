@@ -1,156 +1,100 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
+
 <head>
-<title>Jogo de Azar - Jogo da Velha com Tigrinho</title>
-<style>
-  table {
-    border-collapse: collapse;
-    margin: 20px auto;
-  }
-  td {
-    width: 50px;
-    height: 50px;
-    border: 1px solid black;
-    text-align: center;
-    font-size: 24px;
-    cursor: pointer;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    /* Estilos para o efeito de hover */
-    transition: background-color 0.3s;
-  }
-  td:hover {
-    background-color: lightgray;
-  }
-  #result {
-    font-size: 20px;
-    margin-top: 10px;
-  }
-  .win-line {
-    background-color: yellow; /* Cor da linha vencedora */
-  }
-
-</style>
-</head>
-<body>
-
-<table>
-  <tr>
-    <td id="slot00"></td>
-    <td id="slot01"></td>
-    <td id="slot02"></td>
-  </tr>
-  <tr>
-    <td id="slot10"></td>
-    <td id="slot11"></td>
-    <td id="slot12"></td>
-  </tr>
-  <tr>
-    <td id="slot20"></td>
-    <td id="slot21"></td>
-    <td id="slot22"></td>
-  </tr>
-</table>
-
-<p>Aposta: <span id="betAmount">1</span></p>
-<button onclick="spinSlots()">Girar Slots</button>
-<div id="result"></div>
-
-<script>
-  const slots = [
-    ["slot00", "slot01", "slot02"],
-    ["slot10", "slot11", "slot12"],
-    ["slot20", "slot21", "slot22"]
-  ];
-  const symbols = ["diamond_rosa", "diamond_amarela", "diamond_azul"];  // Adicionar mais símbolos
-  let betAmount = 1;
-  let winMultiplier = 1;
-
-  function spinSlots() {
-    for (let row of slots) {
-      for (let slotId of row) {
-        const cell = document.getElementById(slotId);
-        const randomSymbol = symbols[Math.floor(Math.random() * symbols.length)];
-        cell.textContent = ""; // Limpar conteúdo anterior
-        cell.style.backgroundImage = `url(images/${randomSymbol}.png)`; // Usar o nome do arquivo corretamente
-      }
-    }
-    checkWinner();
-  }
-
-  function checkWinner() {
-    const resultDiv = document.getElementById("result");
-    resultDiv.textContent = "";
-
-    //Verifique todas as combinações vencedoras.
-    for(let i=0; i < 3; i++){
-
-        if(checkWin(0,i)) return;
-        if(checkWin(1,i)) return;
-        if(checkWin(2,i)) return;
-    }
-
-    if(!checkWin(0,0)) {
-
-        resultDiv.textContent = "Você não ganhou, tente novamente.";
-    }
-
-  }
-
-  function checkWin(row,col){
-
-        let a = slots[row][col].id;
-        let b = slots[row][(col + 1) % 3].id;
-        let c = slots[row][(col + 2) % 3].id;
-
-
-        if (checkMatch(a,b,c)){
-
-            highlightWinningLine(row, col);
-            resultDiv.textContent = `Você ganhou! ${calculateWinAmount()}`
-
-            return true;
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>22Diamond - Jogo de Sorte</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-image: url('./img/up.png');
+            background-size: cover;
+            background-position: center; /* Centraliza o fundo */
+            width: 100%;
+            height: 100vh; /* Usando vh para responsividade */
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            
+        }
+        #slots-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 colunas */
+            gap: 10px; /* Espaçamento entre os slots */
+            width: 300px;
+            margin-bottom: 20px;
         }
 
-        return false
-  }
+        .slot {
+            width: 100px;
+            height: 100px;
+            background-color: lightgray;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em; /* Tamanho da fonte */
+        }
 
-  function highlightWinningLine(row, col) {
-      let slotsRow = slots[row];
+        #result {
+          font-size: 1.2em;
+        }
+    </style>
+</head>
 
-      const slot1 = slotsRow[col];
-      const slot2 = slotsRow[(col + 1) % 3];
-      const slot3 = slotsRow[(col + 2) % 3];
+<body>
+    <div id="slots-container"></div>
+    <button onclick="spinSlots()">Girar Slots</button>
+    <div id="result"></div>
 
-      const cell1 = document.getElementById(slot1.id);
-      const cell2 = document.getElementById(slot2.id);
-      const cell3 = document.getElementById(slot3.id);
+    <script>
+        const slotsContainer = document.getElementById('slots-container');
+        const resultDiv = document.getElementById('result');
+        const numSlots = 3;
 
+        // Função para criar os slots
+        function createSlots() {
+            for (let i = 0; i < numSlots; i++) {
+                const slot = document.createElement('div');
+                slot.classList.add('slot');
+                slotsContainer.appendChild(slot);
+            }
+        }
 
-      cell1.classList.add("win-line");
-      cell2.classList.add("win-line");
-      cell3.classList.add("win-line");
+      // Função para gerar números aleatórios entre 1 e 6 (adapte para seu jogo)
+        function getRandomNumber() {
+            return Math.floor(Math.random() * 6) + 1;
+        }
+        
+        function spinSlots() {
+            const slots = document.querySelectorAll('.slot');
+            slots.forEach(slot => {
+                const randomNumber = getRandomNumber();
+                slot.textContent = randomNumber; //Exibe o número no slot
+                slot.style.backgroundColor = `hsl(${randomNumber * 60}, 100%, 50%)`; //Cores aleatórias
+            });
 
-  }
+            checkWin(slots);
+        }
 
+        function checkWin(slots) {
+            const slotValues = [];
+            slots.forEach(slot => slotValues.push(parseInt(slot.textContent)));
+           
+            if(slotValues[0] === slotValues[1] && slotValues[1] === slotValues[2]) {
+                resultDiv.textContent = "Você ganhou!";
+            } else {
+                resultDiv.textContent = "Tente novamente.";
+            }
+        }
 
-  function checkMatch(id1, id2, id3){
+        createSlots();
 
-      const cell1 = document.getElementById(id1);
-      const cell2 = document.getElementById(id2);
-      const cell3 = document.getElementById(id3);
-
-      const symbol1 = cell1.style.backgroundImage.replace(/url\(["']?([^"']+)["']?\)/, '$1');
-      const symbol2 = cell2.style.backgroundImage.replace(/url\(["']?([^"']+)["']?\)/, '$1');
-      const symbol3 = cell3.style.backgroundImage.replace(/url\(["']?([^"']+)["']?\)/, '$1');
-      
-      return symbol1 === symbol2 && symbol2 === symbol3;
-    }
-
-  function calculateWinAmount(){
-      return betAmount * winMultiplier;
-  }
-</script>
+    </script>
 </body>
+
 </html>
