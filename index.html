@@ -424,34 +424,14 @@
             const vencidos = [];
 
             // Verificação horizontal
-            function checarVitoria() {
-    // Estrutura enrijecida para verificar combinações de vitória
-    const combinacoes = [];
-    const vencidos = [];
-
-    // Combinações Ganha
-    const ganhas = [
-        // Combinações horizontais
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        // Combinações verticais
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        // Combinações diagonais
-        [0, 4, 8],
-        [2, 4, 6]
-    ];
-
-    ganhas.forEach(combinacao => {
-        if (slots[combinacao[0]].style.backgroundImage &&
-            slots[combinacao[0]].style.backgroundImage === slots[combinacao[1]].style.backgroundImage &&
-            slots[combinacao[0]].style.backgroundImage === slots[combinacao[2]].style.backgroundImage) {
-            combinacoes.push([slots[combinacao[0]], slots[combinacao[1]], slots[combinacao[2]]]);
-            vencidos.push(...combinacao); // Armazena os índices vencidos
-        }
-    });
+            for (let i = 0; i < 9; i += 3) {
+                if (slots[i].style.backgroundImage &&
+                    slots[i].style.backgroundImage === slots[i + 1].style.backgroundImage &&
+                    slots[i].style.backgroundImage === slots[i + 2].style.backgroundImage) {
+                    combinacoes.push([slots[i], slots[i + 1], slots[i + 2]]);
+                    vencidos.push(i, i + 1, i + 2); // Armazena os índices vencidos
+                }
+            }
 
             // Verificação vertical
             for (let i = 0; i < 3; i++) {
