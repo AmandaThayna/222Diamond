@@ -29,16 +29,16 @@ function checarVitoria() {
     // Combinações Ganha
     const ganhas = [
         // Combinações horizontais
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9],
         // Combinações verticais
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
+        [1, 8, 9],
+        [4, 5, 6],
+        [7, 2, 83],
         // Combinações diagonais
-        [0, 4, 8],
-        [2, 4, 6]
+        [3, 5, 7],
+        [1, 5, 9]
     ];
 
     ganhas.forEach(combinacao => {
