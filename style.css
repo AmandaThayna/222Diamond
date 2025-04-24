@@ -1,409 +1,144 @@
-/* style.css */
+/* Estilos Gerais */
 body {
-    background-image: url(./img/background.jpg); /* Fundo com imagem */
-    background-size: cover; /* Ajusta a imagem de fundo para cobrir toda a tela */
-    background-position: center; /* Centraliza a imagem de fundo */
-    font-family: 'Poppins', sans-serif; /* Fonte moderna e amigável */
+    background-image: url(./img/background.jpg);
+    background-size: cover;
+    background-position: center;
+    font-family: 'Poppins', sans-serif; 
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center; /* Centraliza horizontalmente */
-    align-items: center; /* Centraliza verticalmente */
-    min-height: 100vh; /* Ocupa a altura total da viewport */
-    box-sizing: border-box; /* Inclui preenchimento e borda no total */
+    justify-content: center; 
+    align-items: center; 
+    min-height: 100vh; 
+    box-sizing: border-box; 
 }
 
-h1 {
-    text-align: center; /* Centraliza o texto */
+h1, h3 {
+    text-align: center; 
     color: #FFC107; /* Amarelo vibrante */
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Sombra escura para destaque */
-    font-size: 2.5em; /* Tamanho do título */
-    margin-bottom: 20px; /* Espaço abaixo do título */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); 
 }
 
 a {
-    color: rgb(86, 19, 209); /* Cor do texto dos links */
-    text-decoration: none; /* Remove o sublinhado dos links */
-    transition: color 0.3s ease; /* Transição suave ao passar o mouse */
+    color: rgb(86, 19, 209);
+    text-decoration: none; 
+    transition: color 0.3s ease; 
 }
 
 a:hover {
-    color: white; /* Cor quando o mouse passa sobre o link */
+    color: white;
 }
 
+/* Estilo do Corpo do Jogo */
 #corpo {
     display: flex;
-    flex-direction: column; /* Exibe os elementos em coluna */
-    width: 700px; /* Largura do painel */
-    max-width: 90%; /* Largura máxima para dispositivos menores */
-    height: auto; /* Altura automática com base no conteúdo */
-    border-radius: 10px; /* Bordas arredondadas */
-    padding: 20px 30px; /* Espaçamento interno */
-    background-color: rgba(20, 20, 20, 0.8); /* Fundo escuro com transparência */
-    box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.7); /* Sombra para dar profundidade */
-    color: white; /* Cor do texto */
-    box-sizing: border-box; /* Inclui borda e margem no total */
+    flex-direction: column; 
+    width: 700px; 
+    max-width: 90%; 
+    height: auto; 
+    border-radius: 10px; 
+    padding: 20px 30px; 
+    background-color: rgba(20, 20, 20, 0.8); 
+    box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.7); 
+    color: white; 
+    box-sizing: border-box; 
 }
 
-/* Adicionando estilo ao formulário */
+/* Estilo do Formulário */
 form {
-    background-color: rgba(30, 30, 30, 0.9); /* Fundo do formulário um tom mais escuro */
-    padding: 20px; /* Espaçamento interno */
-    border-radius: 10px; /* Bordas arredondadas */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6); /* Sombra para profundidade */
+    background-color: rgba(30, 30, 30, 0.9);
+    padding: 20px; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6); 
 }
 
 input {
-    padding: 10px; /* Padding interno nos campos de entrada */
-    border-radius: 5px; /* Arredondar as bordas dos campos de entrada */
-    border: 1px solid rgba(255, 255, 255, 0.5); /* Borda branca com leve transparência */
-    margin: 10px 0; /* Margem entre os campos */
-    background-color: rgba(50, 50, 50, 0.8); /* Fundo dos campos de entrada */
-    color: white; /* Cor do texto dos campos */
+    padding: 10px; 
+    border-radius: 5px; 
+    border: 1px solid rgba(255, 255, 255, 0.5); 
+    margin: 10px 0; 
+    background-color: rgba(50, 50, 50, 0.8); 
+    color: white; 
 }
 
-input[type="submit"] {
-    background-color: #66BB6A; /* Cor vibrante para o botão */
-    color: white; /* Cor do texto do botão */
-    cursor: pointer; /* Muda o cursor ao passar sobre o botão */
-    transition: background-color 0.3s; /* Transição suave para o botão */
+/* Estilos dos Botões */
+input[type="submit"], .button {
+    background-color: #66BB6A; 
+    color: white; 
+    cursor: pointer; 
+    transition: background-color 0.3s; 
 }
 
-input[type="submit"]:hover {
-    background-color: #57A859; /* Cor quando o mouse passa sobre o botão */
+input[type="submit"]:hover, .button:hover {
+    background-color: #57A859; 
 }
 
-/* Estilo para slots do jogo */
+/* Estilo dos Slots do Jogo */
 .slot {
     width: 80px;
     height: 80px;
-    padding: 5px; /* Adiciona um padding para dar espaço interno */
-    background: rgba(0, 0, 0, 0.6); /* Fundo escuro para os slots */
-    border-radius: 5px; /* Bordas arredondadas */
-    border: 2px solid rgba(255, 255, 255, 0.2); /* Borda clara com transparência */
-    transition: transform 0.2s, border-color 0.2s; /* Transição para hover */
+    padding: 5px; 
+    background: rgba(0, 0, 0, 0.6); 
+    border-radius: 5px; 
+    border: 2px solid rgba(255, 255, 255, 0.2); 
+    transition: transform 0.2s, border-color 0.2s; 
 }
 
 .slot:hover {
-    transform: scale(1.1); /* Efeito de escalonamento ao passar o mouse */
-    border-color: #FFC107; /* Muda a borda para amarelo ao passar o mouse */
+    transform: scale(1.1); 
+    border-color: #FFC107; 
 }
 
-/* Feedback do jogo */
+/* Feedback do Jogo */
 #feedback {
-    font-size: 24px; /* Tamanho do feedback */
-    margin-top: 10px; /* Espaçamento superior */
-    transition: color 0.3s; /* Transição suave para mudança de cor */
+    font-size: 24px; 
+    margin-top: 10px; 
+    transition: color 0.3s; 
 }
 
-/* Alerta de mensagem */
+/* Alertas de Mensagem */
 .alert {
-    background-color: rgba(255, 0, 0, 0.8); /* Fundo vermelho para alertas */
-    color: white; /* Cor do texto do alerta */
-    border-radius: 5px; /* Bordas arredondadas */
-    padding: 15px; /* Padding do alerta */
-    position: relative; /* Para permitir animações */
-    animation: slide-down 0.5s; /* Animação */
+    background-color: rgba(255, 0, 0, 0.8); 
+    color: white; 
+    border-radius: 5px; 
+    padding: 15px; 
+    position: relative; 
+    animation: slide-down 0.5s; 
 }
 
-/* Animação */
 @keyframes slide-down {
     from {
-        top: -50px; /* Começa acima do viewport */
+        top: -50px; 
     }
     to {
-        top: 20px; /* Move para a posição final */
+        top: 20px; 
     }
 }
-segue meu arquivo index.html para alterações
 
-<!DOCTYPE html>
-<html lang="pt-br">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>22Diamond - Jogo de Sorte</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        body {
-            background-image: url(./img/up.png);
-            background-size: cover;
-            background-position: top;
-            width: 100%;
-            height: 100%;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        h3 {
-            color: #fff;
-        }
-
-        .highlight {
-            color: yellow; /* Cor vibrante para o texto do jogo */
-            font-weight: bold;
-            font-size: 20px;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            background-color: rgba(0, 0, 0, 0.7);
-            text-align: center;
-            margin: 20px auto;
-            padding: 20px 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            transition: box-shadow 0.3s ease;
-            width: 90%;
-            max-width: 400px;
-        }
-
-        input {
-            margin: 10px 0;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-        }
-
-        input[type="submit"] {
-            background-color: #66BB6A;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #57A859;
-        }
-
-        .alert {
-            display: none;
-            background-color: #f44336;
-            color: white;
-            padding: 15px;
-            position: fixed;
-            z-index: 1;
-            left: 50%;
-            top: 20px;
-            transform: translateX(-50%);
-            border-radius: 5px;
-            animation: slide-down 0.5s;
-        }
-
-        .success {
-            background-color: #4CAF50;
-        }
-
-        @keyframes slide-down {
-            from {
-                top: -50px;
-            }
-
-            to {
-                top: 20px;
-            }
-        }
-
-        #jogo {
-            display: none;
-            text-align: center;
-            margin-top: 20px;
-            width: 90%;
-            max-width: 500px;
-        }
-
-        .slot {
-            width: 80px;
-            height: 80px;
-            margin: 5px;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            border: 2px solid rgba(0, 0, 0, 0.5);
-            border-radius: 5px;
-            background-size: cover;
-            transition: transform 0.2s;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        }
-
-        .slot:hover {
-            transform: scale(1.1);
-        }
-
-        #tela {
-            margin: 20px auto;
-            width: 100%;
-            max-width: 500px;
-            height: 100px;
-            background-color: white;
-            border: medium solid black;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
-
-        #feedback {
-            color: #FFFFFF; /* Mudado para branco atraente */
-            margin-bottom: 10px;
-            font-size: 24px;
-            padding: 10px;
-            background-color: rgba(255, 215, 0, 0.8); /* Fundo dourado */
-            border: 2px solid #ffd700; /* Bordar dourada */
-            border-radius: 5px;
-            animation: pulse 1s infinite alternate; /* Animação pulsante */
-            box-shadow: 0 0 15px rgba(255, 215, 0, 1); /* Efeito de brilho */
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            100% {
-                transform: scale(1.05);
-            }
-        }
-
-        .info {
-            color: #2196F3; /* Vibrant blue for text */
-            background-color: rgba(230, 230, 230, 0.8); /* Light grey background */
-            border-radius: 5px;
-            padding: 5px 10px;
-            margin: 5px;
-            font-size: 18px;
-        }
-
-        #slotsContainer {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: repeat(3, 1fr);
-            gap: 10px;
-            justify-items: center;
-        }
-
-        .button {
-            background-color: #66BB6A;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 15px;
-            cursor: pointer;
-            font-size: 24px;
-        }
-
-        .button:hover {
-            background-color: #57A859;
-        }
-
-        #sortearBtn {
-            background-color: #4CAF50; /* Cor verde chamativa para o botão de sortear */
-            border-radius: 50%; /* Formato de botão circular */
-            width: 80px;
-            height: 80px;
-            font-size: 32px;
-            transition: background-color 0.3s;
-        }
-
-        #sortearBtn:hover {
-            background-color: #43A047; /* Muda a cor ao passar o mouse */
-        }
-
-        #infoPanel {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            font-size: 18px;
-            color: white;
-        }
-
-        #automaticBetBtn {
-            font-size: 24px;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            color: yellow; /* Cor do ícone */
-        }
-
-        #megaGanho {
-            display: none;
-            position: fixed;
-            top: 50%; /* Centraliza verticalmente */
-            left: 50%; /* Centraliza horizontalmente */
-            transform: translate(-50%, -50%); /* Ajusta a posição */
-            background-color: rgba(255, 215, 0, 0.9); /* Fundo levemente transparente */
-            padding: 20px;
-            border-radius: 10px;
-            font-size: 30px;
-            color: #FFF;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); /* Efeito de brilho */
-            z-index: 100; /* Se estiver em cima de outros elementos */
-        }
-
-        #automaticBetRounds {
-            display: none; /* Inicialmente oculto */
-            margin: 10px 0;
-        }
+/* Estilos Específicos para o Jogo */
 #jogo {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center; /* Centraliza os elementos */
-    width: 90%; /* Largura responsiva */
+    align-items: center; 
+    width: 90%; 
     max-width: 600px;
-    margin: auto; /* Centraliza na página */
 }
 
-#feedback {
-    color: #FFFFFF; /* Cor do feedback */
-    margin-bottom: 10px;
-    font-size: 24px;
-    padding: 10px;
-    background-color: rgba(255, 215, 0, 0.8); /* Fundo dourado */
-    border: 2px solid #ffd700; /* Borda dourada */
-    border-radius: 5px;
-    animation: pulse 1s infinite alternate; /* Animação pulsante */
-    box-shadow: 0 0 15px rgba(255, 215, 0, 1); /* Efeito de brilho */
+#slotsContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 10px;
+    justify-items: center;
 }
 
-.slot {
-    width: 80px;
-    height: 80px;
-    margin: 5px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    border: 2px solid rgba(0, 0, 0, 0.5);
-    border-radius: 5px;
-    background-size: cover;
-    transition: transform 0.2s;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+/* Animações */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.05);
+    }
 }
-
-.slot:hover {
-    transform: scale(1.1);
-}
-
-.button {
-    background-color: #66BB6A; /* Cor vibrante para o botão de sortear */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    cursor: pointer;
-    font-size: 24px;
-    transition: background-color 0.3s; /* Efeito de transição quando passa o mouse */
-}
-
-.button:hover {
-    background-color: #57A859; /* Cor ao passar o mouse */
-}
-    </style>
-</head>
