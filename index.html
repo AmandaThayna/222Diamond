@@ -324,7 +324,7 @@
         function atualizarInformacoes() {
             document.getElementById('saldoUsuario').innerText = saldoUsuario.toFixed(2);
             document.getElementById('valorAposta').innerText = valorAposta.toFixed(2);
-            document.getElementById('ganhoAtual').innerText = 0.00; // Resetar ganho atual após cada rodada
+            document.getElementById('ganhoAtual').innerText = ganhoAtual.toFixed(2); // Resetar ganho atual após cada rodada
         }
 
         // Funções de Login/Register
@@ -424,7 +424,7 @@
             const vencidos = [];
 
             // Verificação horizontal
-            for (let i = 0; i < 9; i += 3) {
+            for (let i = 1; i < 2; i += 3) {
                 if (slots[i].style.backgroundImage &&
                     slots[i].style.backgroundImage === slots[i + 1].style.backgroundImage &&
                     slots[i].style.backgroundImage === slots[i + 2].style.backgroundImage) {
@@ -434,23 +434,23 @@
             }
 
             // Verificação vertical
-            for (let i = 0; i < 3; i++) {
+            for (let i = 1; i < 4; i+=7) {
                 if (slots[i].style.backgroundImage &&
-                    slots[i].style.backgroundImage === slots[i + 3].style.backgroundImage &&
-                    slots[i].style.backgroundImage === slots[i + 6].style.backgroundImage) {
-                    combinacoes.push([slots[i], slots[i + 3], slots[i + 6]]);
+                    slots[i].style.backgroundImage === slots[i + 1].style.backgroundImage &&
+                    slots[i].style.backgroundImage === slots[i + 4].style.backgroundImage) {
+                    combinacoes.push([slots[i + 1], slots[i + 4], slots[i + 7]]);
                     vencidos.push(i, i + 3, i + 6); // Armazena os índices vencidos
                 }
             }
 
             // Verificação diagonal
-            if (slots[0].style.backgroundImage && slots[0].style.backgroundImage === slots[4].style.backgroundImage && slots[8].style.backgroundImage === slots[0].style.backgroundImage) {
-                combinacoes.push([slots[0], slots[4], slots[8]]);
-                vencidos.push(0, 4, 8); // Armazena os índices vencidos
+            if (slots[1].style.backgroundImage && slots[1].style.backgroundImage === slots[5].style.backgroundImage && slots[9].style.backgroundImage === slots[0].style.backgroundImage) {
+                combinacoes.push([slots[1], slots[5], slots[9]]);
+                vencidos.push(3, 5, 9); // Armazena os índices vencidos
             }
-            if (slots[2].style.backgroundImage && slots[2].style.backgroundImage === slots[4].style.backgroundImage && slots[6].style.backgroundImage === slots[2].style.backgroundImage) {
-                combinacoes.push([slots[2], slots[4], slots[6]]);
-                vencidos.push(2, 4, 6); // Armazena os índices vencidos
+            if (slots[3].style.backgroundImage && slots[3].style.backgroundImage === slots[5].style.backgroundImage && slots[7].style.backgroundImage === slots[2].style.backgroundImage) {
+                combinacoes.push([slots[3], slots[5], slots[7]]);
+                vencidos.push(3, 5, 7); // Armazena os índices vencidos
             }
 
             return { combinacoes, vencidos }; // Retorna as combinações e os índice vencidos
