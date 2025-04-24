@@ -351,5 +351,59 @@ segue meu arquivo index.html para alterações
             display: none; /* Inicialmente oculto */
             margin: 10px 0;
         }
+#jogo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* Centraliza os elementos */
+    width: 90%; /* Largura responsiva */
+    max-width: 600px;
+    margin: auto; /* Centraliza na página */
+}
+
+#feedback {
+    color: #FFFFFF; /* Cor do feedback */
+    margin-bottom: 10px;
+    font-size: 24px;
+    padding: 10px;
+    background-color: rgba(255, 215, 0, 0.8); /* Fundo dourado */
+    border: 2px solid #ffd700; /* Borda dourada */
+    border-radius: 5px;
+    animation: pulse 1s infinite alternate; /* Animação pulsante */
+    box-shadow: 0 0 15px rgba(255, 215, 0, 1); /* Efeito de brilho */
+}
+
+.slot {
+    width: 80px;
+    height: 80px;
+    margin: 5px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    background-size: cover;
+    transition: transform 0.2s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.slot:hover {
+    transform: scale(1.1);
+}
+
+.button {
+    background-color: #66BB6A; /* Cor vibrante para o botão de sortear */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 24px;
+    transition: background-color 0.3s; /* Efeito de transição quando passa o mouse */
+}
+
+.button:hover {
+    background-color: #57A859; /* Cor ao passar o mouse */
+}
     </style>
 </head>
